@@ -1,13 +1,14 @@
-﻿import { NavLink } from 'react-router'
+import { NavLink } from 'react-router'
+
 import { mobileNavigation } from '../../config/navigation'
 
 function getMobileLinkClass(isActive: boolean): string {
   const baseClasses =
-    'flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 text-xs font-medium transition-colors'
+    'group relative flex min-h-16 flex-col items-center justify-center gap-1.5 px-1 pb-1 pt-2 text-[0.68rem] font-semibold transition-colors duration-[var(--duration-micro)]'
 
   const stateClasses = isActive
-    ? 'bg-[var(--color-app-primary-soft)] text-[var(--color-app-primary)]'
-    : 'text-[var(--color-app-muted)] active:bg-white/5'
+    ? 'text-[var(--color-projector)]'
+    : 'text-[var(--color-paper-500)] active:text-[var(--color-paper-100)]'
 
   return `${baseClasses} ${stateClasses}`
 }
@@ -16,31 +17,51 @@ export function MobileBottomNavigation() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[rgba(5,7,13,0.94)] px-2 pt-2 backdrop-blur-xl md:hidden"
-      style={{
-        paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))',
-      }}
+      className="fixed inset-x-0 bottom-0 z-[var(--z-navigation)] border-t border-[var(--color-line)] bg-[color:rgb(7_8_6/0.92)] pb-[env(safe-area-inset-bottom)] backdrop-blur-xl md:hidden"
     >
-      <ul className="mx-auto grid max-w-lg grid-cols-5 gap-1">
+      <div className="grid grid-cols-5">
         {mobileNavigation.map((item) => {
           const Icon = item.icon
 
           return (
-            <li key={item.to}>
-              <NavLink
-                className={({ isActive }) =>
-                  getMobileLinkClass(isActive)
-                }
-                end={item.end}
-                to={item.to}
-              >
-                <Icon aria-hidden="true" size={21} strokeWidth={2} />
-                <span>{item.label}</span>
-              </NavLink>
-            </li>
+            <NavLink
+              className={({ isActive }) =>
+                getMobileLinkClass(isActive)
+              }
+              end={item.end}
+              key={item.to}
+              to={item.to}
+            >
+              {({ isActive }) => (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className={`absolute inset-x-[30%] top-0 h-px bg-[var(--color-projector)] transition-transform duration-[var(--duration-interface)] ${
+                      isActive ? 'scale-x-100' : 'scale-x-0'
+                    }`}
+                  />
+
+                  <span className="relative">
+                    <Icon
+                      aria-hidden="true"
+                      className="size-[1.15rem] transition-transform duration-[var(--duration-interface)] ease-[var(--ease-focus)] group-active:scale-90"
+                    />
+
+                    {isActive ? (
+                      <span
+                        aria-hidden="true"
+                        className="absolute -right-1.5 -top-1 size-1 bg-[var(--color-projector)]"
+                      />
+                    ) : null}
+                  </span>
+
+                  <span>{item.label}</span>
+                </>
+              )}
+            </NavLink>
           )
         })}
-      </ul>
+      </div>
     </nav>
   )
 }
