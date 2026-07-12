@@ -1,15 +1,33 @@
-﻿import { createBrowserRouter } from 'react-router'
+import { createBrowserRouter } from 'react-router'
+
 import { AppShell } from '../components/layout/AppShell'
+
 import { LoginPage } from '../features/auth/pages/LoginPage'
 import { RegisterPage } from '../features/auth/pages/RegisterPage'
+
+import { TmdbVerificationPage } from '../features/development/pages/TmdbVerificationPage'
+
 import { DiscoverPage } from '../features/discovery/pages/DiscoverPage'
 import { HomePage } from '../features/discovery/pages/HomePage'
 import { MoviesPage } from '../features/discovery/pages/MoviesPage'
 import { TvShowsPage } from '../features/discovery/pages/TvShowsPage'
+
 import { LibraryPage } from '../features/library/pages/LibraryPage'
+
 import { ProfilePage } from '../features/profile/pages/ProfilePage'
+
 import { SearchPage } from '../features/search/pages/SearchPage'
+
 import { NotFoundPage } from '../pages/NotFoundPage'
+
+const developmentRoutes = import.meta.env.DEV
+  ? [
+      {
+        path: 'dev/tmdb',
+        element: <TmdbVerificationPage />,
+      },
+    ]
+  : []
 
 export const router = createBrowserRouter([
   {
@@ -52,6 +70,7 @@ export const router = createBrowserRouter([
         path: 'register',
         element: <RegisterPage />,
       },
+      ...developmentRoutes,
       {
         path: '*',
         element: <NotFoundPage />,
