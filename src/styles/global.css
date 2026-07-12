@@ -1,32 +1,210 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 :root {
   color-scheme: dark;
 
-  --color-app-background: #05070d;
-  --color-app-background-soft: #080c15;
-  --color-app-surface: #0d1421;
-  --color-app-surface-elevated: #131d2e;
-  --color-app-border: #263147;
+  /*
+   * Permanent interface palette
+   */
 
-  --color-app-text: #f7f8fc;
-  --color-app-muted: #9ba8bd;
-  --color-app-subtle: #69778e;
+  --color-ink-950: #070806;
+  --color-ink-900: #0a0c0a;
+  --color-ink-850: #0d100d;
+  --color-ink-800: #111411;
+  --color-ink-750: #171a16;
+  --color-ink-700: #1e221d;
 
-  --color-app-primary: #8b7cff;
-  --color-app-primary-strong: #6d5dfc;
-  --color-app-primary-soft: rgba(139, 124, 255, 0.14);
+  --color-paper-100: #f5f1e9;
+  --color-paper-200: #e8e2d8;
+  --color-paper-400: #b7b0a5;
+  --color-paper-500: #918b82;
+  --color-paper-600: #6d6962;
 
-  --color-app-rating: #f4c95d;
-  --color-app-error: #fb7185;
+  --color-line-soft: rgba(245, 241, 233, 0.08);
+  --color-line: rgba(245, 241, 233, 0.14);
+  --color-line-strong: rgba(245, 241, 233, 0.26);
+
+  /*
+   * Projector-light accent
+   */
+
+  --color-projector: #efb761;
+  --color-projector-strong: #f4c875;
+  --color-projector-soft: rgba(239, 183, 97, 0.14);
+
+  --color-rating: #f4c45d;
+  --color-success: #7fd5a3;
+  --color-warning: #efb761;
+  --color-error: #ff8378;
+  --color-focus: #f6d89d;
+
+  /*
+   * Content-reactive atmosphere
+   */
+
+  --atmosphere-primary-rgb: 148 74 47;
+  --atmosphere-secondary-rgb: 45 92 91;
+  --atmosphere-highlight-rgb: 231 166 88;
+  --atmosphere-shadow-rgb: 5 7 6;
+
+  --color-atmosphere-primary:
+    rgb(var(--atmosphere-primary-rgb));
+
+  --color-atmosphere-secondary:
+    rgb(var(--atmosphere-secondary-rgb));
+
+  --color-atmosphere-highlight:
+    rgb(var(--atmosphere-highlight-rgb));
+
+  --color-atmosphere-primary-soft:
+    rgb(var(--atmosphere-primary-rgb) / 0.14);
+
+  --color-atmosphere-secondary-soft:
+    rgb(var(--atmosphere-secondary-rgb) / 0.12);
+
+  --color-atmosphere-highlight-soft:
+    rgb(var(--atmosphere-highlight-rgb) / 0.1);
+
+  /*
+   * Typography
+   */
+
+  --font-interface:
+    "Manrope Variable",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  --font-display:
+    "Instrument Serif",
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  --font-annotation:
+    "Manrope Variable",
+    "Arial Narrow",
+    "Segoe UI",
+    sans-serif;
+
+  --font-mono:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  --tracking-display: -0.035em;
+  --tracking-heading: -0.02em;
+  --tracking-interface: -0.01em;
+  --tracking-annotation: 0.18em;
+
+  /*
+   * Layout
+   */
+
+  --layout-max: 94rem;
+  --layout-reading: 46rem;
+  --layout-gutter: clamp(1rem, 3vw, 3.25rem);
+  --layout-section-gap: clamp(5rem, 10vw, 10rem);
+  --layout-header-height: 4.75rem;
+  --layout-mobile-nav-height: 4.5rem;
+
+  /*
+   * Shape and depth
+   */
+
+  --radius-control: 0.625rem;
+  --radius-panel: 1.125rem;
+  --radius-frame: 1.75rem;
+
+  --shadow-whisper:
+    0 1px 0 rgba(255, 255, 255, 0.04);
+
+  --shadow-interface:
+    0 14px 34px rgba(0, 0, 0, 0.22);
+
+  --shadow-elevated:
+    0 32px 90px rgba(0, 0, 0, 0.42),
+    0 8px 24px rgba(0, 0, 0, 0.24);
+
+  --shadow-focus:
+    0 0 0 1px rgba(246, 216, 157, 0.28),
+    0 0 0 5px rgba(246, 216, 157, 0.08);
+
+  /*
+   * Motion
+   */
+
+  --duration-instant: 120ms;
+  --duration-micro: 180ms;
+  --duration-interface: 300ms;
+  --duration-scene: 520ms;
+  --duration-atmosphere: 900ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-focus: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /*
+   * Layering
+   */
+
+  --z-atmosphere: -1;
+  --z-content: 1;
+  --z-header: 40;
+  --z-navigation: 50;
+  --z-overlay: 80;
+  --z-toast: 90;
+  --z-skip-link: 100;
+
+  /*
+   * Compatibility aliases
+   */
+
+  --color-app-background:
+    var(--color-ink-950);
+
+  --color-app-background-soft:
+    var(--color-ink-900);
+
+  --color-app-surface:
+    var(--color-ink-800);
+
+  --color-app-surface-elevated:
+    var(--color-ink-750);
+
+  --color-app-border:
+    var(--color-line);
+
+  --color-app-text:
+    var(--color-paper-100);
+
+  --color-app-muted:
+    var(--color-paper-400);
+
+  --color-app-subtle:
+    var(--color-paper-600);
+
+  --color-app-primary:
+    var(--color-projector);
+
+  --color-app-primary-strong:
+    var(--color-projector-strong);
+
+  --color-app-primary-soft:
+    var(--color-projector-soft);
+
+  --color-app-rating:
+    var(--color-rating);
+
+  --color-app-error:
+    var(--color-error);
 
   --shadow-app-elevated:
-    0 24px 80px rgba(0, 0, 0, 0.34),
-    0 8px 24px rgba(0, 0, 0, 0.22);
+    var(--shadow-elevated);
 
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  font-family: var(--font-interface);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -43,34 +221,53 @@ html {
   min-width: 320px;
   min-height: 100%;
   scroll-behavior: smooth;
-  background-color: var(--color-app-background);
+  scrollbar-gutter: stable;
+  background: var(--color-app-background);
 }
 
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
+
   color: var(--color-app-text);
+
   background:
     radial-gradient(
-      circle at 15% -10%,
-      rgba(109, 93, 252, 0.22),
-      transparent 32rem
+      circle at 82% 0%,
+      var(--color-atmosphere-primary-soft),
+      transparent 34rem
     ),
     radial-gradient(
-      circle at 95% 8%,
-      rgba(59, 130, 246, 0.12),
-      transparent 28rem
+      circle at 8% 44%,
+      var(--color-atmosphere-secondary-soft),
+      transparent 42rem
     ),
-    linear-gradient(
-      180deg,
-      var(--color-app-background-soft) 0%,
-      var(--color-app-background) 46%
-    );
+    var(--color-app-background);
+}
+
+body::before {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+
+  pointer-events: none;
+  content: "";
+
+  opacity: 0.026;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.72'/%3E%3C/svg%3E");
+
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  mix-blend-mode: soft-light;
 }
 
 #root {
   min-height: 100svh;
+  isolation: isolate;
 }
 
 button,
@@ -85,8 +282,13 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+button {
+  color: inherit;
+}
+
 a {
   color: inherit;
+  text-decoration: none;
 }
 
 img,
@@ -98,14 +300,94 @@ svg {
   max-width: 100%;
 }
 
+img {
+  height: auto;
+}
+
 ::selection {
-  color: #ffffff;
-  background: var(--color-app-primary-strong);
+  color: var(--color-ink-950);
+  background: var(--color-projector-strong);
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-app-primary);
-  outline-offset: 3px;
+  outline: 2px solid var(--color-focus);
+  outline-offset: 4px;
+  box-shadow: var(--shadow-focus);
+}
+
+/*
+ * Authored shared primitives
+ */
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+}
+
+.font-interface {
+  font-family: var(--font-interface);
+}
+
+.archive-label {
+  font-family: var(--font-annotation);
+  font-size: 0.6875rem;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-annotation);
+  text-transform: uppercase;
+  color: var(--color-app-muted);
+}
+
+.editorial-rule {
+  width: 100%;
+  height: 1px;
+  border: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-line-strong),
+      var(--color-line-soft) 62%,
+      transparent
+    );
+}
+
+.projection-surface {
+  position: relative;
+  isolation: isolate;
+
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      var(--color-atmosphere-highlight-soft),
+      transparent 32rem
+    ),
+    radial-gradient(
+      circle at 14% 72%,
+      var(--color-atmosphere-secondary-soft),
+      transparent 40rem
+    );
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-line: rgba(255, 255, 255, 0.3);
+    --color-app-muted: #d2cdc4;
+    --color-app-subtle: #aaa59c;
+  }
+
+  body::before {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -121,4 +403,80 @@ svg {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+@media (forced-colors: active) {
+  body::before {
+    display: none;
+  }
+
+  :focus-visible {
+    outline: 3px solid CanvasText;
+    box-shadow: none;
+  }
+}
+/*
+ * Archive Projection scene transitions
+ */
+
+@keyframes scene-backdrop-in {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+
+  to {
+    opacity: 0.68;
+    transform: scale(1.025);
+  }
+}
+
+@keyframes scene-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scene-poster-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scene-backdrop {
+  opacity: 0.68;
+  transform: scale(1.025);
+  animation:
+    scene-backdrop-in
+    var(--duration-atmosphere)
+    var(--ease-enter)
+    both;
+}
+
+.scene-copy {
+  animation:
+    scene-copy-in
+    var(--duration-scene)
+    var(--ease-enter)
+    both;
+}
+
+.scene-poster {
+  animation:
+    scene-poster-in
+    var(--duration-scene)
+    var(--ease-enter)
+    both;
 }

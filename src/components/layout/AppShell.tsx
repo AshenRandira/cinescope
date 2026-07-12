@@ -1,12 +1,13 @@
-﻿import { Outlet } from 'react-router'
+import { Outlet } from 'react-router'
+
 import { DesktopHeader } from './DesktopHeader'
 import { MobileBottomNavigation } from './MobileBottomNavigation'
 
 export function AppShell() {
   return (
-    <div className="min-h-screen">
+    <div className="projection-surface min-h-screen">
       <a
-        className="sr-only fixed left-4 top-4 z-[100] rounded-lg bg-white px-4 py-3 font-semibold text-black focus:not-sr-only"
+        className="fixed left-4 top-4 z-[var(--z-skip-link)] -translate-y-24 border border-black bg-[var(--color-paper-100)] px-4 py-3 font-semibold text-[var(--color-ink-950)] transition-transform focus:translate-y-0"
         href="#main-content"
       >
         Skip to main content
@@ -15,17 +16,33 @@ export function AppShell() {
       <DesktopHeader />
 
       <main
-        className="mx-auto w-full max-w-7xl px-4 pb-28 pt-8 sm:px-6 md:pb-12 md:pt-10 lg:px-8"
+        className="w-full px-[var(--layout-gutter)] pb-[calc(var(--layout-mobile-nav-height)+env(safe-area-inset-bottom)+2rem)] pt-8 md:min-h-[calc(100svh-var(--layout-header-height))] md:pb-0 md:pt-10"
         id="main-content"
         tabIndex={-1}
       >
         <Outlet />
       </main>
 
-      <footer className="hidden border-t border-white/10 md:block">
-        <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-6 text-sm text-[var(--color-app-subtle)] lg:px-8">
-          <p>Discover stories worth watching.</p>
-          <p>{'\u00A9'} {new Date().getFullYear()} CineScope</p>
+      <footer className="hidden border-t border-[var(--color-line-soft)] md:block">
+        <div className="mx-auto grid min-h-28 max-w-[var(--layout-max)] grid-cols-[1fr_auto_1fr] items-center gap-8 px-[var(--layout-gutter)] text-[var(--color-paper-600)]">
+          <p className="archive-label justify-self-start">
+            Discover stories worth remembering
+          </p>
+
+          <span
+            aria-hidden="true"
+            className="h-8 w-px bg-[var(--color-line)]"
+          />
+
+          <div className="justify-self-end text-right">
+            <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em]">
+              CineScope / The Living Archive
+            </p>
+
+            <p className="mt-1 text-xs">
+              {'\u00A9'} {new Date().getFullYear()}
+            </p>
+          </div>
         </div>
       </footer>
 
@@ -33,4 +50,3 @@ export function AppShell() {
     </div>
   )
 }
-
