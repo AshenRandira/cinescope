@@ -27,6 +27,24 @@ export function getTmdbImageUrl(
   return `${TMDB_IMAGE_BASE_URL}/${size}${normalizedPath}`
 }
 
+export function getTmdbImageSrcSet(
+  filePath: string | null | undefined,
+  sizes: ReadonlyArray<`w${number}`>,
+): string | undefined {
+  if (!filePath) {
+    return undefined
+  }
+
+  const candidates = sizes.map((size) => {
+    const width = Number(size.slice(1))
+    const url = getTmdbImageUrl(filePath, size)
+
+    return `${url} ${width}w`
+  })
+
+  return candidates.join(', ')
+}
+
 export function getTmdbPosterUrl(
   filePath: string | null | undefined,
   size: TmdbImageSize = TMDB_IMAGE_DEFAULTS.poster,
