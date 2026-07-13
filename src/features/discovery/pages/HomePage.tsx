@@ -6,12 +6,14 @@ import {
 import { getTmdbErrorMessage } from '../../../lib/tmdb/client'
 import { ArchiveProjectionHero } from '../components/ArchiveProjectionHero'
 import { DiscoverySplice } from '../components/DiscoverySplice'
+import { TemporalCinemaMap } from '../components/TemporalCinemaMap'
 import { useHomeDiscoveryQueries } from '../hooks/useHomeDiscoveryQueries'
 
 export function HomePage() {
   const {
     discovery,
     featured,
+    temporal,
   } = useHomeDiscoveryQueries()
 
   let openingScene
@@ -63,6 +65,15 @@ export function HomePage() {
         isError={discovery.isError}
         isPending={discovery.isPending}
         onRetry={discovery.refetch}
+      />
+
+      <TemporalCinemaMap
+        errorMessage={getTmdbErrorMessage(temporal.error)}
+        isEmpty={temporal.isEmpty}
+        isError={temporal.isError}
+        isPending={temporal.isPending}
+        onRetry={temporal.refetch}
+        stations={temporal.stations}
       />
     </>
   )
