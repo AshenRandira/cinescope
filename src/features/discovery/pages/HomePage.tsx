@@ -6,6 +6,7 @@ import {
 import { getTmdbErrorMessage } from '../../../lib/tmdb/client'
 import { ArchiveProjectionHero } from '../components/ArchiveProjectionHero'
 import { DiscoverySplice } from '../components/DiscoverySplice'
+import { TelevisionSignal } from '../components/TelevisionSignal'
 import { TemporalCinemaMap } from '../components/TemporalCinemaMap'
 import { useHomeDiscoveryQueries } from '../hooks/useHomeDiscoveryQueries'
 
@@ -13,6 +14,7 @@ export function HomePage() {
   const {
     discovery,
     featured,
+    television,
     temporal,
   } = useHomeDiscoveryQueries()
 
@@ -74,6 +76,15 @@ export function HomePage() {
         isPending={temporal.isPending}
         onRetry={temporal.refetch}
         stations={temporal.stations}
+      />
+
+      <TelevisionSignal
+        errorMessage={getTmdbErrorMessage(television.error)}
+        isEmpty={television.isEmpty}
+        isError={television.isError}
+        isPending={television.isPending}
+        onRetry={television.refetch}
+        signals={television.signals}
       />
     </>
   )

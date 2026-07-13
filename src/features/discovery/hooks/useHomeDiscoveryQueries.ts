@@ -7,13 +7,16 @@ import { tmdbFetch } from '../../../lib/tmdb/client'
 import type {
   TmdbMovie,
   TmdbPaginatedResponse,
+  TmdbTvShow,
 } from '../../../types/tmdb'
 import {
   buildDiscoveryCuts,
+  buildTelevisionSignals,
   buildTemporalStations,
   discoveryCutDefinitions,
   homeFeaturedQueryKey,
   selectFeaturedMovies,
+  televisionSignalDefinitions,
   temporalStationDefinitions,
 } from '../data/homeDiscovery'
 
@@ -106,14 +109,50 @@ export function useHomeDiscoveryQueries() {
     ],
   )
 
+  const televisionQueries = useQueries({
+    queries: televisionSignalDefinitions.map(
+      (definition) => ({
+        queryKey: [
+          'tmdb',
+          'home',
+          'television-signal',
+          definition.id,
+          definition.endpoint,
+          definition.query,
+        ] as const,
+        queryFn: ({ signal }) =>
+          tmdbFetch<TmdbPaginatedResponse<TmdbTvShow>>(
+            definition.endpoint,
+            {
+              query: definition.query,
+              signal,
+            },
+          ),
+        select: (
+          response: TmdbPaginatedResponse<TmdbTvShow>,
+        ) => response.results,
+      }),
+    ),
+  })
+
+  const televisionSignals = buildTelevisionSignals(
+    televisionQueries.map((query) => query.data),
+  )
+
   const hasDiscoveryContent = discoveryCuts.length > 0
   const hasTemporalContent = temporalStations.length > 0
+  const hasTelevisionContent =
+    televisionSignals.length > 0
 
   const discoveryError = discoveryQueries.find(
     (query) => query.error,
   )?.error
 
   const temporalError = temporalQueries.find(
+    (query) => query.error,
+  )?.error
+
+  const televisionError = televisionQueries.find(
     (query) => query.error,
   )?.error
 
@@ -125,6 +164,15 @@ export function useHomeDiscoveryQueries() {
     !hasTemporalContent &&
     !isTemporalPending &&
     temporalQueries.some((query) => query.isError)
+
+  const isTelevisionPending =
+    !hasTelevisionContent &&
+    televisionQueries.some((query) => query.isPending)
+
+  const isTelevisionError =
+    !hasTelevisionContent &&
+    !isTelevisionPending &&
+    televisionQueries.some((query) => query.isError)
 
   function refetchFeatured(): void {
     void featuredQuery.refetch()
@@ -138,6 +186,12 @@ export function useHomeDiscoveryQueries() {
 
   function refetchTemporal(): void {
     temporalQueries.forEach((query) => {
+      void query.refetch()
+    })
+  }
+
+  function refetchTelevision(): void {
+    televisionQueries.forEach((query) => {
       void query.refetch()
     })
   }
@@ -173,6 +227,18 @@ export function useHomeDiscoveryQueries() {
       isPending: featuredQuery.isPending,
       movies: featuredMovies,
       refetch: refetchFeatured,
+    },
+    television: {
+      error: televisionError,
+      isEmpty:
+        !hasTelevisionContent &&
+        televisionQueries.every(
+          (query) => !query.isPending && !query.isError,
+        ),
+      isError: isTelevisionError,
+      isPending: isTelevisionPending,
+      refetch: refetchTelevision,
+      signals: televisionSignals,
     },
     temporal: {
       error: temporalError,
