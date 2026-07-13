@@ -8,7 +8,17 @@ export type {
   TmdbGenreListResponse,
 } from './genre'
 
-export type { TmdbMovie } from './movie'
+export type {
+  TmdbMovie,
+  TmdbMovieCastMember,
+  TmdbMovieCollection,
+  TmdbMovieCredits,
+  TmdbMovieCrewMember,
+  TmdbMovieDetails,
+  TmdbProductionCompany,
+  TmdbProductionCountry,
+  TmdbSpokenLanguage,
+} from './movie'
 
 export type { TmdbPerson } from './person'
 

@@ -20,6 +20,8 @@ import { SearchPage } from '../features/search/pages/SearchPage'
 
 import { NotFoundPage } from '../pages/NotFoundPage'
 
+import { MovieDetailPage } from '../features/movie-details/pages/MovieDetailPage'
+
 const developmentRoutes = import.meta.env.DEV
   ? [
       {
@@ -45,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: 'movies',
         element: <MoviesPage />,
+      },
+      {
+        path: 'movies/:movieId',
+        element: <MovieDetailPage />,
       },
       {
         path: 'tv',
