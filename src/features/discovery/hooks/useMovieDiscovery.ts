@@ -1,4 +1,4 @@
-﻿import {
+import {
   useInfiniteQuery,
   useQuery,
 } from '@tanstack/react-query'
@@ -104,7 +104,9 @@ export function useMovieDiscovery(
       isEmpty:
         moviesQuery.isSuccess &&
         records.length === 0,
-      isError: moviesQuery.isError,
+      isInitialError:
+        moviesQuery.isError &&
+        records.length === 0,
       isFetchingNextPage:
         moviesQuery.isFetchingNextPage,
       isNextPageError:

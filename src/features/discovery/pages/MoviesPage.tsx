@@ -18,6 +18,9 @@ import {
 import {
   MovieDiscoveryControls,
 } from '../components/MovieDiscoveryControls'
+import {
+  MovieDiscoveryContinuation,
+} from '../components/MovieDiscoveryContinuation'
 import { useMovieDiscovery } from '../hooks/useMovieDiscovery'
 import {
   useMovieDiscoveryFilters,
@@ -213,16 +216,15 @@ function ContactSheetRecord({
   onToggle,
   record,
 }: ContactSheetRecordProps) {
-  const isWide =
+  const isWideCandidate =
     index % 7 === 1 ||
     index % 7 === 5
 
-  const isTall =
-    !isWide &&
-    index % 5 === 2
+  const isWide =
+    record.backdropPath !== null &&
+    isWideCandidate
 
-  const useBackdrop =
-    isWide && record.backdropPath !== null
+  const useBackdrop = isWide
 
   const imageUrl = useBackdrop
     ? getTmdbBackdropUrl(
@@ -255,9 +257,7 @@ function ContactSheetRecord({
 
   const variantClass = isWide
     ? 'movie-contact-card--wide'
-    : isTall
-      ? 'movie-contact-card--tall'
-      : 'movie-contact-card--standard'
+    : 'movie-contact-card--standard'
 
   return (
     <article
@@ -355,7 +355,7 @@ function ContactSheetRecord({
               {isSelected
                 ? 'Close dossier'
                 : 'Inspect dossier'}
-              <span aria-hidden="true">ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢</span>
+              <span aria-hidden="true">&rarr;</span>
             </button>
           </div>
         </div>
@@ -543,7 +543,7 @@ export function MoviesPage() {
         message="CineScope is retrieving released films from TMDB and preparing the first catalogue frames."
       />
     )
-  } else if (movies.isError) {
+  } else if (movies.isInitialError) {
     registerContent = (
       <ErrorState
         title="The film register could not be opened"
@@ -557,10 +557,21 @@ export function MoviesPage() {
     )
   } else if (movies.isEmpty) {
     registerContent = (
-      <EmptyState
-        title="No film records were returned"
-        message="TMDB responded successfully, but no released films matched the current discovery method."
-      />
+      <div className="movie-register__empty-state">
+        <EmptyState
+          title="No film records were returned"
+          message="TMDB responded successfully, but no released films matched the current discovery method."
+        />
+
+        {!isDefault ? (
+          <button
+            type="button"
+            onClick={resetFilters}
+          >
+            Reset discovery parameters
+          </button>
+        ) : null}
+      </div>
     )
   } else {
     const leadRecord = movies.records[0]
@@ -634,12 +645,42 @@ export function MoviesPage() {
             </div>
           </section>
         ) : null}
+
+        <MovieDiscoveryContinuation
+          errorMessage={movies.errorMessage}
+          hasNextPage={Boolean(
+            movies.hasNextPage,
+          )}
+          isFetchingNextPage={
+            movies.isFetchingNextPage
+          }
+          isNextPageError={
+            movies.isNextPageError
+          }
+          loadedCount={movies.records.length}
+          loadedPageCount={
+            movies.loadedPageCount
+          }
+          onContinue={movies.loadNextPage}
+          totalResults={movies.totalResults}
+        />
       </>
     ) : (
-      <EmptyState
-        title="No film records were returned"
-        message="TMDB responded successfully, but the catalogue contained no usable movie records."
-      />
+      <div className="movie-register__empty-state">
+        <EmptyState
+          title="No film records were returned"
+          message="TMDB responded successfully, but the catalogue contained no usable movie records."
+        />
+
+        {!isDefault ? (
+          <button
+            type="button"
+            onClick={resetFilters}
+          >
+            Reset discovery parameters
+          </button>
+        ) : null}
+      </div>
     )
   }
 
