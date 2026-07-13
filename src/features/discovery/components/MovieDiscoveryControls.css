@@ -238,3 +238,22 @@
     color: LinkText;
   }
 }
+/* Phase 5 keyboard audit */
+
+.movie-parameters button:focus-visible,
+.movie-parameters select:focus-visible {
+  outline: 2px solid
+    var(--color-projector-strong);
+  outline-offset: 4px;
+}
+
+.movie-parameters select {
+  max-width: 100%;
+}
+
+@media (forced-colors: active) {
+  .movie-parameters button:focus-visible,
+  .movie-parameters select:focus-visible {
+    outline-color: Highlight;
+  }
+}

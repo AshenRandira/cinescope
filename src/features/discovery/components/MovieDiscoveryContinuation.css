@@ -118,3 +118,16 @@
     border-color: CanvasText;
   }
 }
+/* Phase 5 keyboard audit */
+
+.movie-continuation button:focus-visible {
+  outline: 2px solid
+    var(--color-projector-strong);
+  outline-offset: 4px;
+}
+
+@media (forced-colors: active) {
+  .movie-continuation button:focus-visible {
+    outline-color: Highlight;
+  }
+}

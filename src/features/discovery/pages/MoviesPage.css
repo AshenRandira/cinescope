@@ -814,3 +814,36 @@
     color: LinkText;
   }
 }
+/* Phase 5 accessibility audit */
+
+.movie-contact-card,
+.movie-contact-card__shell,
+.movie-contact-card__body,
+.movie-contact-card__inspection {
+  min-width: 0;
+}
+
+.movie-contact-card__title,
+.movie-contact-card__inspection-title,
+.movie-contact-card__dossier-title {
+  overflow-wrap: anywhere;
+}
+
+.movie-contact-card button:focus-visible,
+.movie-register__empty-state > button:focus-visible {
+  outline: 2px solid
+    var(--color-projector-strong);
+  outline-offset: 4px;
+}
+
+.movie-contact-card {
+  scroll-margin-top: 6rem;
+}
+
+@media (forced-colors: active) {
+  .movie-contact-card button:focus-visible,
+  .movie-register__empty-state
+    > button:focus-visible {
+    outline-color: Highlight;
+  }
+}

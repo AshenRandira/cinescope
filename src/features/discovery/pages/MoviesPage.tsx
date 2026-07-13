@@ -137,6 +137,7 @@ function OpeningProjection({
                 : `${record.title} poster`
             }
             decoding="async"
+            fetchPriority="high"
             loading="eager"
             sizes="(max-width: 48rem) 100vw, 53vw"
             src={imageUrl}
@@ -736,7 +737,10 @@ export function MoviesPage() {
       <section
         className="movie-register__catalogue"
         aria-labelledby="movie-register-selection"
-        aria-busy={movies.isPending}
+        aria-busy={
+          movies.isPending ||
+          movies.isFetchingNextPage
+        }
       >
         <header className="movie-register__catalogue-heading">
           <div>
