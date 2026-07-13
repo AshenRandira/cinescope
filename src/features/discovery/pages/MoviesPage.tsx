@@ -1,12 +1,698 @@
-﻿import { RoutePlaceholder } from '../../../components/feedback/RoutePlaceholder'
+import { useState } from 'react'
+import {
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from '../../../components/feedback'
+import {
+  getTmdbBackdropUrl,
+  getTmdbImageSrcSet,
+  getTmdbPosterUrl,
+} from '../../../lib/tmdb/image'
+import {
+  defaultMovieDiscoveryFilters,
+  type MovieDiscoveryRecord,
+} from '../data/movieDiscovery'
+import { useMovieDiscovery } from '../hooks/useMovieDiscovery'
+import './MoviesPage.css'
+
+type GenreLookup = ReadonlyMap<number, string>
+
+type MovieRecordProps = {
+  genreNames: GenreLookup
+  record: MovieDiscoveryRecord
+}
+
+type ContactSheetRecordProps = MovieRecordProps & {
+  index: number
+  isSelected: boolean
+  onToggle: (movieId: number) => void
+}
+
+function formatVoteCount(voteCount: number): string {
+  if (voteCount === 1) {
+    return '1 recorded vote'
+  }
+
+  return `${voteCount.toLocaleString()} recorded votes`
+}
+
+function getScoreLabel(
+  voteAverage: number | null,
+): string {
+  if (voteAverage === null) {
+    return 'Not yet rated'
+  }
+
+  return `${voteAverage.toFixed(1)} TMDB user score`
+}
+
+function resolveGenres(
+  genreIds: number[],
+  genreNames: GenreLookup,
+  limit = 3,
+): string[] {
+  return genreIds
+    .map((genreId) => genreNames.get(genreId))
+    .filter((genreName): genreName is string =>
+      Boolean(genreName),
+    )
+    .slice(0, limit)
+}
+
+function getGenreLabel(
+  record: MovieDiscoveryRecord,
+  genreNames: GenreLookup,
+  limit = 3,
+): string {
+  const resolvedGenres = resolveGenres(
+    record.genreIds,
+    genreNames,
+    limit,
+  )
+
+  if (resolvedGenres.length === 0) {
+    return 'Genre unavailable'
+  }
+
+  return resolvedGenres.join(' / ')
+}
+
+function OpeningProjection({
+  genreNames,
+  record,
+}: MovieRecordProps) {
+  const backdropUrl = getTmdbBackdropUrl(
+    record.backdropPath,
+    'w1280',
+  )
+
+  const posterUrl = getTmdbPosterUrl(
+    record.posterPath,
+    'w500',
+  )
+
+  const useBackdrop = backdropUrl !== null
+  const imageUrl = backdropUrl ?? posterUrl
+
+  const imageSrcSet = useBackdrop
+    ? getTmdbImageSrcSet(
+        record.backdropPath,
+        ['w780', 'w1280'],
+      )
+    : getTmdbImageSrcSet(
+        record.posterPath,
+        ['w342', 'w500', 'w780'],
+      )
+
+  return (
+    <article
+      className="movie-opening-projection"
+      aria-labelledby={`opening-movie-${record.id}`}
+    >
+      <div
+        className={[
+          'movie-opening-projection__artwork',
+          useBackdrop
+            ? 'movie-opening-projection__artwork--landscape'
+            : 'movie-opening-projection__artwork--portrait',
+        ].join(' ')}
+      >
+        {imageUrl ? (
+          <img
+            alt={
+              useBackdrop
+                ? `${record.title} backdrop artwork`
+                : `${record.title} poster`
+            }
+            decoding="async"
+            loading="eager"
+            sizes="(max-width: 48rem) 100vw, 53vw"
+            src={imageUrl}
+            srcSet={imageSrcSet}
+          />
+        ) : (
+          <div
+            className="movie-artwork-fallback"
+            aria-hidden="true"
+          >
+            <span>Artwork unavailable</span>
+          </div>
+        )}
+
+        <span className="movie-frame-number">
+          01
+        </span>
+      </div>
+
+      <div className="movie-opening-projection__copy">
+        <p className="archive-label">
+          Opening projection
+        </p>
+
+        <h3
+          className="movie-opening-projection__title font-display"
+          id={`opening-movie-${record.id}`}
+        >
+          {record.title}
+        </h3>
+
+        <p className="movie-record-index">
+          <span>
+            {record.releaseYear ??
+              'Release date unavailable'}
+          </span>
+          <span aria-hidden="true">/</span>
+          <span>
+            {getGenreLabel(
+              record,
+              genreNames,
+            )}
+          </span>
+          <span aria-hidden="true">/</span>
+          <span>
+            {record.originalLanguage.toUpperCase()}
+          </span>
+        </p>
+
+        <p className="movie-opening-projection__overview text-pretty">
+          {record.overview ??
+            'This archive record does not yet include a synopsis.'}
+        </p>
+
+        <dl className="movie-record-signals">
+          <div>
+            <dt>Audience response</dt>
+            <dd>
+              {getScoreLabel(record.voteAverage)}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Rating volume</dt>
+            <dd>{formatVoteCount(record.voteCount)}</dd>
+          </div>
+        </dl>
+      </div>
+    </article>
+  )
+}
+
+function ContactSheetRecord({
+  genreNames,
+  index,
+  isSelected,
+  onToggle,
+  record,
+}: ContactSheetRecordProps) {
+  const isWide =
+    index % 7 === 1 ||
+    index % 7 === 5
+
+  const isTall =
+    !isWide &&
+    index % 5 === 2
+
+  const useBackdrop =
+    isWide && record.backdropPath !== null
+
+  const imageUrl = useBackdrop
+    ? getTmdbBackdropUrl(
+        record.backdropPath,
+        'w780',
+      )
+    : getTmdbPosterUrl(
+        record.posterPath,
+        'w500',
+      )
+
+  const imageSrcSet = useBackdrop
+    ? getTmdbImageSrcSet(
+        record.backdropPath,
+        ['w300', 'w780'],
+      )
+    : getTmdbImageSrcSet(
+        record.posterPath,
+        ['w185', 'w342', 'w500'],
+      )
+
+  const recordNumber = String(index + 2).padStart(
+    2,
+    '0',
+  )
+
+  const titleId = `contact-movie-${record.id}`
+  const inspectionId =
+    `movie-inspection-${record.id}`
+
+  const variantClass = isWide
+    ? 'movie-contact-card--wide'
+    : isTall
+      ? 'movie-contact-card--tall'
+      : 'movie-contact-card--standard'
+
+  return (
+    <article
+      className={[
+        'movie-contact-card',
+        variantClass,
+        isSelected
+          ? 'movie-contact-card--selected'
+          : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      aria-labelledby={titleId}
+    >
+      <div className="movie-contact-card__shell">
+        <div
+          className={[
+            'movie-contact-card__artwork',
+            useBackdrop
+              ? 'movie-contact-card__artwork--landscape'
+              : 'movie-contact-card__artwork--portrait',
+          ].join(' ')}
+        >
+          {imageUrl ? (
+            <img
+              alt={`${record.title} ${
+                useBackdrop
+                  ? 'backdrop artwork'
+                  : 'poster'
+              }`}
+              decoding="async"
+              loading="lazy"
+              sizes={
+                useBackdrop
+                  ? '(max-width: 48rem) 100vw, 42vw'
+                  : '(max-width: 40rem) 45vw, 22vw'
+              }
+              src={imageUrl}
+              srcSet={imageSrcSet}
+            />
+          ) : (
+            <div
+              className="movie-artwork-fallback"
+              aria-hidden="true"
+            >
+              <span>Artwork unavailable</span>
+            </div>
+          )}
+
+          <span className="movie-frame-number">
+            {recordNumber}
+          </span>
+
+          <div className="movie-contact-card__dossier">
+            <div className="movie-contact-card__dossier-header">
+              <p className="archive-label">
+                Projection dossier
+              </p>
+
+              <span aria-hidden="true">
+                Frame {recordNumber}
+              </span>
+            </div>
+
+            <p className="movie-contact-card__dossier-overview">
+              {record.overview ??
+                'Synopsis unavailable for this record.'}
+            </p>
+
+            <dl className="movie-contact-card__dossier-signals">
+              <div>
+                <dt>TMDB score</dt>
+                <dd>
+                  {record.voteAverage === null
+                    ? 'Not rated'
+                    : record.voteAverage.toFixed(1)}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Recorded votes</dt>
+                <dd>
+                  {record.voteCount.toLocaleString()}
+                </dd>
+              </div>
+            </dl>
+
+            <button
+              className="movie-contact-card__dossier-action"
+              type="button"
+              aria-controls={inspectionId}
+              aria-expanded={isSelected}
+              onClick={() => onToggle(record.id)}
+            >
+              {isSelected
+                ? 'Close dossier'
+                : 'Inspect dossier'}
+              <span aria-hidden="true">â†’</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="movie-contact-card__caption">
+          <h3
+            className="movie-contact-card__title font-display"
+            id={titleId}
+          >
+            {record.title}
+          </h3>
+
+          <p className="movie-contact-card__index">
+            <span>
+              {record.releaseYear ?? 'Date unknown'}
+            </span>
+            <span aria-hidden="true">/</span>
+            <span>
+              {getGenreLabel(
+                record,
+                genreNames,
+                isWide ? 3 : 2,
+              )}
+            </span>
+          </p>
+
+          <div className="movie-contact-card__actions">
+            <span>
+              {record.voteAverage === null
+                ? 'Not yet rated'
+                : `${record.voteAverage.toFixed(1)} / 10`}
+            </span>
+
+            <span className="movie-contact-card__preview-cue">
+              Preview dossier
+            </span>
+
+            <button
+              className="movie-contact-card__mobile-action"
+              type="button"
+              aria-controls={inspectionId}
+              aria-expanded={isSelected}
+              onClick={() => onToggle(record.id)}
+            >
+              {isSelected
+                ? 'Close dossier'
+                : 'Inspect dossier'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {isSelected ? (
+        <div
+          className="movie-contact-card__inspection"
+          id={inspectionId}
+          role="region"
+          aria-label={`Expanded record for ${record.title}`}
+        >
+          <div>
+            <p className="archive-label">
+              Expanded record {recordNumber}
+            </p>
+
+            <p className="movie-contact-card__inspection-overview text-pretty">
+              {record.overview ??
+                'This archive record does not yet include a synopsis.'}
+            </p>
+          </div>
+
+          <dl className="movie-record-signals">
+            <div>
+              <dt>Primary release</dt>
+              <dd>
+                {record.releaseDate ??
+                  'Release date unavailable'}
+              </dd>
+            </div>
+
+            <div>
+              <dt>Genres</dt>
+              <dd>
+                {getGenreLabel(
+                  record,
+                  genreNames,
+                )}
+              </dd>
+            </div>
+
+            <div>
+              <dt>TMDB audience response</dt>
+              <dd>
+                {getScoreLabel(
+                  record.voteAverage,
+                )}
+              </dd>
+            </div>
+
+            <div>
+              <dt>Rating volume</dt>
+              <dd>
+                {formatVoteCount(
+                  record.voteCount,
+                )}
+              </dd>
+            </div>
+
+            <div>
+              <dt>Original language</dt>
+              <dd>
+                {record.originalLanguage.toUpperCase()}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      ) : null}
+    </article>
+  )
+}
 
 export function MoviesPage() {
+  const [selectedMovieId, setSelectedMovieId] =
+    useState<number | null>(null)
+
+  const { genres, movies } = useMovieDiscovery(
+    defaultMovieDiscoveryFilters,
+  )
+
+  const genreNames = new Map<number, string>(
+    genres.items.map((genre) => [
+      genre.id,
+      genre.name,
+    ]),
+  )
+
+  function toggleMovieRecord(movieId: number): void {
+    setSelectedMovieId((currentMovieId) =>
+      currentMovieId === movieId
+        ? null
+        : movieId,
+    )
+  }
+
+  let registerContent
+
+  if (movies.isPending) {
+    registerContent = (
+      <LoadingState
+        title="Opening the film register"
+        message="CineScope is retrieving released films from TMDB and preparing the first catalogue frames."
+      />
+    )
+  } else if (movies.isError) {
+    registerContent = (
+      <ErrorState
+        title="The film register could not be opened"
+        message={
+          movies.errorMessage ??
+          'TMDB did not return the records required for this projection.'
+        }
+        onRetry={movies.retry}
+        retryLabel="Reopen the register"
+      />
+    )
+  } else if (movies.isEmpty) {
+    registerContent = (
+      <EmptyState
+        title="No film records were returned"
+        message="TMDB responded successfully, but no released films matched the current discovery method."
+      />
+    )
+  } else {
+    const leadRecord = movies.records[0]
+    const contactRecords = movies.records.slice(1)
+
+    registerContent = leadRecord ? (
+      <>
+        <div
+          className="movie-register__result-summary"
+          aria-live="polite"
+        >
+          <p>
+            <strong>
+              {movies.records.length.toLocaleString()}
+            </strong>{' '}
+            records currently projected
+          </p>
+
+          <p>
+            {movies.totalResults.toLocaleString()}{' '}
+            reported matches in the TMDB catalogue
+          </p>
+        </div>
+
+        <OpeningProjection
+          genreNames={genreNames}
+          record={leadRecord}
+        />
+
+        {contactRecords.length > 0 ? (
+          <section
+            className="movie-contact-sheet"
+            aria-labelledby="movie-contact-sheet-title"
+          >
+            <header className="movie-contact-sheet__heading">
+              <div>
+                <p className="archive-label">
+                  Film contact sheet
+                </p>
+
+                <h3
+                  className="movie-contact-sheet__title font-display"
+                  id="movie-contact-sheet-title"
+                >
+                  Scan the remaining frames.
+                </h3>
+              </div>
+
+              <p>
+                Titles and essential identifiers remain
+                visible. Hover, focus or inspect a record
+                for additional catalogue information.
+              </p>
+            </header>
+
+            <div className="movie-contact-sheet__grid">
+              {contactRecords.map(
+                (record, index) => (
+                  <ContactSheetRecord
+                    genreNames={genreNames}
+                    index={index}
+                    isSelected={
+                      selectedMovieId === record.id
+                    }
+                    key={record.id}
+                    onToggle={toggleMovieRecord}
+                    record={record}
+                  />
+                ),
+              )}
+            </div>
+          </section>
+        ) : null}
+      </>
+    ) : (
+      <EmptyState
+        title="No film records were returned"
+        message="TMDB responded successfully, but the catalogue contained no usable movie records."
+      />
+    )
+  }
+
   return (
-    <RoutePlaceholder
-      description="This area will organize trending, popular, top-rated, now-playing, and upcoming movies into responsive discovery sections."
-      eyebrow="Movie discovery"
-      release="Release 1"
-      title="Every kind of movie, one place."
-    />
+    <main className="movie-register-page projection-surface">
+      <header className="movie-register__opening">
+        <div>
+          <p className="archive-label">
+            05 / Movie Register
+          </p>
+
+          <h1 className="movie-register__title font-display text-balance">
+            Find a film through the shape of its
+            record.
+          </h1>
+        </div>
+
+        <div className="movie-register__opening-copy">
+          <p className="text-pretty">
+            A living catalogue arranged through
+            release history, genre, duration and
+            recorded audience response.
+          </p>
+
+          <p className="movie-register__disclosure">
+            This opening selection uses TMDB
+            popularity among released films. It is
+            not personalized and does not represent
+            a CineScope quality ranking.
+          </p>
+        </div>
+      </header>
+
+      <hr className="editorial-rule" />
+
+      <section
+        className="movie-register__catalogue"
+        aria-labelledby="movie-register-selection"
+        aria-busy={movies.isPending}
+      >
+        <header className="movie-register__catalogue-heading">
+          <div>
+            <p className="archive-label">
+              Opening selection
+            </p>
+
+            <h2
+              className="movie-register__section-title font-display"
+              id="movie-register-selection"
+            >
+              Current attention
+            </h2>
+          </div>
+
+          <div className="movie-register__method">
+            <p>
+              Released films ordered by TMDB
+              popularity.
+            </p>
+
+            {genres.isPending ? (
+              <p className="movie-register__genre-note">
+                Genre index loading independently.
+              </p>
+            ) : null}
+
+            {genres.isError ? (
+              <div
+                className="movie-register__genre-error"
+                role="status"
+              >
+                <p>
+                  Genre names are temporarily
+                  unavailable. Film records remain
+                  accessible.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={genres.retry}
+                >
+                  Retry genre index
+                </button>
+              </div>
+            ) : null}
+
+            {genres.isEmpty ? (
+              <p className="movie-register__genre-note">
+                TMDB returned an empty genre index.
+              </p>
+            ) : null}
+          </div>
+        </header>
+
+        {registerContent}
+      </section>
+    </main>
   )
 }
