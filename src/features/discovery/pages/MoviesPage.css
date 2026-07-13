@@ -1,4 +1,4 @@
-﻿.movie-register-page {
+.movie-register-page {
   width: min(
     calc(100% - (var(--layout-gutter) * 2)),
     var(--layout-max)
@@ -766,4 +766,3 @@
     background: Canvas;
   }
 }
-
