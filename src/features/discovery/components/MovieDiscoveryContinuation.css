@@ -1,0 +1,133 @@
+.movie-continuation {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(17rem, 0.65fr);
+  gap: 2rem;
+  align-items: end;
+  margin-top: clamp(3.5rem, 7vw, 7rem);
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+  border-block: 1px solid var(--color-line);
+}
+
+.movie-continuation__title {
+  max-width: 12ch;
+  margin: 0.55rem 0 0;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 400;
+  line-height: 0.95;
+  color: var(--color-paper-100);
+}
+
+.movie-continuation__status {
+  max-width: 44rem;
+  margin: 1rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--color-app-muted);
+}
+
+.movie-continuation__action {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: end;
+}
+
+.movie-continuation__action > button {
+  display: inline-flex;
+  gap: 0.9rem;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0.5rem 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-projector-strong);
+  background: transparent;
+  font-family: var(--font-annotation);
+  font-size: 0.66rem;
+  font-weight: 650;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.movie-continuation__action > button:hover,
+.movie-continuation__action > button:focus-visible {
+  color: var(--color-paper-100);
+}
+
+.movie-continuation__action > button:disabled {
+  color: var(--color-app-subtle);
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.movie-continuation__action > button span {
+  font-size: 0.9rem;
+  color: var(--color-projector-strong);
+}
+
+.movie-continuation__error {
+  max-width: 31rem;
+  padding-left: 1rem;
+  border-left: 1px solid
+    var(--color-projector-strong);
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--color-app-muted);
+}
+
+.movie-continuation__error p {
+  margin: 0;
+}
+
+.movie-continuation__error p + p {
+  margin-top: 0.5rem;
+  color: var(--color-app-subtle);
+}
+
+.movie-continuation__complete {
+  max-width: 27rem;
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  text-align: right;
+  color: var(--color-app-muted);
+}
+
+@media (max-width: 64rem) {
+  .movie-continuation {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-continuation__action {
+    justify-items: start;
+  }
+
+  .movie-continuation__complete {
+    text-align: left;
+  }
+}
+
+@media (forced-colors: active) {
+  .movie-continuation__action > button {
+    color: LinkText;
+  }
+
+  .movie-continuation__error {
+    border-color: CanvasText;
+  }
+}
+/* Phase 5 keyboard audit */
+
+.movie-continuation button:focus-visible {
+  outline: 2px solid
+    var(--color-projector-strong);
+  outline-offset: 4px;
+}
+
+@media (forced-colors: active) {
+  .movie-continuation button:focus-visible {
+    outline-color: Highlight;
+  }
+}
