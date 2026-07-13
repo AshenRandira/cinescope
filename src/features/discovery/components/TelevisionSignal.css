@@ -2,7 +2,7 @@
     position: relative;
     isolation: isolate;
   }
-  
+
   .television-signal::before {
     position: absolute;
     z-index: -1;
@@ -27,12 +27,12 @@
         transparent 36rem
       );
   }
-  
+
   .television-signal__tabs {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  
+
   .television-signal__tab {
     min-height: 8rem;
     padding: 1.25rem;
@@ -44,16 +44,16 @@
       background-color var(--duration-interface)
         var(--ease-standard);
   }
-  
+
   .television-signal__tab:last-child {
     border-right: 0;
   }
-  
+
   .television-signal__tab:hover {
     color: var(--color-app-text);
     background: rgb(255 255 255 / 0.025);
   }
-  
+
   .television-signal__tab[data-active="true"] {
     color: var(--color-app-text);
     background:
@@ -63,7 +63,7 @@
         transparent
       );
   }
-  
+
   .television-signal__tab-line {
     width: 2rem;
     height: 1px;
@@ -73,18 +73,18 @@
       background-color var(--duration-interface)
         var(--ease-standard);
   }
-  
+
   .television-signal__tab[data-active="true"]
     .television-signal__tab-line {
     width: 4rem;
     background: var(--color-projector);
   }
-  
+
   .television-signal__panel {
     position: relative;
     isolation: isolate;
   }
-  
+
   .television-signal__panel::after {
     position: absolute;
     z-index: 2;
@@ -100,7 +100,7 @@
         rgb(255 255 255 / 0.18) 4px
       );
   }
-  
+
   .television-signal__frequency-line {
     height: 2.5rem;
     opacity: 0.6;
@@ -121,31 +121,31 @@
         transparent
       );
   }
-  
+
   @keyframes television-backdrop-in {
     from {
       opacity: 0;
       transform: scale(1.045);
     }
-  
+
     to {
         opacity: 0.74;
         transform: scale(1.01);
       }
   }
-  
+
   @keyframes television-content-in {
     from {
       opacity: 0;
       transform: translateX(-0.75rem);
     }
-  
+
     to {
       opacity: 1;
       transform: translateX(0);
     }
   }
-  
+
   .television-signal__backdrop {
     opacity: 0.74;
     transform: scale(1.01);
@@ -159,7 +159,7 @@
       var(--ease-enter)
       both;
   }
-  
+
   .television-signal__content {
     animation:
       television-content-in
@@ -167,11 +167,11 @@
       var(--ease-enter)
       both;
   }
-  
+
   .television-signal__record {
     position: relative;
   }
-  
+
   .television-signal__record::after {
     position: absolute;
     top: 50%;
@@ -185,12 +185,12 @@
       background-color var(--duration-interface)
         var(--ease-standard);
   }
-  
+
   .television-signal__record[data-active="true"]::after {
     width: 3rem;
     background: var(--color-projector);
   }
-  
+
   .television-signal__record[data-active="true"] {
     background:
       linear-gradient(
@@ -199,45 +199,45 @@
         transparent
       );
   }
-  
+
   @media (max-width: 767px) {
     .television-signal__tabs {
       grid-template-columns: 1fr;
     }
-  
+
     .television-signal__tab {
       min-height: 7rem;
       border-right: 0;
       border-bottom: 1px solid var(--color-line-soft);
     }
-  
+
     .television-signal__tab:last-child {
       border-bottom: 0;
     }
-  
+
     .television-signal__record::after {
       right: 0.75rem;
     }
-  
+
     .television-signal__record[data-active="true"]::after {
       width: 2rem;
     }
   }
-  
+
   @media (prefers-contrast: more) {
     .television-signal::before {
       opacity: 0.28;
     }
-  
+
     .television-signal__backdrop {
       opacity: 0.36;
     }
-  
+
     .television-signal__panel::after {
       display: none;
     }
   }
-  
+
   @media (prefers-reduced-motion: reduce) {
     .television-signal__backdrop,
     .television-signal__content {
