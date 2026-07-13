@@ -1,8 +1,8 @@
-.discovery-splice {
+﻿.discovery-splice {
     position: relative;
     isolation: isolate;
   }
-  
+
   .discovery-splice::before {
     position: absolute;
     z-index: -1;
@@ -27,31 +27,31 @@
         transparent 34rem
       );
   }
-  
+
   @keyframes discovery-splice-backdrop-in {
     from {
       opacity: 0;
       transform: scale(1.055);
     }
-  
+
     to {
       opacity: 0.62;
       transform: scale(1.015);
     }
   }
-  
+
   @keyframes discovery-splice-content-in {
     from {
       opacity: 0;
       transform: translateY(1rem);
     }
-  
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
-  
+
   .discovery-splice__backdrop {
     opacity: 0.62;
     transform: scale(1.015);
@@ -62,7 +62,7 @@
       var(--ease-enter)
       both;
   }
-  
+
   .discovery-splice__reveal {
     animation:
       discovery-splice-content-in
@@ -70,7 +70,7 @@
       var(--ease-enter)
       both;
   }
-  
+
   .discovery-splice__poster-frame::after {
     position: absolute;
     z-index: -1;
@@ -83,17 +83,17 @@
     content: "";
     opacity: 0.48;
   }
-  
+
   @media (prefers-contrast: more) {
     .discovery-splice::before {
       opacity: 0.28;
     }
-  
+
     .discovery-splice__backdrop {
       opacity: 0.38;
     }
   }
-  
+
   @media (prefers-reduced-motion: reduce) {
     .discovery-splice__backdrop,
     .discovery-splice__reveal {
