@@ -6,6 +6,7 @@ import {
 import { getTmdbErrorMessage } from '../../../lib/tmdb/client'
 import { ArchiveProjectionHero } from '../components/ArchiveProjectionHero'
 import { DiscoverySplice } from '../components/DiscoverySplice'
+import { HomepageClosingFrame } from '../components/HomepageClosingFrame'
 import { TelevisionSignal } from '../components/TelevisionSignal'
 import { TemporalCinemaMap } from '../components/TemporalCinemaMap'
 import { useHomeDiscoveryQueries } from '../hooks/useHomeDiscoveryQueries'
@@ -86,6 +87,8 @@ export function HomePage() {
         onRetry={television.refetch}
         signals={television.signals}
       />
+
+      <HomepageClosingFrame />
     </>
   )
 }

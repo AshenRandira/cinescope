@@ -24,25 +24,14 @@ export function AppShell() {
       </main>
 
       <footer className="hidden border-t border-[var(--color-line-soft)] md:block">
-        <div className="mx-auto grid min-h-28 max-w-[var(--layout-max)] grid-cols-[1fr_auto_1fr] items-center gap-8 px-[var(--layout-gutter)] text-[var(--color-paper-600)]">
-          <p className="archive-label justify-self-start">
-            Discover stories worth remembering
+        <div className="mx-auto flex min-h-20 max-w-[var(--layout-max)] items-center justify-between gap-8 px-[var(--layout-gutter)] text-[var(--color-paper-600)]">
+          <p className="font-mono text-[0.65rem] uppercase tracking-[0.16em]">
+            CineScope / The Living Archive
           </p>
 
-          <span
-            aria-hidden="true"
-            className="h-8 w-px bg-[var(--color-line)]"
-          />
-
-          <div className="justify-self-end text-right">
-            <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em]">
-              CineScope / The Living Archive
-            </p>
-
-            <p className="mt-1 text-xs">
-              {'\u00A9'} {new Date().getFullYear()}
-            </p>
-          </div>
+          <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em]">
+            {'\u00A9'} {new Date().getFullYear()}
+          </p>
         </div>
       </footer>
 
