@@ -2,7 +2,7 @@
     position: relative;
     isolation: isolate;
   }
-  
+
   .temporal-map::before {
     position: absolute;
     z-index: -1;
@@ -24,13 +24,13 @@
         transparent 38rem
       );
   }
-  
+
   .temporal-map__track {
     position: relative;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  
+
   .temporal-map__track::before {
     position: absolute;
     top: 4.05rem;
@@ -46,7 +46,7 @@
         var(--color-line-soft)
       );
   }
-  
+
   .temporal-map__station {
     position: relative;
     z-index: 1;
@@ -59,16 +59,16 @@
       background-color var(--duration-interface)
         var(--ease-standard);
   }
-  
+
   .temporal-map__station:last-child {
     border-right: 0;
   }
-  
+
   .temporal-map__station:hover {
     color: var(--color-app-text);
     background: rgb(255 255 255 / 0.025);
   }
-  
+
   .temporal-map__station[data-active="true"] {
     color: var(--color-app-text);
     background:
@@ -78,7 +78,7 @@
         transparent
       );
   }
-  
+
   .temporal-map__node {
     position: relative;
     width: 0.75rem;
@@ -95,7 +95,7 @@
       background-color var(--duration-interface)
         var(--ease-standard);
   }
-  
+
   .temporal-map__station[data-active="true"]
     .temporal-map__node {
     border-color: var(--color-projector-strong);
@@ -103,31 +103,31 @@
     transform: scale(1.32);
     box-shadow: 0 0 0 0.4rem rgb(239 183 97 / 0.1);
   }
-  
+
   @keyframes temporal-backdrop-in {
     from {
       opacity: 0;
       transform: scale(1.055);
     }
-  
+
     to {
       opacity: 0.56;
       transform: scale(1.015);
     }
   }
-  
+
   @keyframes temporal-content-in {
     from {
       opacity: 0;
       transform: translateY(1rem);
     }
-  
+
     to {
         opacity: 0.7;
         transform: scale(1.015);
       }
   }
-  
+
   .temporal-map__backdrop {
     opacity: 0.7;
     transform: scale(1.015);
@@ -141,7 +141,7 @@
       var(--ease-enter)
       both;
   }
-  
+
   .temporal-map__content {
     animation:
       temporal-content-in
@@ -149,7 +149,7 @@
       var(--ease-enter)
       both;
   }
-  
+
   .temporal-map__year {
     font-family: var(--font-display);
     font-size: clamp(5rem, 12vw, 11rem);
@@ -158,11 +158,11 @@
     letter-spacing: -0.06em;
     color: var(--color-app-text);
   }
-  
+
   .temporal-map__record {
     position: relative;
   }
-  
+
   .temporal-map__record::before {
     position: absolute;
     top: -1px;
@@ -175,17 +175,17 @@
       width var(--duration-interface)
       var(--ease-focus);
   }
-  
+
   .temporal-map__record[data-active="true"]::before {
     width: 100%;
   }
-  
+
   @media (max-width: 767px) {
     .temporal-map__track {
       display: block;
       padding-left: 1.75rem;
     }
-  
+
     .temporal-map__track::before {
       top: 1.5rem;
       bottom: 1.5rem;
@@ -200,7 +200,7 @@
           var(--color-line-soft)
         );
     }
-  
+
     .temporal-map__station {
       min-height: 7rem;
       width: 100%;
@@ -208,44 +208,44 @@
       border-right: 0;
       border-bottom: 1px solid var(--color-line-soft);
     }
-  
+
     .temporal-map__station:last-child {
       border-bottom: 0;
     }
-  
+
     .temporal-map__node {
       position: absolute;
       top: 1rem;
       left: -1.75rem;
       margin-top: 0;
     }
-  
+
     .temporal-map__year {
       font-size: clamp(4.5rem, 28vw, 7rem);
     }
   }
-  
+
   @media (prefers-contrast: more) {
     .temporal-map::before {
       opacity: 0.3;
     }
-  
+
     .temporal-map__backdrop {
       opacity: 0.34;
     }
-  
+
     .temporal-map__track::before {
       background: var(--color-app-text);
     }
   }
-  
+
   @media (prefers-reduced-motion: reduce) {
     .temporal-map__backdrop,
     .temporal-map__content {
       transform: none;
       animation: none;
     }
-  
+
     .temporal-map__station[data-active="true"]
       .temporal-map__node {
       transform: none;
