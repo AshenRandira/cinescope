@@ -1,0 +1,253 @@
+.temporal-map {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .temporal-map::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    opacity: 0.18;
+    background:
+      linear-gradient(
+        90deg,
+        transparent 0,
+        transparent calc(50% - 1px),
+        var(--color-line-soft) 50%,
+        transparent calc(50% + 1px)
+      ),
+      radial-gradient(
+        circle at 18% 62%,
+        var(--color-atmosphere-secondary-soft),
+        transparent 38rem
+      );
+  }
+
+  .temporal-map__track {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .temporal-map__track::before {
+    position: absolute;
+    top: 4.05rem;
+    right: 7%;
+    left: 7%;
+    height: 1px;
+    content: "";
+    background:
+      linear-gradient(
+        90deg,
+        var(--color-line-soft),
+        var(--color-projector),
+        var(--color-line-soft)
+      );
+  }
+
+  .temporal-map__station {
+    position: relative;
+    z-index: 1;
+    min-height: 9rem;
+    padding: 1.25rem 1rem 1.5rem;
+    border-right: 1px solid var(--color-line-soft);
+    text-align: left;
+    transition:
+      color var(--duration-interface) var(--ease-standard),
+      background-color var(--duration-interface)
+        var(--ease-standard);
+  }
+
+  .temporal-map__station:last-child {
+    border-right: 0;
+  }
+
+  .temporal-map__station:hover {
+    color: var(--color-app-text);
+    background: rgb(255 255 255 / 0.025);
+  }
+
+  .temporal-map__station[data-active="true"] {
+    color: var(--color-app-text);
+    background:
+      linear-gradient(
+        180deg,
+        rgb(239 183 97 / 0.09),
+        transparent
+      );
+  }
+
+  .temporal-map__node {
+    position: relative;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-top: 1.35rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 999px;
+    background: var(--color-app-background);
+    transition:
+      transform var(--duration-interface)
+        var(--ease-focus),
+      border-color var(--duration-interface)
+        var(--ease-standard),
+      background-color var(--duration-interface)
+        var(--ease-standard);
+  }
+
+  .temporal-map__station[data-active="true"]
+    .temporal-map__node {
+    border-color: var(--color-projector-strong);
+    background: var(--color-projector);
+    transform: scale(1.32);
+    box-shadow: 0 0 0 0.4rem rgb(239 183 97 / 0.1);
+  }
+
+  @keyframes temporal-backdrop-in {
+    from {
+      opacity: 0;
+      transform: scale(1.055);
+    }
+
+    to {
+      opacity: 0.56;
+      transform: scale(1.015);
+    }
+  }
+
+  @keyframes temporal-content-in {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+
+    to {
+        opacity: 0.7;
+        transform: scale(1.015);
+      }
+  }
+
+  .temporal-map__backdrop {
+    opacity: 0.7;
+    transform: scale(1.015);
+    filter:
+      brightness(1.08)
+      saturate(0.84)
+      contrast(1.04);
+    animation:
+      temporal-backdrop-in
+      var(--duration-atmosphere)
+      var(--ease-enter)
+      both;
+  }
+
+  .temporal-map__content {
+    animation:
+      temporal-content-in
+      var(--duration-scene)
+      var(--ease-enter)
+      both;
+  }
+
+  .temporal-map__year {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 11rem);
+    font-weight: 400;
+    line-height: 0.72;
+    letter-spacing: -0.06em;
+    color: var(--color-app-text);
+  }
+
+  .temporal-map__record {
+    position: relative;
+  }
+
+  .temporal-map__record::before {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    content: "";
+    background: var(--color-projector);
+    transition:
+      width var(--duration-interface)
+      var(--ease-focus);
+  }
+
+  .temporal-map__record[data-active="true"]::before {
+    width: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .temporal-map__track {
+      display: block;
+      padding-left: 1.75rem;
+    }
+
+    .temporal-map__track::before {
+      top: 1.5rem;
+      bottom: 1.5rem;
+      left: 0.35rem;
+      width: 1px;
+      height: auto;
+      background:
+        linear-gradient(
+          180deg,
+          var(--color-line-soft),
+          var(--color-projector),
+          var(--color-line-soft)
+        );
+    }
+
+    .temporal-map__station {
+      min-height: 7rem;
+      width: 100%;
+      padding: 1rem 0 1.25rem 1rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--color-line-soft);
+    }
+
+    .temporal-map__station:last-child {
+      border-bottom: 0;
+    }
+
+    .temporal-map__node {
+      position: absolute;
+      top: 1rem;
+      left: -1.75rem;
+      margin-top: 0;
+    }
+
+    .temporal-map__year {
+      font-size: clamp(4.5rem, 28vw, 7rem);
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .temporal-map::before {
+      opacity: 0.3;
+    }
+
+    .temporal-map__backdrop {
+      opacity: 0.34;
+    }
+
+    .temporal-map__track::before {
+      background: var(--color-app-text);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .temporal-map__backdrop,
+    .temporal-map__content {
+      transform: none;
+      animation: none;
+    }
+
+    .temporal-map__station[data-active="true"]
+      .temporal-map__node {
+      transform: none;
+    }
+  }
