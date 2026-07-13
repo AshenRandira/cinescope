@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   EmptyState,
   ErrorState,
@@ -10,10 +10,18 @@ import {
   getTmdbPosterUrl,
 } from '../../../lib/tmdb/image'
 import {
-  defaultMovieDiscoveryFilters,
   type MovieDiscoveryRecord,
 } from '../data/movieDiscovery'
+import {
+  getMovieDiscoveryMethodLabel,
+} from '../data/movieDiscoveryUrl'
+import {
+  MovieDiscoveryControls,
+} from '../components/MovieDiscoveryControls'
 import { useMovieDiscovery } from '../hooks/useMovieDiscovery'
+import {
+  useMovieDiscoveryFilters,
+} from '../hooks/useMovieDiscoveryFilters'
 import './MoviesPage.css'
 
 type GenreLookup = ReadonlyMap<number, string>
@@ -347,7 +355,7 @@ function ContactSheetRecord({
               {isSelected
                 ? 'Close dossier'
                 : 'Inspect dossier'}
-              <span aria-hidden="true">â†’</span>
+              <span aria-hidden="true">ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢</span>
             </button>
           </div>
         </div>
@@ -472,16 +480,51 @@ export function MoviesPage() {
   const [selectedMovieId, setSelectedMovieId] =
     useState<number | null>(null)
 
-  const { genres, movies } = useMovieDiscovery(
-    defaultMovieDiscoveryFilters,
+  const {
+    filters,
+    isDefault,
+    resetFilters,
+    setGenreId,
+    setMinimumScore,
+    setReleasePeriod,
+    setRuntime,
+    setSort,
+  } = useMovieDiscoveryFilters()
+
+  const { genres, movies } =
+    useMovieDiscovery(filters)
+
+  const genreNames = useMemo(
+    () =>
+      new Map<number, string>(
+        genres.items.map((genre) => [
+          genre.id,
+          genre.name,
+        ]),
+      ),
+    [genres.items],
   )
 
-  const genreNames = new Map<number, string>(
-    genres.items.map((genre) => [
-      genre.id,
-      genre.name,
-    ]),
-  )
+  const activeGenreName =
+    filters.genreId === null
+      ? null
+      : genreNames.get(filters.genreId) ?? null
+
+  const methodLabel =
+    getMovieDiscoveryMethodLabel(
+      filters,
+      activeGenreName,
+    )
+
+  useEffect(() => {
+    setSelectedMovieId(null)
+  }, [
+    filters.genreId,
+    filters.minimumScore,
+    filters.releasePeriod,
+    filters.runtime,
+    filters.sort,
+  ])
 
   function toggleMovieRecord(movieId: number): void {
     setSelectedMovieId((currentMovieId) =>
@@ -622,15 +665,32 @@ export function MoviesPage() {
           </p>
 
           <p className="movie-register__disclosure">
-            This opening selection uses TMDB
-            popularity among released films. It is
-            not personalized and does not represent
-            a CineScope quality ranking.
+            {isDefault
+              ? 'This opening selection uses TMDB popularity among released films. It is not personalized and does not represent a CineScope quality ranking.'
+              : 'This register reflects the active catalogue parameters below. It is not personalized and does not represent a CineScope quality ranking.'}
           </p>
         </div>
       </header>
 
       <hr className="editorial-rule" />
+
+      <MovieDiscoveryControls
+        filters={filters}
+        genreErrorMessage={genres.errorMessage}
+        genreItems={genres.items}
+        isDefault={isDefault}
+        isGenreEmpty={genres.isEmpty}
+        isGenreError={genres.isError}
+        isGenrePending={genres.isPending}
+        methodLabel={methodLabel}
+        onGenreChange={setGenreId}
+        onMinimumScoreChange={setMinimumScore}
+        onReleasePeriodChange={setReleasePeriod}
+        onReset={resetFilters}
+        onRetryGenres={genres.retry}
+        onRuntimeChange={setRuntime}
+        onSortChange={setSort}
+      />
 
       <section
         className="movie-register__catalogue"
@@ -647,47 +707,14 @@ export function MoviesPage() {
               className="movie-register__section-title font-display"
               id="movie-register-selection"
             >
-              Current attention
+              {isDefault
+                ? 'Current attention'
+                : 'Selected register'}
             </h2>
           </div>
 
           <div className="movie-register__method">
-            <p>
-              Released films ordered by TMDB
-              popularity.
-            </p>
-
-            {genres.isPending ? (
-              <p className="movie-register__genre-note">
-                Genre index loading independently.
-              </p>
-            ) : null}
-
-            {genres.isError ? (
-              <div
-                className="movie-register__genre-error"
-                role="status"
-              >
-                <p>
-                  Genre names are temporarily
-                  unavailable. Film records remain
-                  accessible.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={genres.retry}
-                >
-                  Retry genre index
-                </button>
-              </div>
-            ) : null}
-
-            {genres.isEmpty ? (
-              <p className="movie-register__genre-note">
-                TMDB returned an empty genre index.
-              </p>
-            ) : null}
+            <p>{methodLabel}</p>
           </div>
         </header>
 
