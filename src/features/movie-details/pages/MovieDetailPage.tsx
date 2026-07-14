@@ -17,6 +17,8 @@ import { useMovieDetail } from '../hooks/useMovieDetail'
 
 import './MovieDetailPage.css'
 
+import { MovieDetailSections } from '../components/MovieDetailSections'
+
 function formatReleaseDate(
   releaseDate: string,
 ): string {
@@ -394,6 +396,8 @@ export function MovieDetailPage() {
           </div>
         </div>
       </section>
+
+      <MovieDetailSections movie={movie} />
     </article>
   )
 }
