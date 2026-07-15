@@ -17,7 +17,9 @@ import { useMovieDetail } from '../hooks/useMovieDetail'
 
 import './MovieDetailPage.css'
 
+import { MovieAvailabilitySection } from '../components/MovieAvailabilitySection'
 import { MovieDetailSections } from '../components/MovieDetailSections'
+import { MovieRecommendationsSection } from '../components/MovieRecommendationsSection'
 import { MovieVideoSection } from '../components/MovieVideoSection'
 
 function formatReleaseDate(
@@ -95,7 +97,14 @@ export function MovieDetailPage() {
   }>()
 
   const movieId = parseMovieId(routeMovieId)
-  const { details } = useMovieDetail(movieId)
+  const { details, watchProviders } = useMovieDetail(movieId)
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto',
+    })
+  }, [movieId])
 
   useEffect(() => {
     if (details.data) {
@@ -401,6 +410,15 @@ export function MovieDetailPage() {
       <MovieVideoSection movie={movie} />
 
       <MovieDetailSections movie={movie} />
+
+      <MovieAvailabilitySection
+        movieTitle={movie.title}
+        watchProviders={watchProviders}
+      />
+
+      <MovieRecommendationsSection
+        movie={movie}
+      />
     </article>
   )
 }

@@ -1,0 +1,305 @@
+.movie-recommendations {
+    width: min(
+      calc(100% - (var(--layout-gutter) * 2)),
+      var(--layout-max)
+    );
+    margin-inline: auto;
+    padding-block: clamp(4rem, 8vw, 8rem);
+    border-top: 1px solid var(--color-line);
+  }
+  
+  .movie-recommendations__heading {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(18rem, 0.55fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-bottom: clamp(2.5rem, 5vw, 5rem);
+  }
+  
+  .movie-recommendations__title {
+    max-width: 13ch;
+    margin: 0.65rem 0 0;
+    font-size: clamp(3rem, 6vw, 6.5rem);
+    font-weight: 400;
+    line-height: 0.9;
+    color: var(--color-paper-100);
+  }
+  
+  .movie-recommendations__copy {
+    justify-self: end;
+    max-width: 31rem;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--color-app-muted);
+  }
+  
+  .movie-recommendations__grid {
+    display: grid;
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+    gap: clamp(2rem, 4vw, 4rem)
+      clamp(1rem, 2vw, 2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .movie-recommendations__grid li {
+    min-width: 0;
+  }
+  
+  .movie-recommendation-card {
+    display: block;
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .movie-recommendation-card__artwork {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 2 / 3;
+    background:
+      linear-gradient(
+        145deg,
+        var(--color-ink-700),
+        var(--color-ink-900)
+      );
+    box-shadow: var(--shadow-interface);
+  }
+  
+  .movie-recommendation-card__artwork::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    border: 1px solid var(--color-line-strong);
+    box-shadow:
+      inset 0 0 0 0.25rem
+      rgba(7, 8, 6, 0.14);
+  }
+  
+  .movie-recommendation-card__artwork img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter:
+      saturate(0.78)
+      contrast(1.03);
+    transition:
+      transform var(--motion-duration-slow)
+        var(--motion-easing-standard),
+      filter var(--motion-duration-standard)
+        var(--motion-easing-standard);
+  }
+  
+  .movie-recommendation-card:hover
+    .movie-recommendation-card__artwork img,
+  .movie-recommendation-card:focus-visible
+    .movie-recommendation-card__artwork img {
+    filter:
+      saturate(0.95)
+      contrast(1.04);
+    transform: scale(1.02);
+  }
+  
+  .movie-recommendation-card:focus-visible {
+    outline: 2px solid var(--color-projector-strong);
+    outline-offset: 5px;
+  }
+  
+  .movie-recommendation-card__fallback {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    padding: 1rem;
+    background:
+      linear-gradient(
+        135deg,
+        transparent 49.7%,
+        var(--color-line) 50%,
+        transparent 50.3%
+      ),
+      radial-gradient(
+        circle at 70% 30%,
+        var(--color-projector-soft),
+        transparent 42%
+      );
+  }
+  
+  .movie-recommendation-card__fallback span {
+    font-family: var(--font-annotation);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--color-app-muted);
+  }
+  
+  .movie-recommendation-card__number {
+    position: absolute;
+    right: 0.55rem;
+    bottom: 0.45rem;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: var(--color-paper-100);
+    text-shadow: 0 1px 8px var(--color-ink-950);
+  }
+  
+  .movie-recommendation-card__caption {
+    padding-top: 0.9rem;
+  }
+  
+  .movie-recommendation-card__caption h3 {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: clamp(1.45rem, 2vw, 2.15rem);
+    font-weight: 400;
+    line-height: 1;
+    overflow-wrap: anywhere;
+    color: var(--color-paper-100);
+  }
+  
+  .movie-recommendation-card:hover
+    .movie-recommendation-card__caption h3,
+  .movie-recommendation-card:focus-visible
+    .movie-recommendation-card__caption h3 {
+    color: var(--color-projector-strong);
+  }
+  
+  .movie-recommendation-card__caption p {
+    margin: 0.65rem 0 0;
+    font-family: var(--font-annotation);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-app-muted);
+  }
+  
+  .movie-recommendation-card__caption > span {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-family: var(--font-annotation);
+    font-size: 0.58rem;
+    color: var(--color-projector-strong);
+  }
+  
+  .movie-recommendations__empty {
+    max-width: 48rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    border-block: 1px solid var(--color-line);
+  }
+  
+  .movie-recommendations__empty > p {
+    margin: 0;
+    font-family: var(--font-annotation);
+    font-size: 0.59rem;
+    font-weight: 650;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--color-projector-strong);
+  }
+  
+  .movie-recommendations__empty h3 {
+    max-width: 14ch;
+    margin: 0.7rem 0 0;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 400;
+    line-height: 0.92;
+    color: var(--color-paper-100);
+  }
+  
+  .movie-recommendations__empty a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    margin-top: 1.5rem;
+    border-bottom: 1px solid currentColor;
+    font-family: var(--font-annotation);
+    font-size: 0.61rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--color-projector-strong);
+  }
+  
+  .movie-recommendations__empty a:focus-visible {
+    outline: 2px solid var(--color-projector-strong);
+    outline-offset: 4px;
+  }
+  
+  @media (max-width: 64rem) {
+    .movie-recommendations__heading {
+      grid-template-columns: 1fr;
+    }
+  
+    .movie-recommendations__copy {
+      justify-self: start;
+    }
+  
+    .movie-recommendations__grid {
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+    }
+  }
+  
+  @media (max-width: 48rem) {
+    .movie-recommendations__grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+  }
+  
+  @media (max-width: 40rem) {
+    .movie-recommendations__title {
+      font-size: clamp(3rem, 14vw, 5rem);
+    }
+  
+    .movie-recommendations__grid {
+      gap: 2.25rem 0.85rem;
+    }
+  
+    .movie-recommendation-card__caption h3 {
+      font-size: clamp(1.35rem, 6vw, 1.8rem);
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .movie-recommendation-card__artwork img {
+      transition: none;
+    }
+  
+    .movie-recommendation-card:hover
+      .movie-recommendation-card__artwork img,
+    .movie-recommendation-card:focus-visible
+      .movie-recommendation-card__artwork img {
+      transform: none;
+    }
+  }
+  
+  @media (forced-colors: active) {
+    .movie-recommendation-card__fallback,
+    .movie-recommendations__empty {
+      border: 1px solid CanvasText;
+      background: Canvas;
+    }
+  
+    .movie-recommendation-card:focus-visible,
+    .movie-recommendations__empty
+      a:focus-visible {
+      outline-color: Highlight;
+    }
+  
+    .movie-recommendations__empty a {
+      color: LinkText;
+    }
+  }
