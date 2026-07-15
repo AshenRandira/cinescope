@@ -234,7 +234,7 @@ import {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                02 / Record anatomy
+                03 / Record anatomy
               </p>
   
               <h2
@@ -339,7 +339,7 @@ import {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                03 / Credits register
+                04 / Credits register
               </p>
   
               <h2
