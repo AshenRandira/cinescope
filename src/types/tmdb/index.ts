@@ -28,6 +28,14 @@ export type {
   TmdbWatchProviderResponse,
 } from './provider'
 
+export type {
+  TmdbMultiSearchMovie,
+  TmdbMultiSearchPerson,
+  TmdbMultiSearchResponse,
+  TmdbMultiSearchResult,
+  TmdbMultiSearchTvShow,
+} from './search'
+
 export type { TmdbTvShow } from './tv'
 
 export type {
