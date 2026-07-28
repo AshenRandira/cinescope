@@ -4,30 +4,30 @@ import {
     useState,
     type MouseEvent,
   } from 'react'
-  
+
   import {
     ExternalLink,
     Play,
     X,
   } from 'lucide-react'
-  
+
   import {
     getTmdbBackdropUrl,
     getTmdbImageSrcSet,
     getTmdbPosterUrl,
   } from '../../../lib/tmdb/image'
-  
+
   import type {
     TmdbMovieDetails,
     TmdbVideo,
   } from '../../../types/tmdb'
-  
+
   import './MovieVideoSection.css'
-  
+
   type MovieVideoSectionProps = {
     movie: TmdbMovieDetails
   }
-  
+
   const VIDEO_TYPE_PRIORITY: Readonly<
     Record<string, number>
   > = {
@@ -37,37 +37,37 @@ import {
     Featurette: 20,
     'Behind the Scenes': 10,
   }
-  
+
   function getVideoPriority(
     video: TmdbVideo,
   ): number {
     const typePriority =
       VIDEO_TYPE_PRIORITY[video.type] ?? 0
-  
+
     const officialPriority = video.official
       ? 100
       : 0
-  
+
     const languagePriority =
       video.iso_639_1 === 'en' ? 5 : 0
-  
+
     return (
       officialPriority +
       typePriority +
       languagePriority
     )
   }
-  
+
   function getPublishedTimestamp(
     publishedAt: string,
   ): number {
     const timestamp = Date.parse(publishedAt)
-  
+
     return Number.isNaN(timestamp)
       ? 0
       : timestamp
   }
-  
+
   function getSupportedVideos(
     videos: TmdbVideo[],
   ): TmdbVideo[] {
@@ -81,11 +81,11 @@ import {
         const priorityDifference =
           getVideoPriority(secondVideo) -
           getVideoPriority(firstVideo)
-  
+
         if (priorityDifference !== 0) {
           return priorityDifference
         }
-  
+
         return (
           getPublishedTimestamp(
             secondVideo.published_at,
@@ -96,22 +96,22 @@ import {
         )
       })
   }
-  
+
   function formatVideoDate(
     publishedAt: string,
   ): string {
     const date = new Date(publishedAt)
-  
+
     if (Number.isNaN(date.getTime())) {
       return 'Publication date unavailable'
     }
-  
+
     return new Intl.DateTimeFormat('en', {
       month: 'short',
       year: 'numeric',
     }).format(date)
   }
-  
+
   function getVideoEmbedUrl(
     videoKey: string,
   ): string {
@@ -121,7 +121,7 @@ import {
       '?autoplay=1&playsinline=1&rel=0'
     )
   }
-  
+
   function getVideoExternalUrl(
     videoKey: string,
   ): string {
@@ -130,40 +130,40 @@ import {
       encodeURIComponent(videoKey)
     )
   }
-  
+
   export function MovieVideoSection({
     movie,
   }: MovieVideoSectionProps) {
     const dialogRef =
       useRef<HTMLDialogElement>(null)
-  
+
     const [activeVideo, setActiveVideo] =
       useState<TmdbVideo | null>(null)
-  
+
     const supportedVideos = getSupportedVideos(
       movie.videos.results,
     )
-  
+
     const primaryVideo =
       supportedVideos[0] ?? null
-  
+
     const additionalVideos =
       supportedVideos.slice(1, 4)
-  
+
     const backdropUrl = getTmdbBackdropUrl(
       movie.backdrop_path,
       'w1280',
     )
-  
+
     const posterUrl = getTmdbPosterUrl(
       movie.poster_path,
       'w780',
     )
-  
+
     const artworkUrl = backdropUrl ?? posterUrl
     const artworkUsesBackdrop =
       backdropUrl !== null
-  
+
     const artworkSrcSet = artworkUsesBackdrop
       ? getTmdbImageSrcSet(
           movie.backdrop_path,
@@ -173,48 +173,48 @@ import {
           movie.poster_path,
           ['w500', 'w780'],
         )
-  
+
     useEffect(() => {
       const dialog = dialogRef.current
-  
+
       if (!dialog) {
         return
       }
-  
+
       if (activeVideo && !dialog.open) {
         dialog.showModal()
         return
       }
-  
+
       if (!activeVideo && dialog.open) {
         dialog.close()
       }
     }, [activeVideo])
-  
+
     useEffect(() => {
       if (!activeVideo) {
         return
       }
-  
+
       const previousOverflow =
         document.body.style.overflow
-  
+
       document.body.style.overflow = 'hidden'
-  
+
       return () => {
         document.body.style.overflow =
           previousOverflow
       }
     }, [activeVideo])
-  
+
     function openVideo(video: TmdbVideo): void {
       setActiveVideo(video)
     }
-  
+
     function closeVideo(): void {
       dialogRef.current?.close()
     }
-  
+
     function handleDialogClick(
       event: MouseEvent<HTMLDialogElement>,
     ): void {
@@ -222,7 +222,7 @@ import {
         event.currentTarget.close()
       }
     }
-  
+
     return (
       <section
         className="movie-video-section"
@@ -233,7 +233,7 @@ import {
             <p className="archive-label">
               02 / Projection material
             </p>
-  
+
             <h2
               className="movie-video-section__title font-display text-balance"
               id="movie-video-heading"
@@ -241,14 +241,14 @@ import {
               Motion preserved alongside the record.
             </h2>
           </div>
-  
+
           <p className="movie-video-section__copy text-pretty">
             Official trailers and selected production
             footage associated with this feature’s TMDB
             catalogue entry.
           </p>
         </header>
-  
+
         {primaryVideo ? (
           <div className="movie-video-feature">
             <button
@@ -273,31 +273,31 @@ import {
                   Projection artwork unavailable
                 </span>
               )}
-  
+
               <span className="movie-video-feature__shade" />
-  
+
               <span className="movie-video-feature__play">
                 <Play aria-hidden="true" />
               </span>
-  
+
               <span className="movie-video-feature__caption">
                 <span>
                   Selected {primaryVideo.type}
                 </span>
-  
+
                 <strong>{primaryVideo.name}</strong>
               </span>
             </button>
-  
+
             <aside className="movie-video-feature__record">
               <p className="movie-video-feature__index">
                 Primary projection
               </p>
-  
+
               <h3 className="font-display">
                 {primaryVideo.name}
               </h3>
-  
+
               <dl>
                 <div>
                   <dt>Material type</dt>
@@ -306,7 +306,7 @@ import {
                       'Video'}
                   </dd>
                 </div>
-  
+
                 <div>
                   <dt>Publication</dt>
                   <dd>
@@ -315,12 +315,12 @@ import {
                     )}
                   </dd>
                 </div>
-  
+
                 <div>
                   <dt>Source</dt>
                   <dd>{primaryVideo.site}</dd>
                 </div>
-  
+
                 <div>
                   <dt>Record status</dt>
                   <dd>
@@ -330,7 +330,7 @@ import {
                   </dd>
                 </div>
               </dl>
-  
+
               <button
                 className="movie-video-feature__action"
                 type="button"
@@ -348,11 +348,11 @@ import {
             <p className="movie-video-empty__index">
               Projection unavailable
             </p>
-  
+
             <h3 className="font-display">
               No supported footage is attached.
             </h3>
-  
+
             <p>
               This movie record does not currently contain
               a playable YouTube trailer or production
@@ -360,12 +360,12 @@ import {
             </p>
           </div>
         )}
-  
+
         {additionalVideos.length > 0 ? (
           <div className="movie-video-additional">
             <div className="movie-video-additional__heading">
               <p>Additional footage</p>
-  
+
               <span>
                 {additionalVideos.length} selected
                 {additionalVideos.length === 1
@@ -373,7 +373,7 @@ import {
                   : ' records'}
               </span>
             </div>
-  
+
             <ul>
               {additionalVideos.map(
                 (video, index) => (
@@ -390,10 +390,10 @@ import {
                           '0',
                         )}
                       </span>
-  
+
                       <span className="movie-video-additional__name">
                         <strong>{video.name}</strong>
-  
+
                         <small>
                           {video.type || 'Video'} /{' '}
                           {formatVideoDate(
@@ -401,7 +401,7 @@ import {
                           )}
                         </small>
                       </span>
-  
+
                       <Play
                         className="movie-video-additional__play"
                         aria-hidden="true"
@@ -413,7 +413,7 @@ import {
             </ul>
           </div>
         ) : null}
-  
+
         <dialog
           className="movie-video-dialog"
           ref={dialogRef}
@@ -434,7 +434,7 @@ import {
                     {activeVideo.type ||
                       'Video projection'}
                   </p>
-  
+
                   <h2
                     className="font-display"
                     id="movie-video-dialog-title"
@@ -442,7 +442,7 @@ import {
                     {activeVideo.name}
                   </h2>
                 </div>
-  
+
                 <button
                   autoFocus
                   className="movie-video-dialog__close"
@@ -453,7 +453,7 @@ import {
                   <X aria-hidden="true" />
                 </button>
               </header>
-  
+
               <div className="movie-video-dialog__frame">
                 <iframe
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -465,13 +465,13 @@ import {
                   title={`${activeVideo.name} video`}
                 />
               </div>
-  
+
               <footer className="movie-video-dialog__footer">
                 <p>
                   Embedded from YouTube using
                   privacy-enhanced playback.
                 </p>
-  
+
                 <a
                   href={getVideoExternalUrl(
                     activeVideo.key,

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router'
 import {
   EmptyState,
   ErrorState,
@@ -205,6 +206,14 @@ function OpeningProjection({
             <dd>{formatVoteCount(record.voteCount)}</dd>
           </div>
         </dl>
+
+        <Link
+          className="movie-opening-projection__record-link"
+          to={`/movies/${record.id}`}
+        >
+          Open full record
+          <span aria-hidden="true">&rarr;</span>
+        </Link>
       </div>
     </article>
   )
@@ -390,9 +399,13 @@ function ContactSheetRecord({
                 : `${record.voteAverage.toFixed(1)} / 10`}
             </span>
 
-            <span className="movie-contact-card__preview-cue">
-              Preview dossier
-            </span>
+            <Link
+              className="movie-contact-card__record-link"
+              to={`/movies/${record.id}`}
+            >
+              Open full record
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
 
             <button
               className="movie-contact-card__mobile-action"

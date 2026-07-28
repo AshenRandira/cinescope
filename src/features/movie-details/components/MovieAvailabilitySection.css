@@ -7,7 +7,7 @@
     padding-block: clamp(4rem, 8vw, 8rem);
     border-top: 1px solid var(--color-line);
   }
-  
+
   .movie-availability__heading {
     display: grid;
     grid-template-columns:
@@ -17,7 +17,7 @@
     align-items: end;
     margin-bottom: clamp(2.5rem, 5vw, 5rem);
   }
-  
+
   .movie-availability__title {
     max-width: 13ch;
     margin: 0.65rem 0 0;
@@ -26,25 +26,25 @@
     line-height: 0.9;
     color: var(--color-paper-100);
   }
-  
+
   .movie-availability__introduction {
     justify-self: end;
     width: min(100%, 31rem);
   }
-  
+
   .movie-availability__introduction > p {
     margin: 0;
     font-size: 0.9rem;
     line-height: 1.75;
     color: var(--color-app-muted);
   }
-  
+
   .movie-availability__region-control {
     display: grid;
     gap: 0.55rem;
     margin-top: 1.5rem;
   }
-  
+
   .movie-availability__region-control span {
     font-family: var(--font-annotation);
     font-size: 0.59rem;
@@ -53,7 +53,7 @@
     text-transform: uppercase;
     color: var(--color-projector-strong);
   }
-  
+
   .movie-availability__region-control select {
     width: 100%;
     min-height: 3rem;
@@ -64,14 +64,14 @@
     background: var(--color-ink-900);
     font: inherit;
   }
-  
+
   .movie-availability__region-control select:focus-visible,
   .movie-availability-state button:focus-visible,
   .movie-availability__footer a:focus-visible {
     outline: 2px solid var(--color-projector-strong);
     outline-offset: 4px;
   }
-  
+
   .movie-availability__record {
     display: grid;
     grid-template-columns:
@@ -80,14 +80,14 @@
     gap: clamp(2.5rem, 6vw, 6rem);
     align-items: start;
   }
-  
+
   .movie-availability__region-index {
     position: sticky;
     top: 7rem;
     padding-top: 1.2rem;
     border-top: 1px solid var(--color-projector-strong);
   }
-  
+
   .movie-availability__region-index p {
     margin: 0;
     font-family: var(--font-annotation);
@@ -96,7 +96,7 @@
     text-transform: uppercase;
     color: var(--color-app-subtle);
   }
-  
+
   .movie-availability__region-index strong {
     display: block;
     margin-top: 0.55rem;
@@ -105,7 +105,7 @@
     line-height: 0.95;
     color: var(--color-paper-100);
   }
-  
+
   .movie-availability__region-index span {
     display: inline-block;
     margin-top: 0.75rem;
@@ -114,16 +114,16 @@
     letter-spacing: 0.1em;
     color: var(--color-projector-strong);
   }
-  
+
   .movie-availability__groups {
     display: grid;
     gap: clamp(2.5rem, 5vw, 4rem);
   }
-  
+
   .movie-provider-group {
     min-width: 0;
   }
-  
+
   .movie-provider-group header {
     display: flex;
     gap: 1rem;
@@ -133,7 +133,7 @@
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-line-strong);
   }
-  
+
   .movie-provider-group header p,
   .movie-provider-group header > span {
     margin: 0;
@@ -143,7 +143,7 @@
     text-transform: uppercase;
     color: var(--color-app-subtle);
   }
-  
+
   .movie-provider-group header h3 {
     margin: 0.4rem 0 0;
     font-size: clamp(2rem, 3.5vw, 3.8rem);
@@ -151,7 +151,7 @@
     line-height: 0.95;
     color: var(--color-paper-100);
   }
-  
+
   .movie-provider-group ul {
     display: grid;
     grid-template-columns:
@@ -161,7 +161,7 @@
     padding: 0;
     list-style: none;
   }
-  
+
   .movie-provider-group li {
     display: grid;
     min-width: 0;
@@ -172,7 +172,7 @@
     border: 1px solid var(--color-line);
     background: var(--color-ink-900);
   }
-  
+
   .movie-provider-card__logo {
     display: grid;
     overflow: hidden;
@@ -181,19 +181,19 @@
     place-items: center;
     background: var(--color-paper-100);
   }
-  
+
   .movie-provider-card__logo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
+
   .movie-provider-card__logo span {
     font-family: var(--font-display);
     font-size: 1.2rem;
     color: var(--color-ink-950);
   }
-  
+
   .movie-provider-group li > p {
     min-width: 0;
     margin: 0;
@@ -202,13 +202,13 @@
     overflow-wrap: anywhere;
     color: var(--color-paper-200);
   }
-  
+
   .movie-availability-state {
     max-width: 48rem;
     padding: clamp(2rem, 5vw, 4rem);
     border-block: 1px solid var(--color-line);
   }
-  
+
   .movie-availability-state__index {
     margin: 0;
     font-family: var(--font-annotation);
@@ -218,7 +218,7 @@
     text-transform: uppercase;
     color: var(--color-projector-strong);
   }
-  
+
   .movie-availability-state h3 {
     max-width: 15ch;
     margin: 0.7rem 0 0;
@@ -227,7 +227,7 @@
     line-height: 0.92;
     color: var(--color-paper-100);
   }
-  
+
   .movie-availability-state > p:not(
     .movie-availability-state__index
   ) {
@@ -236,7 +236,7 @@
     line-height: 1.7;
     color: var(--color-app-muted);
   }
-  
+
   .movie-availability-state button {
     display: inline-flex;
     gap: 0.65rem;
@@ -255,12 +255,12 @@
     color: var(--color-projector-strong);
     background: transparent;
   }
-  
+
   .movie-availability-state button svg {
     width: 1rem;
     height: 1rem;
   }
-  
+
   .movie-availability__footer {
     display: flex;
     gap: 1rem 2rem;
@@ -270,17 +270,17 @@
     padding-top: 1.25rem;
     border-top: 1px solid var(--color-line);
   }
-  
+
   .movie-availability__footer p {
     margin: 0;
     font-size: 0.72rem;
     color: var(--color-app-muted);
   }
-  
+
   .movie-availability__footer strong {
     color: var(--color-paper-200);
   }
-  
+
   .movie-availability__footer a {
     display: inline-flex;
     gap: 0.5rem;
@@ -294,77 +294,77 @@
     text-transform: uppercase;
     color: var(--color-projector-strong);
   }
-  
+
   .movie-availability__footer a:hover {
     color: var(--color-paper-100);
   }
-  
+
   .movie-availability__footer svg {
     width: 0.9rem;
     height: 0.9rem;
   }
-  
+
   @media (max-width: 72rem) {
     .movie-provider-group ul {
       grid-template-columns:
         repeat(3, minmax(0, 1fr));
     }
   }
-  
+
   @media (max-width: 64rem) {
     .movie-availability__heading {
       grid-template-columns: 1fr;
     }
-  
+
     .movie-availability__introduction {
       justify-self: start;
     }
-  
+
     .movie-availability__record {
       grid-template-columns:
         minmax(11rem, 0.25fr)
         minmax(0, 1fr);
     }
-  
+
     .movie-provider-group ul {
       grid-template-columns:
         repeat(2, minmax(0, 1fr));
     }
   }
-  
+
   @media (max-width: 48rem) {
     .movie-availability__record {
       grid-template-columns: 1fr;
     }
-  
+
     .movie-availability__region-index {
       position: static;
     }
   }
-  
+
   @media (max-width: 40rem) {
     .movie-availability__title {
       font-size: clamp(3rem, 14vw, 5rem);
     }
-  
+
     .movie-provider-group ul {
       grid-template-columns: 1fr;
     }
-  
+
     .movie-provider-group header,
     .movie-availability__footer {
       display: grid;
     }
-  
+
     .movie-provider-group header > span {
       justify-self: start;
     }
-  
+
     .movie-availability__footer a {
       justify-self: start;
     }
   }
-  
+
   @media (forced-colors: active) {
     .movie-availability__region-control select,
     .movie-provider-group li,
@@ -372,13 +372,13 @@
       border: 1px solid CanvasText;
       background: Canvas;
     }
-  
+
     .movie-availability__region-control select:focus-visible,
     .movie-availability-state button:focus-visible,
     .movie-availability__footer a:focus-visible {
       outline-color: Highlight;
     }
-  
+
     .movie-availability-state button,
     .movie-availability__footer a {
       color: LinkText;

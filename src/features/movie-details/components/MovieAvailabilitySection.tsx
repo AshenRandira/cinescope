@@ -3,23 +3,23 @@ import {
     useMemo,
     useState,
   } from 'react'
-  
+
   import {
     ExternalLink,
     RefreshCw,
   } from 'lucide-react'
-  
+
   import {
     getTmdbLogoUrl,
   } from '../../../lib/tmdb/image'
-  
+
   import type {
     TmdbWatchProvider,
     TmdbWatchProviderResponse,
   } from '../../../types/tmdb'
-  
+
   import './MovieAvailabilitySection.css'
-  
+
   type WatchProviderQueryState = {
     data: TmdbWatchProviderResponse | null
     errorMessage: string | null
@@ -27,25 +27,25 @@ import {
     isPending: boolean
     retry: () => void
   }
-  
+
   type MovieAvailabilitySectionProps = {
     movieTitle: string
     watchProviders: WatchProviderQueryState
   }
-  
+
   type ProviderCategoryKey =
     | 'flatrate'
     | 'free'
     | 'ads'
     | 'rent'
     | 'buy'
-  
+
   type ProviderCategory = {
     key: ProviderCategoryKey
     label: string
     note: string
   }
-  
+
   const PROVIDER_CATEGORIES:
     readonly ProviderCategory[] = [
       {
@@ -74,30 +74,30 @@ import {
         note: 'Digital purchase availability',
       },
     ]
-  
+
   function getBrowserRegion(): string | null {
     if (typeof navigator === 'undefined') {
       return null
     }
-  
+
     const locales = [
       ...navigator.languages,
       navigator.language,
     ]
-  
+
     for (const locale of locales) {
       const match = locale.match(
         /[-_]([A-Za-z]{2}|\d{3})(?:$|[-_])/,
       )
-  
+
       if (match?.[1]) {
         return match[1].toUpperCase()
       }
     }
-  
+
     return null
   }
-  
+
   function getRegionLabel(
     regionCode: string,
   ): string {
@@ -108,7 +108,7 @@ import {
           type: 'region',
         },
       )
-  
+
       return (
         displayNames.of(regionCode) ??
         regionCode
@@ -117,7 +117,7 @@ import {
       return regionCode
     }
   }
-  
+
   function getProviderInitials(
     providerName: string,
   ): string {
@@ -127,10 +127,10 @@ import {
       .slice(0, 2)
       .map((word) => word[0]?.toUpperCase())
       .join('')
-  
+
     return initials || 'CS'
   }
-  
+
   function sortProviders(
     providers: TmdbWatchProvider[],
   ): TmdbWatchProvider[] {
@@ -143,31 +143,31 @@ import {
         ),
     )
   }
-  
+
   export function MovieAvailabilitySection({
     movieTitle,
     watchProviders,
   }: MovieAvailabilitySectionProps) {
     const browserRegion =
       getBrowserRegion() ?? 'US'
-  
+
     const [
       selectedRegion,
       setSelectedRegion,
     ] = useState(browserRegion)
-  
+
     const availableRegions = useMemo(() => {
       const regionCodes = Object.keys(
         watchProviders.data?.results ?? {},
       )
-  
+
       return regionCodes.sort((first, second) =>
         getRegionLabel(first).localeCompare(
           getRegionLabel(second),
         ),
       )
     }, [watchProviders.data])
-  
+
     useEffect(() => {
       if (
         availableRegions.length === 0 ||
@@ -177,31 +177,31 @@ import {
       ) {
         return
       }
-  
+
       if (
         availableRegions.includes(browserRegion)
       ) {
         setSelectedRegion(browserRegion)
         return
       }
-  
+
       if (availableRegions.includes('US')) {
         setSelectedRegion('US')
         return
       }
-  
+
       setSelectedRegion(availableRegions[0])
     }, [
       availableRegions,
       browserRegion,
       selectedRegion,
     ])
-  
+
     const selectedAvailability =
       watchProviders.data?.results[
         selectedRegion
       ] ?? null
-  
+
     const providerGroups =
       selectedAvailability
         ? PROVIDER_CATEGORIES
@@ -218,10 +218,10 @@ import {
                 category.providers.length > 0,
             )
         : []
-  
+
     const regionLabel =
       getRegionLabel(selectedRegion)
-  
+
     return (
       <section
         className="movie-availability"
@@ -232,7 +232,7 @@ import {
             <p className="archive-label">
               05 / Viewing coordinates
             </p>
-  
+
             <h2
               className="movie-availability__title font-display text-balance"
               id="movie-availability-heading"
@@ -240,18 +240,18 @@ import {
               Where the feature may be projected.
             </h2>
           </div>
-  
+
           <div className="movie-availability__introduction">
             <p className="text-pretty">
               Availability varies by territory and may
               change without notice. Select a country to
               inspect the current provider record.
             </p>
-  
+
             {availableRegions.length > 0 ? (
               <label className="movie-availability__region-control">
                 <span>Viewing country</span>
-  
+
                 <select
                   value={selectedRegion}
                   onChange={(event) => {
@@ -278,7 +278,7 @@ import {
             ) : null}
           </div>
         </header>
-  
+
         {watchProviders.isPending ? (
           <div
             className="movie-availability-state"
@@ -287,18 +287,18 @@ import {
             <p className="movie-availability-state__index">
               Reading territory records
             </p>
-  
+
             <h3 className="font-display">
               Locating viewing providers.
             </h3>
-  
+
             <p>
               CineScope is retrieving regional
               availability for {movieTitle}.
             </p>
           </div>
         ) : null}
-  
+
         {watchProviders.isError ? (
           <div
             className="movie-availability-state"
@@ -307,16 +307,16 @@ import {
             <p className="movie-availability-state__index">
               Provider record interrupted
             </p>
-  
+
             <h3 className="font-display">
               Availability could not be retrieved.
             </h3>
-  
+
             <p>
               {watchProviders.errorMessage ??
                 'The provider catalogue is temporarily unavailable.'}
             </p>
-  
+
             <button
               type="button"
               onClick={watchProviders.retry}
@@ -326,7 +326,7 @@ import {
             </button>
           </div>
         ) : null}
-  
+
         {!watchProviders.isPending &&
         !watchProviders.isError &&
         availableRegions.length === 0 ? (
@@ -334,18 +334,18 @@ import {
             <p className="movie-availability-state__index">
               No territory records
             </p>
-  
+
             <h3 className="font-display">
               Availability is not catalogued.
             </h3>
-  
+
             <p>
               No country-specific provider records are
               attached to this movie at present.
             </p>
           </div>
         ) : null}
-  
+
         {!watchProviders.isPending &&
         !watchProviders.isError &&
         availableRegions.length > 0 &&
@@ -354,32 +354,32 @@ import {
             <p className="movie-availability-state__index">
               {regionLabel} / No current listings
             </p>
-  
+
             <h3 className="font-display">
               No providers are recorded for this country.
             </h3>
-  
+
             <p>
               Try another viewing country or return later
               as regional availability changes.
             </p>
           </div>
         ) : null}
-  
+
         {!watchProviders.isPending &&
         !watchProviders.isError &&
         providerGroups.length > 0 ? (
           <div className="movie-availability__record">
             <div className="movie-availability__region-index">
               <p>Selected territory</p>
-  
+
               <strong className="font-display">
                 {regionLabel}
               </strong>
-  
+
               <span>{selectedRegion}</span>
             </div>
-  
+
             <div className="movie-availability__groups">
               {providerGroups.map((group) => (
                 <section
@@ -390,7 +390,7 @@ import {
                   <header>
                     <div>
                       <p>{group.note}</p>
-  
+
                       <h3
                         className="font-display"
                         id={`provider-group-${group.key}`}
@@ -398,7 +398,7 @@ import {
                         {group.label}
                       </h3>
                     </div>
-  
+
                     <span>
                       {group.providers.length}{' '}
                       {group.providers.length === 1
@@ -406,7 +406,7 @@ import {
                         : 'providers'}
                     </span>
                   </header>
-  
+
                   <ul>
                     {group.providers.map(
                       (provider) => {
@@ -415,7 +415,7 @@ import {
                             provider.logo_path,
                             'w92',
                           )
-  
+
                         return (
                           <li
                             key={
@@ -440,7 +440,7 @@ import {
                                 </span>
                               )}
                             </div>
-  
+
                             <p>
                               {
                                 provider.provider_name
@@ -456,7 +456,7 @@ import {
             </div>
           </div>
         ) : null}
-  
+
         {!watchProviders.isPending &&
         !watchProviders.isError &&
         selectedAvailability?.link ? (
@@ -465,7 +465,7 @@ import {
               Availability data supplied by{' '}
               <strong>JustWatch</strong> through TMDB.
             </p>
-  
+
             <a
               href={selectedAvailability.link}
               rel="noreferrer"
@@ -478,4 +478,4 @@ import {
         ) : null}
       </section>
     )
-  } 
+  }

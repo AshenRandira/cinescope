@@ -2,23 +2,23 @@ import {
     getTmdbImageSrcSet,
     getTmdbProfileUrl,
   } from '../../../lib/tmdb/image'
-  
+
   import type {
     TmdbMovieCrewMember,
     TmdbMovieDetails,
   } from '../../../types/tmdb'
-  
+
   import './MovieDetailSections.css'
-  
+
   type MovieDetailSectionsProps = {
     movie: TmdbMovieDetails
   }
-  
+
   type CrewGroupDefinition = {
     jobs: readonly string[]
     label: string
   }
-  
+
   const KEY_CREW_GROUPS: readonly CrewGroupDefinition[] = [
     {
       label: 'Direction',
@@ -50,27 +50,27 @@ import {
       jobs: ['Original Music Composer'],
     },
   ]
-  
+
   function formatReleaseDate(
     releaseDate: string,
   ): string {
     if (!releaseDate) {
       return 'Release date unavailable'
     }
-  
+
     const date = new Date(`${releaseDate}T00:00:00`)
-  
+
     if (Number.isNaN(date.getTime())) {
       return releaseDate
     }
-  
+
     return new Intl.DateTimeFormat('en', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     }).format(date)
   }
-  
+
   function formatRuntime(
     runtime: number | null,
   ): string {
@@ -81,21 +81,21 @@ import {
     ) {
       return 'Runtime unavailable'
     }
-  
+
     const hours = Math.floor(runtime / 60)
     const minutes = runtime % 60
-  
+
     if (hours === 0) {
       return `${minutes} min`
     }
-  
+
     if (minutes === 0) {
       return `${hours} hr`
     }
-  
+
     return `${hours} hr ${minutes} min`
   }
-  
+
   function joinLabels(
     labels: string[],
     fallback: string,
@@ -105,12 +105,12 @@ import {
         .map((label) => label.trim())
         .filter(Boolean),
     )]
-  
+
     return uniqueLabels.length > 0
       ? uniqueLabels.join(', ')
       : fallback
   }
-  
+
   function getOriginalLanguageLabel(
     movie: TmdbMovieDetails,
   ): string {
@@ -120,7 +120,7 @@ import {
           language.iso_639_1 ===
           movie.original_language,
       )
-  
+
     return (
       matchingLanguage?.english_name ||
       matchingLanguage?.name ||
@@ -128,7 +128,7 @@ import {
       'Language unavailable'
     )
   }
-  
+
   function getCrewNames(
     crew: TmdbMovieCrewMember[],
     jobs: readonly string[],
@@ -136,7 +136,7 @@ import {
     const matchingJobs = new Set(jobs)
     const recordedPeople = new Set<number>()
     const names: string[] = []
-  
+
     for (const member of crew) {
       if (
         !matchingJobs.has(member.job) ||
@@ -144,18 +144,18 @@ import {
       ) {
         continue
       }
-  
+
       recordedPeople.add(member.id)
       names.push(member.name)
-  
+
       if (names.length === 3) {
         break
       }
     }
-  
+
     return names
   }
-  
+
   function getInitials(name: string): string {
     const initials = name
       .split(/\s+/)
@@ -163,10 +163,10 @@ import {
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase())
       .join('')
-  
+
     return initials || 'CS'
   }
-  
+
   export function MovieDetailSections({
     movie,
   }: MovieDetailSectionsProps) {
@@ -179,7 +179,7 @@ import {
       ),
       'Language information unavailable',
     )
-  
+
     const productionCountries = joinLabels(
       movie.production_countries.map(
         (country) =>
@@ -190,21 +190,21 @@ import {
         ? movie.origin_country.join(', ')
         : 'Country information unavailable',
     )
-  
+
     const productionCompanies = joinLabels(
       movie.production_companies.map(
         (company) => company.name,
       ),
       'Production company information unavailable',
     )
-  
+
     const cast = [...movie.credits.cast]
       .sort(
         (firstMember, secondMember) =>
           firstMember.order - secondMember.order,
       )
       .slice(0, 12)
-  
+
     const crewGroups = KEY_CREW_GROUPS
       .map((group) => ({
         label: group.label,
@@ -214,17 +214,17 @@ import {
         ),
       }))
       .filter((group) => group.names.length > 0)
-  
+
     const originalTitleNote =
       movie.original_title &&
       movie.original_title !== movie.title
         ? movie.original_title
         : 'Matches the primary display title'
-  
+
     const collectionLabel =
       movie.belongs_to_collection?.name ??
       'Not attached to a recorded collection'
-  
+
     return (
       <div className="movie-detail-sections">
         <section
@@ -236,7 +236,7 @@ import {
               <p className="archive-label">
                 03 / Record anatomy
               </p>
-  
+
               <h2
                 className="movie-detail-section-heading__title font-display text-balance"
                 id="movie-record-heading"
@@ -244,14 +244,14 @@ import {
                 The catalogue facts behind the frame.
               </h2>
             </div>
-  
+
             <p className="movie-detail-section-heading__copy text-pretty">
               Release, language, territory and production
               information preserved as part of this TMDB
               feature record.
             </p>
           </header>
-  
+
           <div className="movie-detail-record__layout">
             <dl className="movie-detail-fact-grid">
               <div>
@@ -262,12 +262,12 @@ import {
                   )}
                 </dd>
               </div>
-  
+
               <div>
                 <dt>Runtime</dt>
                 <dd>{formatRuntime(movie.runtime)}</dd>
               </div>
-  
+
               <div>
                 <dt>Production status</dt>
                 <dd>
@@ -275,32 +275,32 @@ import {
                     'Status unavailable'}
                 </dd>
               </div>
-  
+
               <div>
                 <dt>Original language</dt>
                 <dd>
                   {getOriginalLanguageLabel(movie)}
                 </dd>
               </div>
-  
+
               <div>
                 <dt>Spoken languages</dt>
                 <dd>{spokenLanguages}</dd>
               </div>
-  
+
               <div>
                 <dt>Production countries</dt>
                 <dd>{productionCountries}</dd>
               </div>
             </dl>
-  
+
             <aside
               className="movie-detail-archive-notes"
               aria-label="Additional catalogue notes"
             >
               <div>
                 <h3>Genres</h3>
-  
+
                 {movie.genres.length > 0 ? (
                   <ul className="movie-detail-genre-list">
                     {movie.genres.map((genre) => (
@@ -313,17 +313,17 @@ import {
                   <p>Genre information unavailable.</p>
                 )}
               </div>
-  
+
               <div>
                 <h3>Original title</h3>
                 <p>{originalTitleNote}</p>
               </div>
-  
+
               <div>
                 <h3>Collection record</h3>
                 <p>{collectionLabel}</p>
               </div>
-  
+
               <div>
                 <h3>Production companies</h3>
                 <p>{productionCompanies}</p>
@@ -331,7 +331,7 @@ import {
             </aside>
           </div>
         </section>
-  
+
         <section
           className="movie-detail-credits"
           aria-labelledby="movie-credits-heading"
@@ -341,7 +341,7 @@ import {
               <p className="archive-label">
                 04 / Credits register
               </p>
-  
+
               <h2
                 className="movie-detail-section-heading__title font-display text-balance"
                 id="movie-credits-heading"
@@ -349,14 +349,14 @@ import {
                 The people recorded around the production.
               </h2>
             </div>
-  
+
             <p className="movie-detail-section-heading__copy text-pretty">
               Principal cast appears in credited order,
               accompanied by selected creative departments
               from the available production credits.
             </p>
           </header>
-  
+
           <div className="movie-detail-credits__layout">
             <aside
               className="movie-detail-key-crew"
@@ -365,14 +365,14 @@ import {
               <p className="movie-detail-subsection-index">
                 Selected departments
               </p>
-  
+
               <h3
                 className="movie-detail-subsection-title font-display"
                 id="movie-key-crew-heading"
               >
                 Key crew
               </h3>
-  
+
               {crewGroups.length > 0 ? (
                 <dl className="movie-detail-key-crew__list">
                   {crewGroups.map((group) => (
@@ -389,7 +389,7 @@ import {
                 </p>
               )}
             </aside>
-  
+
             <div
               className="movie-detail-cast"
               aria-labelledby="movie-cast-heading"
@@ -399,7 +399,7 @@ import {
                   <p className="movie-detail-subsection-index">
                     Credited order
                   </p>
-  
+
                   <h3
                     className="movie-detail-subsection-title font-display"
                     id="movie-cast-heading"
@@ -407,14 +407,14 @@ import {
                     Principal cast
                   </h3>
                 </div>
-  
+
                 <p>
                   {cast.length > 0
                     ? `${cast.length} performers projected`
                     : 'No cast records available'}
                 </p>
               </div>
-  
+
               {cast.length > 0 ? (
                 <ul className="movie-detail-cast__grid">
                   {cast.map((member, index) => {
@@ -423,13 +423,13 @@ import {
                         member.profile_path,
                         'w342',
                       )
-  
+
                     const profileSrcSet =
                       getTmdbImageSrcSet(
                         member.profile_path,
                         ['w185', 'w342'],
                       )
-  
+
                     return (
                       <li
                         className="movie-detail-cast-card"
@@ -455,7 +455,7 @@ import {
                               </span>
                             </div>
                           )}
-  
+
                           <span className="movie-detail-cast-card__number">
                             {String(index + 1).padStart(
                               2,
@@ -463,10 +463,10 @@ import {
                             )}
                           </span>
                         </div>
-  
+
                         <div className="movie-detail-cast-card__caption">
                           <h4>{member.name}</h4>
-  
+
                           <p>
                             {member.character ||
                               'Role unavailable'}

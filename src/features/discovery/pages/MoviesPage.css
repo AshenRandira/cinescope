@@ -290,6 +290,34 @@
   color: var(--color-paper-200);
 }
 
+.movie-opening-projection__record-link,
+.movie-contact-card__record-link {
+  display: inline-flex;
+  gap: 0.65rem;
+  align-items: center;
+  min-height: 2.75rem;
+  border-bottom: 1px solid currentColor;
+  font-family: var(--font-annotation);
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-projector-strong);
+  transition: color var(--motion-duration-micro)
+    var(--motion-easing-standard);
+}
+
+.movie-opening-projection__record-link {
+  margin-top: 1.5rem;
+}
+
+.movie-opening-projection__record-link:hover,
+.movie-opening-projection__record-link:focus-visible,
+.movie-contact-card__record-link:hover,
+.movie-contact-card__record-link:focus-visible {
+  color: var(--color-paper-100);
+}
+
 .movie-contact-sheet {
   padding-top: clamp(3rem, 6vw, 6rem);
 }
@@ -559,9 +587,10 @@
   transform: scale(1.015);
 }
 
-
-.movie-contact-card__preview-cue {
-  color: var(--color-app-subtle);
+.movie-contact-card__record-link {
+  min-height: 2.5rem;
+  font-size: inherit;
+  letter-spacing: inherit;
 }
 
 .movie-contact-card__mobile-action {
@@ -697,10 +726,6 @@
     display: none;
   }
 
-  .movie-contact-card__preview-cue {
-    display: none;
-  }
-
   .movie-contact-card__mobile-action {
     display: inline-flex;
     min-height: 2.75rem;
@@ -775,7 +800,9 @@
   }
 
   .movie-register__genre-error button,
-  .movie-contact-card__actions button {
+  .movie-contact-card__actions button,
+  .movie-opening-projection__record-link,
+  .movie-contact-card__record-link {
     color: LinkText;
   }
 
