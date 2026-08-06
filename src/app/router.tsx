@@ -14,8 +14,6 @@ import { TvShowsPage } from '../features/discovery/pages/TvShowsPage'
 
 import { ProfilePage } from '../features/profile/pages/ProfilePage'
 
-import { SearchPage } from '../features/search/pages/SearchPage'
-
 import { NotFoundPage } from '../pages/NotFoundPage'
 
 import { MovieDetailPage } from '../features/movie-details/pages/MovieDetailPage'
@@ -56,7 +54,15 @@ export const router = createBrowserRouter([
       },
       {
         path: 'search',
-        element: <SearchPage />,
+        lazy: async () => {
+          const { SearchPage } = await import(
+            '../features/search/pages/SearchPage'
+          )
+
+          return {
+            Component: SearchPage,
+          }
+        },
       },
       {
         path: 'library',
