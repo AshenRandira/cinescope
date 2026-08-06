@@ -12,8 +12,6 @@ import { HomePage } from '../features/discovery/pages/HomePage'
 import { MoviesPage } from '../features/discovery/pages/MoviesPage'
 import { TvShowsPage } from '../features/discovery/pages/TvShowsPage'
 
-import { LibraryPage } from '../features/library/pages/LibraryPage'
-
 import { ProfilePage } from '../features/profile/pages/ProfilePage'
 
 import { SearchPage } from '../features/search/pages/SearchPage'
@@ -62,7 +60,15 @@ export const router = createBrowserRouter([
       },
       {
         path: 'library',
-        element: <LibraryPage />,
+        lazy: async () => {
+          const { LibraryPage } = await import(
+            '../features/library/pages/LibraryPage'
+          )
+
+          return {
+            Component: LibraryPage,
+          }
+        },
       },
       {
         path: 'profile',

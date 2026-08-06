@@ -8,6 +8,7 @@ import { createRoot } from 'react-dom/client'
 
 import App from './app/App'
 import { queryClient } from './app/queryClient'
+import { LibraryProvider } from './features/library/context/LibraryProvider'
 import './styles/global.css'
 
 const rootElement = document.getElementById('root')
@@ -19,7 +20,9 @@ if (!rootElement) {
 createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <LibraryProvider>
+        <App />
+      </LibraryProvider>
     </QueryClientProvider>
   </StrictMode>,
 )

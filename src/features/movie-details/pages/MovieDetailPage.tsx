@@ -12,6 +12,8 @@ import {
   getTmdbPosterUrl,
 } from '../../../lib/tmdb/image'
 
+import { LibraryControls } from '../../library/components/LibraryControls'
+
 import { parseMovieId } from '../data/movieDetail'
 import { useMovieDetail } from '../hooks/useMovieDetail'
 
@@ -350,6 +352,21 @@ export function MovieDetailPage() {
                 {movie.overview ||
                   'This feature record does not yet include an overview.'}
               </p>
+
+              <LibraryControls
+                candidate={{
+                  backdropPath: movie.backdrop_path,
+                  id: movie.id,
+                  mediaType: 'movie',
+                  overview: movie.overview || null,
+                  posterPath: movie.poster_path,
+                  releaseYear:
+                    movie.release_date
+                      ? movie.release_date.slice(0, 4)
+                      : null,
+                  title: movie.title,
+                }}
+              />
 
               <dl className="movie-detail-hero__ratings">
                 <div>

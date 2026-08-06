@@ -7,6 +7,8 @@ import {
   getTmdbProfileUrl,
 } from '../../../lib/tmdb/image'
 
+import { LibraryControls } from '../../library/components/LibraryControls'
+
 import type {
   SearchRecord,
 } from '../data/search'
@@ -188,6 +190,21 @@ export function SearchResultCard({
                   : 'Contributor record indexed'}
               </p>
             )}
+
+            {record.mediaType !== 'person' ? (
+              <LibraryControls
+                candidate={{
+                  backdropPath: null,
+                  id: record.id,
+                  mediaType: record.mediaType,
+                  overview: record.overview,
+                  posterPath: record.imagePath,
+                  releaseYear: record.dateYear,
+                  title: record.title,
+                }}
+                variant="save"
+              />
+            ) : null}
           </footer>
         </div>
       </article>

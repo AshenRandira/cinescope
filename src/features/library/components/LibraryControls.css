@@ -1,0 +1,121 @@
+.library-save-control {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-app-muted);
+  background: transparent;
+  font-family: var(--font-annotation);
+  font-size: 0.6rem;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.library-save-control:hover,
+.library-save-control:focus-visible,
+.library-save-control[aria-pressed="true"] {
+  color: var(--color-projector-strong);
+}
+
+.library-save-control svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.library-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: stretch;
+  margin-top: 1.5rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--color-line);
+}
+
+.library-controls > button,
+.library-controls > label {
+  display: inline-flex;
+  min-height: 2.9rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-line);
+  color: var(--color-app-muted);
+  background: rgb(5 7 6 / 0.42);
+  font-family: var(--font-annotation);
+  font-size: 0.61rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.library-controls > button {
+  cursor: pointer;
+}
+
+.library-controls > button:hover,
+.library-controls > button:focus-visible {
+  border-color: var(--color-projector);
+  color: var(--color-paper-100);
+}
+
+.library-controls
+  > button[aria-pressed="true"] {
+  border-color: var(--color-projector);
+  color: var(--color-ink-950);
+  background: var(--color-projector);
+}
+
+.library-controls > button svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.library-controls > label {
+  gap: 0.75rem;
+}
+
+.library-controls select {
+  min-height: 2rem;
+  padding-inline: 0.55rem;
+  border: 1px solid var(--color-line);
+  color: var(--color-paper-100);
+  background: var(--color-ink-950);
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 40rem) {
+  .library-controls {
+    display: grid;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .library-controls > button,
+  .library-controls > label {
+    justify-content: center;
+  }
+
+  .library-controls > label {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (forced-colors: active) {
+  .library-controls
+    > button[aria-pressed="true"] {
+    border-color: Highlight;
+    color: HighlightText;
+    background: Highlight;
+  }
+
+  .library-save-control {
+    color: ButtonText;
+  }
+}
