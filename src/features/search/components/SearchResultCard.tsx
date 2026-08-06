@@ -183,11 +183,17 @@ export function SearchResultCard({
                 Open film record
                 <ArrowRight aria-hidden="true" />
               </Link>
+            ) : record.mediaType === 'tv' ? (
+              <Link
+                aria-label={`Open series record for ${record.title}`}
+                to={`/tv/${record.id}`}
+              >
+                Open series record
+                <ArrowRight aria-hidden="true" />
+              </Link>
             ) : (
               <p>
-                {record.mediaType === 'tv'
-                  ? 'Series record indexed'
-                  : 'Contributor record indexed'}
+                Contributor record indexed
               </p>
             )}
 

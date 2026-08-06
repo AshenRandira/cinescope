@@ -29,7 +29,9 @@ import {
   }
 
   type MovieAvailabilitySectionProps = {
+    mediaKind?: 'movie' | 'series'
     movieTitle: string
+    sectionIndex?: string
     watchProviders: WatchProviderQueryState
   }
 
@@ -145,7 +147,9 @@ import {
   }
 
   export function MovieAvailabilitySection({
+    mediaKind = 'movie',
     movieTitle,
+    sectionIndex = '05',
     watchProviders,
   }: MovieAvailabilitySectionProps) {
     const browserRegion =
@@ -230,14 +234,14 @@ import {
         <header className="movie-availability__heading">
           <div>
             <p className="archive-label">
-              05 / Viewing coordinates
+              {sectionIndex} / Viewing coordinates
             </p>
 
             <h2
               className="movie-availability__title font-display text-balance"
               id="movie-availability-heading"
             >
-              Where the feature may be projected.
+              Where this {mediaKind} may be projected.
             </h2>
           </div>
 
@@ -341,7 +345,7 @@ import {
 
             <p>
               No country-specific provider records are
-              attached to this movie at present.
+              attached to this {mediaKind} at present.
             </p>
           </div>
         ) : null}

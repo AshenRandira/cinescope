@@ -80,15 +80,10 @@ function getScoreLabel(
     : `${record.voteAverage.toFixed(1)} / 10`
 }
 
-function getSearchTarget(
+function getTvTarget(
   record: TvDiscoveryRecord,
 ): string {
-  const searchParams = new URLSearchParams({
-    q: record.name,
-    type: 'tv',
-  })
-
-  return `/search?${searchParams.toString()}`
+  return `/tv/${record.id}`
 }
 
 function TelevisionLead({
@@ -205,9 +200,9 @@ function TelevisionLead({
 
         <Link
           className="tv-record-link"
-          to={getSearchTarget(record)}
+          to={getTvTarget(record)}
         >
-          Trace this series
+          Open series record
           <ArrowRight aria-hidden="true" />
         </Link>
       </div>
@@ -304,8 +299,8 @@ function TelevisionCard({
         </div>
 
         <footer className="tv-card__footer">
-          <Link to={getSearchTarget(record)}>
-            Trace in search
+          <Link to={getTvTarget(record)}>
+            Open series record
             <ArrowRight aria-hidden="true" />
           </Link>
 
@@ -427,9 +422,9 @@ export function TvShowsPage() {
               </div>
 
               <p>
-                Each frame identifies a TMDB series
-                record. Dedicated series detail pages
-                remain a later archive phase.
+                Each frame opens a complete series
+                record with seasons, credits, viewing
+                providers, and related transmissions.
               </p>
             </header>
 

@@ -48,12 +48,7 @@ function getRecordTarget(
     return `/movies/${record.id}`
   }
 
-  const searchParams = new URLSearchParams({
-    q: record.title,
-    type: 'tv',
-  })
-
-  return `/search?${searchParams.toString()}`
+  return `/tv/${record.id}`
 }
 
 function getRecordAction(
@@ -61,7 +56,7 @@ function getRecordAction(
 ): string {
   return record.mediaType === 'movie'
     ? 'Open film record'
-    : 'Trace series record'
+    : 'Open series record'
 }
 
 function getScoreLabel(

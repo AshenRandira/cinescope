@@ -36,7 +36,17 @@ export type {
   TmdbMultiSearchTvShow,
 } from './search'
 
-export type { TmdbTvShow } from './tv'
+export type {
+  TmdbTvCastMember,
+  TmdbTvCreator,
+  TmdbTvCredits,
+  TmdbTvCrewMember,
+  TmdbTvDetails,
+  TmdbTvEpisodeSummary,
+  TmdbTvNetwork,
+  TmdbTvSeason,
+  TmdbTvShow,
+} from './tv'
 
 export type {
   TmdbVideo,

@@ -50,6 +50,10 @@ function getSuggestionTarget(
     return `/movies/${record.id}`
   }
 
+  if (record.mediaType === 'tv') {
+    return `/tv/${record.id}`
+  }
+
   const searchParams = new URLSearchParams({
     q: record.title,
     type: record.mediaType,
