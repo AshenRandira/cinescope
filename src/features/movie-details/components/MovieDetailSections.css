@@ -242,6 +242,17 @@
     min-width: 0;
   }
 
+  .movie-detail-cast-card__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .movie-detail-cast-card__link:hover h4,
+  .movie-detail-cast-card__link:focus-visible h4 {
+    color: var(--color-projector-strong);
+  }
+
   .movie-detail-cast-card__portrait {
     position: relative;
     overflow: hidden;

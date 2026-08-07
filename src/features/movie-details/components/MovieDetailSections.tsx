@@ -3,6 +3,8 @@ import {
     getTmdbProfileUrl,
   } from '../../../lib/tmdb/image'
 
+  import { Link } from 'react-router'
+
   import type {
     TmdbMovieCrewMember,
     TmdbMovieDetails,
@@ -435,43 +437,49 @@ import {
                         className="movie-detail-cast-card"
                         key={member.credit_id}
                       >
-                        <div className="movie-detail-cast-card__portrait">
-                          {profileUrl ? (
-                            <img
-                              alt={`${member.name} portrait`}
-                              decoding="async"
-                              loading="lazy"
-                              sizes="(max-width: 40rem) 30vw, (max-width: 64rem) 20vw, 12vw"
-                              src={profileUrl}
-                              srcSet={profileSrcSet}
-                            />
-                          ) : (
-                            <div
-                              className="movie-detail-cast-card__fallback"
-                              aria-hidden="true"
-                            >
-                              <span>
-                                {getInitials(member.name)}
-                              </span>
-                            </div>
-                          )}
-
-                          <span className="movie-detail-cast-card__number">
-                            {String(index + 1).padStart(
-                              2,
-                              '0',
+                        <Link
+                          aria-label={`Open contributor record for ${member.name}`}
+                          className="movie-detail-cast-card__link"
+                          to={`/people/${member.id}`}
+                        >
+                          <div className="movie-detail-cast-card__portrait">
+                            {profileUrl ? (
+                              <img
+                                alt={`${member.name} portrait`}
+                                decoding="async"
+                                loading="lazy"
+                                sizes="(max-width: 40rem) 30vw, (max-width: 64rem) 20vw, 12vw"
+                                src={profileUrl}
+                                srcSet={profileSrcSet}
+                              />
+                            ) : (
+                              <div
+                                className="movie-detail-cast-card__fallback"
+                                aria-hidden="true"
+                              >
+                                <span>
+                                  {getInitials(member.name)}
+                                </span>
+                              </div>
                             )}
-                          </span>
-                        </div>
 
-                        <div className="movie-detail-cast-card__caption">
-                          <h4>{member.name}</h4>
+                            <span className="movie-detail-cast-card__number">
+                              {String(index + 1).padStart(
+                                2,
+                                '0',
+                              )}
+                            </span>
+                          </div>
 
-                          <p>
-                            {member.character ||
-                              'Role unavailable'}
-                          </p>
-                        </div>
+                          <div className="movie-detail-cast-card__caption">
+                            <h4>{member.name}</h4>
+
+                            <p>
+                              {member.character ||
+                                'Role unavailable'}
+                            </p>
+                          </div>
+                        </Link>
                       </li>
                     )
                   })}

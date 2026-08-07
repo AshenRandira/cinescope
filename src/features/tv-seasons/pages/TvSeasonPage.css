@@ -442,6 +442,17 @@
   background: var(--color-ink-950);
 }
 
+.tv-season-cast__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tv-season-cast__link:hover h3,
+.tv-season-cast__link:focus-visible h3 {
+  color: var(--season-accent);
+}
+
 .tv-season-cast__portrait {
   position: relative;
   aspect-ratio: 2 / 3;

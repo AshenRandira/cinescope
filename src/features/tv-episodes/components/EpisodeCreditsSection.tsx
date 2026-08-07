@@ -2,6 +2,7 @@ import {
   getTmdbImageSrcSet,
   getTmdbProfileUrl,
 } from '../../../lib/tmdb/image'
+import { Link } from 'react-router'
 
 import type {
   TmdbTvCastMember,
@@ -159,30 +160,36 @@ export function EpisodeCreditsSection({
 
                 return (
                   <li key={performer.credit_id}>
-                    <div className="tv-episode-performer__portrait">
-                      {profileUrl ? (
-                        <img
-                          alt={`${performer.name} portrait`}
-                          decoding="async"
-                          loading="lazy"
-                          sizes="(max-width: 40rem) 45vw, (max-width: 64rem) 25vw, 12vw"
-                          src={profileUrl}
-                          srcSet={profileSrcSet}
-                        />
-                      ) : (
-                        <span aria-hidden="true">
-                          {getInitials(performer.name)}
-                        </span>
-                      )}
-                      <small>
-                        {String(index + 1).padStart(2, '0')}
-                      </small>
-                    </div>
-                    <h4>{performer.name}</h4>
-                    <p>
-                      {performer.character ||
-                        'Role unavailable'}
-                    </p>
+                    <Link
+                      aria-label={`Open contributor record for ${performer.name}`}
+                      className="tv-episode-performer__link"
+                      to={`/people/${performer.id}`}
+                    >
+                      <div className="tv-episode-performer__portrait">
+                        {profileUrl ? (
+                          <img
+                            alt={`${performer.name} portrait`}
+                            decoding="async"
+                            loading="lazy"
+                            sizes="(max-width: 40rem) 45vw, (max-width: 64rem) 25vw, 12vw"
+                            src={profileUrl}
+                            srcSet={profileSrcSet}
+                          />
+                        ) : (
+                          <span aria-hidden="true">
+                            {getInitials(performer.name)}
+                          </span>
+                        )}
+                        <small>
+                          {String(index + 1).padStart(2, '0')}
+                        </small>
+                      </div>
+                      <h4>{performer.name}</h4>
+                      <p>
+                        {performer.character ||
+                          'Role unavailable'}
+                      </p>
+                    </Link>
                   </li>
                 )
               })}

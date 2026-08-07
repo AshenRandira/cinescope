@@ -1,0 +1,268 @@
+.person-credits {
+  width: min(100% - 2rem, 92rem);
+  margin-inline: auto;
+  padding-block: clamp(5rem, 10vw, 10rem);
+  border-top: 1px solid var(--color-line);
+}
+
+.person-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.64fr) minmax(16rem, 0.36fr);
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 5rem);
+}
+
+.person-section-heading h2 {
+  max-width: 13ch;
+  margin: 0.5rem 0 0;
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  font-weight: 400;
+  line-height: 0.88;
+}
+
+.person-section-heading > p {
+  margin: 0;
+  color: var(--color-app-muted);
+  font-size: 0.75rem;
+  line-height: 1.75;
+}
+
+.person-credit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 1px;
+  background: var(--color-line);
+  list-style: none;
+}
+
+.person-credit-grid > li {
+  min-width: 0;
+}
+
+.person-credit-card {
+  display: block;
+  height: 100%;
+  color: inherit;
+  background: var(--color-ink-950);
+  text-decoration: none;
+}
+
+.person-credit-card__artwork {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, transparent 49.8%, var(--color-line) 50%, transparent 50.2%),
+    var(--color-ink-800);
+}
+
+.person-credit-card__artwork img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.74) contrast(1.05);
+  transition: transform var(--duration-scene)
+    var(--ease-enter);
+}
+
+.person-credit-card:hover img,
+.person-credit-card:focus-visible img {
+  transform: scale(1.025);
+}
+
+.person-credit-card__artwork > span {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  color: var(--color-projector);
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+}
+
+.person-credit-card__artwork small {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  color: var(--color-ink-950);
+  background: var(--color-projector);
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+}
+
+.person-credit-card__copy {
+  padding: 1rem;
+}
+
+.person-credit-card__copy p,
+.person-credit-card__copy h3,
+.person-credit-card__copy span {
+  margin: 0;
+}
+
+.person-credit-card__copy p,
+.person-credit-card__copy span {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.person-credit-card__copy h3 {
+  margin-top: 0.55rem;
+  font-size: clamp(1.7rem, 3vw, 3rem);
+  font-weight: 400;
+  line-height: 0.96;
+}
+
+.person-credit-card__copy span {
+  display: block;
+  margin-top: 0.7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.person-credits__empty {
+  color: var(--color-app-muted);
+}
+
+.person-chronology {
+  margin-top: clamp(4rem, 8vw, 8rem);
+}
+
+.person-chronology__heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.5rem;
+}
+
+.person-chronology__heading p,
+.person-chronology__heading h3,
+.person-chronology__heading span {
+  margin: 0;
+}
+
+.person-chronology__heading p,
+.person-chronology__heading span {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.person-chronology__heading p {
+  color: var(--color-projector);
+}
+
+.person-chronology__heading h3 {
+  margin-top: 0.45rem;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 400;
+}
+
+.person-chronology ol {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-line);
+  list-style: none;
+}
+
+.person-chronology li {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.person-chronology li a {
+  display: grid;
+  grid-template-columns: 2rem 4rem minmax(10rem, 0.55fr) minmax(10rem, 0.45fr) auto;
+  gap: 1rem;
+  align-items: center;
+  min-height: 4.25rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.person-chronology li a:hover strong,
+.person-chronology li a:focus-visible strong {
+  color: var(--color-projector);
+}
+
+.person-chronology li span,
+.person-chronology li time,
+.person-chronology li small {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.person-chronology li strong {
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.person-chronology li small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.person-chronology li a > span:last-child {
+  color: var(--color-projector);
+}
+
+@media (max-width: 64rem) {
+  .person-credit-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 48rem) {
+  .person-section-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .person-credit-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .person-chronology li a {
+    grid-template-columns: 2rem 3rem minmax(0, 1fr) auto;
+  }
+
+  .person-chronology li small {
+    display: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .person-section-heading h2 {
+    font-size: clamp(3rem, 15vw, 4.5rem);
+  }
+
+  .person-chronology__heading {
+    display: grid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .person-credit-card__artwork img {
+    transition: none;
+  }
+
+  .person-credit-card:hover img,
+  .person-credit-card:focus-visible img {
+    transform: none;
+  }
+}

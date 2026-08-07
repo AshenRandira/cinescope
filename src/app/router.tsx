@@ -89,6 +89,18 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: 'people/:personId',
+        lazy: async () => {
+          const { PersonDetailPage } = await import(
+            '../features/person-details/pages/PersonDetailPage'
+          )
+
+          return {
+            Component: PersonDetailPage,
+          }
+        },
+      },
+      {
         path: 'search',
         lazy: async () => {
           const { SearchPage } = await import(

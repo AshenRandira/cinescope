@@ -54,12 +54,7 @@ function getSuggestionTarget(
     return `/tv/${record.id}`
   }
 
-  const searchParams = new URLSearchParams({
-    q: record.title,
-    type: record.mediaType,
-  })
-
-  return `/search?${searchParams.toString()}`
+  return `/people/${record.id}`
 }
 
 function getSuggestionImage(

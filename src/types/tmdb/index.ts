@@ -20,7 +20,16 @@ export type {
   TmdbSpokenLanguage,
 } from './movie'
 
-export type { TmdbPerson } from './person'
+export type {
+  TmdbPerson,
+  TmdbPersonCombinedCredit,
+  TmdbPersonCombinedCredits,
+  TmdbPersonCreditMediaType,
+  TmdbPersonDetails,
+  TmdbPersonExternalIds,
+  TmdbPersonImage,
+  TmdbPersonImages,
+} from './person'
 
 export type {
   TmdbWatchProvider,

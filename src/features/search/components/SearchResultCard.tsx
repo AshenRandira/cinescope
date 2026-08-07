@@ -192,9 +192,13 @@ export function SearchResultCard({
                 <ArrowRight aria-hidden="true" />
               </Link>
             ) : (
-              <p>
-                Contributor record indexed
-              </p>
+              <Link
+                aria-label={`Open contributor record for ${record.title}`}
+                to={`/people/${record.id}`}
+              >
+                Open contributor record
+                <ArrowRight aria-hidden="true" />
+              </Link>
             )}
 
             {record.mediaType !== 'person' ? (

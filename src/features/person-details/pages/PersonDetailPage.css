@@ -1,0 +1,525 @@
+.person-detail-page {
+  min-width: 0;
+  padding-bottom:
+    calc(var(--layout-mobile-nav-height) + 2rem);
+  background: var(--color-ink-950);
+}
+
+.person-detail-hero {
+  position: relative;
+  min-height: clamp(48rem, 100svh, 68rem);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.person-detail-hero__background,
+.person-detail-hero__shade {
+  position: absolute;
+  inset: 0;
+}
+
+.person-detail-hero__background {
+  z-index: -3;
+  background:
+    radial-gradient(
+      circle at 74% 32%,
+      var(--color-projector-soft),
+      transparent 32%
+    ),
+    var(--color-ink-950);
+}
+
+.person-detail-hero__background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% 22%;
+  filter:
+    grayscale(0.18)
+    saturate(0.62)
+    contrast(1.08)
+    brightness(0.42);
+  opacity: 0.62;
+  transform: scale(1.04);
+}
+
+.person-detail-hero__shade {
+  z-index: -2;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 8, 6, 0.99) 0%,
+      rgba(7, 8, 6, 0.92) 44%,
+      rgba(7, 8, 6, 0.58) 72%,
+      rgba(7, 8, 6, 0.78) 100%
+    ),
+    linear-gradient(
+      0deg,
+      var(--color-ink-950) 0%,
+      rgba(7, 8, 6, 0.12) 48%,
+      rgba(7, 8, 6, 0.48) 100%
+    );
+}
+
+.person-detail-hero__inner {
+  display: grid;
+  width: min(
+    calc(100% - (var(--layout-gutter) * 2)),
+    var(--layout-max)
+  );
+  min-height: clamp(48rem, 100svh, 68rem);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 4vw, 3.5rem)
+    clamp(3.5rem, 7vw, 6rem);
+}
+
+.person-detail-hero__return {
+  display: inline-flex;
+  gap: 0.7rem;
+  align-items: center;
+  align-self: start;
+  justify-self: start;
+  min-height: 2.75rem;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-paper-200);
+  font-family: var(--font-annotation);
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.person-detail-hero__return svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.person-detail-hero__return:hover,
+.person-detail-hero__return:focus-visible {
+  color: var(--color-projector-strong);
+}
+
+.person-detail-hero__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr)
+    minmax(17rem, 25rem);
+  gap: clamp(3rem, 8vw, 8rem);
+  align-items: end;
+  align-self: end;
+  padding-top: clamp(4rem, 11vh, 8rem);
+}
+
+.person-detail-hero__copy {
+  max-width: 60rem;
+}
+
+.person-detail-hero__title {
+  max-width: 11ch;
+  margin: 0.65rem 0 0;
+  color: var(--color-paper-100);
+  font-size: clamp(4.5rem, 10vw, 10rem);
+  font-weight: 400;
+  line-height: 0.82;
+  text-wrap: balance;
+}
+
+.person-detail-hero__department {
+  margin: 1.4rem 0 0;
+  color: var(--color-projector-strong);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.2vw, 2.2rem);
+  font-style: italic;
+}
+
+.person-detail-hero__lead {
+  max-width: 46rem;
+  margin: 1.35rem 0 0;
+  color: var(--color-paper-400);
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+  line-height: 1.78;
+}
+
+.person-detail-hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2.5rem;
+  margin: 2rem 0 0;
+}
+
+.person-detail-hero__facts div {
+  max-width: 18rem;
+}
+
+.person-detail-hero__facts dt,
+.person-detail-hero__facts dd {
+  margin: 0;
+}
+
+.person-detail-hero__facts dt {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.person-detail-hero__facts dd {
+  margin-top: 0.35rem;
+  color: var(--color-paper-200);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.person-detail-hero__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.person-detail-hero__links a {
+  display: inline-flex;
+  gap: 0.65rem;
+  align-items: center;
+  min-height: 2.6rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--color-line-strong);
+  color: var(--color-paper-200);
+  font-family: var(--font-annotation);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.person-detail-hero__links a:hover,
+.person-detail-hero__links a:focus-visible {
+  border-color: var(--color-projector);
+  color: var(--color-projector-strong);
+}
+
+.person-detail-hero__links svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.person-detail-hero__portrait {
+  position: relative;
+  margin: 0;
+  padding: 0.55rem;
+  border: 1px solid var(--color-line-strong);
+  background: rgba(7, 8, 6, 0.58);
+  box-shadow: var(--shadow-elevated);
+}
+
+.person-detail-hero__portrait > img,
+.person-detail-hero__portrait > div {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+}
+
+.person-detail-hero__portrait > img {
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+  filter: saturate(0.76) contrast(1.04);
+}
+
+.person-detail-hero__portrait > div {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(
+      135deg,
+      transparent 49.7%,
+      var(--color-line) 50%,
+      transparent 50.3%
+    ),
+    var(--color-ink-800);
+  color: var(--color-projector);
+  font-family: var(--font-display);
+  font-size: 5rem;
+}
+
+.person-detail-hero__portrait figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.25rem 0.15rem;
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.person-biography,
+.person-portraits {
+  width: min(100% - 2rem, 92rem);
+  margin-inline: auto;
+  padding-block: clamp(5rem, 10vw, 10rem);
+  border-top: 1px solid var(--color-line);
+}
+
+.person-biography__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.66fr)
+    minmax(16rem, 0.34fr);
+  gap: clamp(3rem, 8vw, 8rem);
+  align-items: start;
+}
+
+.person-biography__copy {
+  min-width: 0;
+  max-width: 54rem;
+}
+
+.person-biography__copy p {
+  margin: 0;
+  color: var(--color-paper-400);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.person-biography__copy p + p {
+  margin-top: 1.6rem;
+}
+
+.person-biography__copy .person-biography__empty {
+  color: var(--color-app-muted);
+  font-family: var(--font-interface);
+  font-size: 0.9rem;
+}
+
+.person-biography__register {
+  min-width: 0;
+  padding: 1.5rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-ink-900);
+}
+
+.person-biography__register > p {
+  margin: 0 0 1.25rem;
+  color: var(--color-projector);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.person-biography__register dl {
+  margin: 0;
+}
+
+.person-biography__register dl div {
+  padding-block: 1rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.person-biography__register dt,
+.person-biography__register dd {
+  margin: 0;
+}
+
+.person-biography__register dt {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.person-biography__register dd {
+  margin-top: 0.5rem;
+  color: var(--color-paper-200);
+  font-size: 0.72rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.person-portraits__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 1px;
+  background: var(--color-line);
+  list-style: none;
+}
+
+.person-portraits__grid li {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--color-ink-800);
+}
+
+.person-portraits__grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: saturate(0.62) contrast(1.08);
+  transition:
+    filter var(--duration-interface)
+      var(--ease-enter),
+    transform var(--duration-scene) var(--ease-enter);
+}
+
+.person-portraits__grid li:hover img {
+  filter: saturate(0.9) contrast(1.04);
+  transform: scale(1.025);
+}
+
+.person-portraits__grid span {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  color: var(--color-ink-950);
+  background: var(--color-projector);
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+}
+
+.person-detail-return {
+  display: flex;
+  width: min(100% - 2rem, 92rem);
+  justify-content: space-between;
+  gap: 2rem;
+  margin-inline: auto;
+  padding-block: 2.25rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.person-detail-return p,
+.person-detail-return a {
+  margin: 0;
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.person-detail-return a:hover,
+.person-detail-return a:focus-visible {
+  color: var(--color-projector);
+}
+
+@media (max-width: 64rem) {
+  .person-detail-hero__layout {
+    grid-template-columns: minmax(0, 1fr)
+      minmax(15rem, 20rem);
+    gap: 3rem;
+  }
+
+  .person-portraits__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 48rem) {
+  .person-detail-hero {
+    min-height: auto;
+  }
+
+  .person-detail-hero__background img {
+    object-position: center top;
+    opacity: 0.5;
+  }
+
+  .person-detail-hero__shade {
+    background:
+      linear-gradient(
+        0deg,
+        var(--color-ink-950) 0%,
+        rgba(7, 8, 6, 0.78) 56%,
+        rgba(7, 8, 6, 0.66) 100%
+      );
+  }
+
+  .person-detail-hero__inner {
+    min-height: auto;
+    padding-top: 1.5rem;
+  }
+
+  .person-detail-hero__layout {
+    grid-template-columns: 1fr;
+    padding-top: 4rem;
+  }
+
+  .person-detail-hero__copy {
+    order: 2;
+  }
+
+  .person-detail-hero__portrait {
+    width: min(72vw, 22rem);
+    justify-self: center;
+  }
+
+  .person-detail-hero__title {
+    max-width: 12ch;
+    font-size: clamp(4rem, 18vw, 6.5rem);
+  }
+
+  .person-biography__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 40rem) {
+  .person-detail-hero__facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .person-detail-hero__facts div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .person-portraits__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .person-detail-return {
+    display: grid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .person-detail-hero__background img,
+  .person-portraits__grid img {
+    transform: none;
+    transition: none;
+  }
+
+  .person-portraits__grid li:hover img {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .person-detail-hero__shade {
+    background: transparent;
+  }
+
+  .person-detail-hero__portrait,
+  .person-biography__register {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  .person-detail-hero__return,
+  .person-detail-return a {
+    color: LinkText;
+  }
+}

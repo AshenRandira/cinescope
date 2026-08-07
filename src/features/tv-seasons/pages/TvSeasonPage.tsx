@@ -574,30 +574,36 @@ export function TvSeasonPage() {
 
               return (
                 <li key={member.credit_id}>
-                  <div className="tv-season-cast__portrait">
-                    {profileUrl ? (
-                      <img
-                        alt={`${member.name} portrait`}
-                        decoding="async"
-                        loading="lazy"
-                        sizes="(max-width: 40rem) 45vw, (max-width: 64rem) 24vw, 13vw"
-                        src={profileUrl}
-                        srcSet={profileSrcSet}
-                      />
-                    ) : (
-                      <span aria-hidden="true">
-                        {getInitials(member.name)}
-                      </span>
-                    )}
-                    <small>
-                      {String(index + 1).padStart(2, '0')}
-                    </small>
-                  </div>
-                  <h3>{member.name}</h3>
-                  <p>
-                    {member.character ||
-                      'Role unavailable'}
-                  </p>
+                  <Link
+                    aria-label={`Open contributor record for ${member.name}`}
+                    className="tv-season-cast__link"
+                    to={`/people/${member.id}`}
+                  >
+                    <div className="tv-season-cast__portrait">
+                      {profileUrl ? (
+                        <img
+                          alt={`${member.name} portrait`}
+                          decoding="async"
+                          loading="lazy"
+                          sizes="(max-width: 40rem) 45vw, (max-width: 64rem) 24vw, 13vw"
+                          src={profileUrl}
+                          srcSet={profileSrcSet}
+                        />
+                      ) : (
+                        <span aria-hidden="true">
+                          {getInitials(member.name)}
+                        </span>
+                      )}
+                      <small>
+                        {String(index + 1).padStart(2, '0')}
+                      </small>
+                    </div>
+                    <h3>{member.name}</h3>
+                    <p>
+                      {member.character ||
+                        'Role unavailable'}
+                    </p>
+                  </Link>
                 </li>
               )
             })}
