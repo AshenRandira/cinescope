@@ -439,80 +439,91 @@ export function TvSeasonPage() {
                   id={`episode-${episode.episode_number}`}
                   key={episode.id}
                 >
-                  <div className="tv-episode-card__artwork">
-                    {stillUrl ? (
-                      <img
-                        alt=""
-                        decoding="async"
-                        loading="lazy"
-                        sizes="(max-width: 48rem) 100vw, 42vw"
-                        src={stillUrl}
-                        srcSet={stillSrcSet}
-                      />
-                    ) : (
-                      <div className="tv-episode-card__fallback">
-                        <span>
-                          E{String(
-                            episode.episode_number,
-                          ).padStart(2, '0')}
-                        </span>
-                        <small>Still unavailable</small>
-                      </div>
-                    )}
-                    <span className="tv-episode-card__number">
-                      S{String(season.season_number).padStart(2, '0')}
-                      E{String(episode.episode_number).padStart(2, '0')}
-                    </span>
-                  </div>
-
-                  <div className="tv-episode-card__copy">
-                    <div className="tv-episode-card__heading">
-                      <div>
-                        <p>
-                          Episode {episode.episode_number}
-                        </p>
-                        <h3 className="font-display">
-                          {episode.name}
-                        </h3>
-                      </div>
-                      <span>
-                        {formatScore(
-                          episode.vote_average,
-                          episode.vote_count,
-                        )}
+                  <Link
+                    aria-label={`Open episode record for ${episode.name}`}
+                    className="tv-episode-card__link"
+                    to={`/tv/${series.id}/season/${season.season_number}/episode/${episode.episode_number}`}
+                  >
+                    <div className="tv-episode-card__artwork">
+                      {stillUrl ? (
+                        <img
+                          alt=""
+                          decoding="async"
+                          loading="lazy"
+                          sizes="(max-width: 48rem) 100vw, 42vw"
+                          src={stillUrl}
+                          srcSet={stillSrcSet}
+                        />
+                      ) : (
+                        <div className="tv-episode-card__fallback">
+                          <span>
+                            E{String(
+                              episode.episode_number,
+                            ).padStart(2, '0')}
+                          </span>
+                          <small>Still unavailable</small>
+                        </div>
+                      )}
+                      <span className="tv-episode-card__number">
+                        S{String(season.season_number).padStart(2, '0')}
+                        E{String(episode.episode_number).padStart(2, '0')}
                       </span>
                     </div>
 
-                    <p className="tv-episode-card__metadata">
-                      {formatDate(episode.air_date)}
-                      <span aria-hidden="true"> / </span>
-                      {formatRuntime(episode.runtime)}
-                    </p>
+                    <div className="tv-episode-card__copy">
+                      <div className="tv-episode-card__heading">
+                        <div>
+                          <p>
+                            Episode {episode.episode_number}
+                          </p>
+                          <h3 className="font-display">
+                            {episode.name}
+                          </h3>
+                        </div>
+                        <span>
+                          {formatScore(
+                            episode.vote_average,
+                            episode.vote_count,
+                          )}
+                        </span>
+                      </div>
 
-                    <p className="tv-episode-card__overview text-pretty">
-                      {episode.overview ||
-                        'No synopsis is currently attached to this episode record.'}
-                    </p>
+                      <p className="tv-episode-card__metadata">
+                        {formatDate(episode.air_date)}
+                        <span aria-hidden="true"> / </span>
+                        {formatRuntime(episode.runtime)}
+                      </p>
 
-                    <dl className="tv-episode-card__credits">
-                      <div>
-                        <dt>Directed by</dt>
-                        <dd>{directors || 'Not indexed'}</dd>
-                      </div>
-                      <div>
-                        <dt>Written by</dt>
-                        <dd>{writers || 'Not indexed'}</dd>
-                      </div>
-                      <div>
-                        <dt>Guest register</dt>
-                        <dd>
-                          {episode.guest_stars.length > 0
-                            ? `${episode.guest_stars.length} credited`
-                            : 'No guest credits'}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
+                      <p className="tv-episode-card__overview text-pretty">
+                        {episode.overview ||
+                          'No synopsis is currently attached to this episode record.'}
+                      </p>
+
+                      <dl className="tv-episode-card__credits">
+                        <div>
+                          <dt>Directed by</dt>
+                          <dd>{directors || 'Not indexed'}</dd>
+                        </div>
+                        <div>
+                          <dt>Written by</dt>
+                          <dd>{writers || 'Not indexed'}</dd>
+                        </div>
+                        <div>
+                          <dt>Guest register</dt>
+                          <dd>
+                            {episode.guest_stars.length > 0
+                              ? `${episode.guest_stars.length} credited`
+                              : 'No guest credits'}
+                          </dd>
+                        </div>
+                      </dl>
+
+                      <span className="tv-episode-card__action">
+                        Open episode record
+                        <span aria-hidden="true"> →</span>
+                      </span>
+                    </div>
+                  </Link>
                 </li>
               )
             })}

@@ -226,11 +226,22 @@
 }
 
 .tv-episode-card {
-  display: grid;
-  grid-template-columns: minmax(20rem, 0.42fr) minmax(0, 0.58fr);
   min-width: 0;
   scroll-margin-top: 6rem;
   background: var(--color-ink-950);
+}
+
+.tv-episode-card__link {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.42fr) minmax(0, 0.58fr);
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tv-episode-card__link:focus-visible {
+  outline: 1px solid var(--season-accent);
+  outline-offset: -1px;
 }
 
 .tv-episode-card:target {
@@ -380,6 +391,16 @@
   line-height: 1.5;
 }
 
+.tv-episode-card__action {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--season-accent);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .tv-season-empty {
   padding: clamp(3rem, 8vw, 8rem);
   border: 1px solid var(--color-line);
@@ -518,7 +539,7 @@
 @media (max-width: 56rem) {
   .tv-season-hero__layout,
   .tv-season-section-heading,
-  .tv-episode-card {
+  .tv-episode-card__link {
     grid-template-columns: 1fr;
   }
 

@@ -86,6 +86,35 @@ export interface TmdbTvSeasonEpisode
   guest_stars: TmdbTvEpisodeGuestStar[]
 }
 
+export interface TmdbTvEpisodeCredits {
+  cast: TmdbTvCastMember[]
+  crew: TmdbTvCrewMember[]
+  guest_stars: TmdbTvEpisodeGuestStar[]
+  id: number
+}
+
+export interface TmdbTvEpisodeImage {
+  aspect_ratio: number
+  file_path: string
+  height: number
+  iso_639_1: string | null
+  vote_average: number
+  vote_count: number
+  width: number
+}
+
+export interface TmdbTvEpisodeImages {
+  id: number
+  stills: TmdbTvEpisodeImage[]
+}
+
+export interface TmdbTvEpisodeDetails
+  extends TmdbTvSeasonEpisode {
+  credits: TmdbTvEpisodeCredits
+  images: TmdbTvEpisodeImages
+  videos: TmdbVideoListResponse
+}
+
 export interface TmdbTvCastMember {
   adult: boolean
   character: string

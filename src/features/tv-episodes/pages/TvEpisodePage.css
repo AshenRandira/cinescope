@@ -1,0 +1,390 @@
+.tv-episode-page {
+  background: var(--color-ink-950);
+  color: var(--color-paper-100);
+}
+
+.tv-episode-hero {
+  position: relative;
+  min-height: min(56rem, calc(100svh - 4rem));
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.tv-episode-hero__still,
+.tv-episode-hero__shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tv-episode-hero__still {
+  object-fit: cover;
+  filter: saturate(0.5) contrast(1.1) brightness(0.52);
+}
+
+.tv-episode-hero__shade {
+  background:
+    linear-gradient(90deg, rgb(5 7 6 / 0.96) 0%, rgb(5 7 6 / 0.74) 48%, rgb(5 7 6 / 0.36) 100%),
+    linear-gradient(0deg, var(--color-ink-950), transparent 60%);
+}
+
+.tv-episode-hero__inner,
+.tv-episode-anatomy,
+.tv-episode-nav {
+  position: relative;
+  width: min(100% - 2rem, 92rem);
+  margin-inline: auto;
+}
+
+.tv-episode-hero__inner {
+  z-index: 1;
+  padding-block: clamp(2rem, 5vw, 5rem);
+}
+
+.tv-episode-back-link {
+  display: inline-flex;
+  gap: 0.55rem;
+  align-items: center;
+  color: var(--color-paper-500);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.11em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.tv-episode-back-link:hover,
+.tv-episode-back-link:focus-visible {
+  color: var(--color-projector);
+}
+
+.tv-episode-hero__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(12rem, 0.22fr);
+  gap: clamp(2rem, 7vw, 8rem);
+  align-items: end;
+  min-height: min(39rem, calc(100svh - 16rem));
+  padding-top: clamp(4rem, 9vw, 9rem);
+}
+
+.tv-episode-hero__series {
+  margin: 1rem 0 0;
+  color: var(--color-projector);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.tv-episode-hero__copy h1 {
+  max-width: 13ch;
+  margin: 0.5rem 0 0;
+  font-size: clamp(4rem, 8.5vw, 8.5rem);
+  font-weight: 400;
+  line-height: 0.84;
+}
+
+.tv-episode-hero__overview {
+  max-width: 52rem;
+  margin: 1.8rem 0 0;
+  color: var(--color-paper-400);
+  font-size: clamp(0.82rem, 1.3vw, 1rem);
+  line-height: 1.75;
+}
+
+.tv-episode-hero__controls {
+  margin-top: 1.75rem;
+}
+
+.tv-episode-hero__index {
+  display: grid;
+  min-height: 18rem;
+  align-content: end;
+  padding: 1.5rem;
+  border: 1px solid var(--color-line-strong);
+  background: rgb(5 7 6 / 0.7);
+  backdrop-filter: blur(0.5rem);
+}
+
+.tv-episode-hero__index > span,
+.tv-episode-hero__index > small {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.tv-episode-hero__index strong {
+  margin-block: 0.45rem auto;
+  color: var(--color-projector);
+  font-size: clamp(4rem, 7vw, 7rem);
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+.tv-episode-hero__facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(2rem, 4vw, 4rem) 0 0;
+  border-block: 1px solid var(--color-line);
+}
+
+.tv-episode-hero__facts > div {
+  padding: 1rem 1rem 1rem 0;
+}
+
+.tv-episode-hero__facts > div + div {
+  padding-left: 1rem;
+  border-left: 1px solid var(--color-line);
+}
+
+.tv-episode-hero__facts dt,
+.tv-episode-hero__facts dd {
+  margin: 0;
+}
+
+.tv-episode-hero__facts dt {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.tv-episode-hero__facts dd {
+  margin-top: 0.4rem;
+  font-size: 0.7rem;
+}
+
+.tv-episode-anatomy {
+  padding-block: clamp(5rem, 10vw, 10rem);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.tv-episode-anatomy__heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.64fr) minmax(16rem, 0.36fr);
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 5rem);
+}
+
+.tv-episode-anatomy__heading h2 {
+  max-width: 13ch;
+  margin: 0.5rem 0 0;
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  font-weight: 400;
+  line-height: 0.88;
+}
+
+.tv-episode-anatomy__heading > p {
+  margin: 0;
+  color: var(--color-app-muted);
+  font-size: 0.75rem;
+  line-height: 1.75;
+}
+
+.tv-episode-anatomy__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.65fr) minmax(16rem, 0.35fr);
+  gap: 1px;
+  background: var(--color-line);
+}
+
+.tv-episode-synopsis,
+.tv-episode-anatomy__facts {
+  background: var(--color-ink-950);
+}
+
+.tv-episode-synopsis {
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+.tv-episode-synopsis > p {
+  margin: 0;
+  color: var(--color-projector);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tv-episode-synopsis blockquote {
+  max-width: 24ch;
+  margin: 1.5rem 0 0;
+  font-size: clamp(2rem, 4.5vw, 4.8rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.tv-episode-anatomy__facts {
+  margin: 0;
+  padding: 1.5rem;
+}
+
+.tv-episode-anatomy__facts > div {
+  padding-block: 1rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.tv-episode-anatomy__facts dt,
+.tv-episode-anatomy__facts dd {
+  margin: 0;
+}
+
+.tv-episode-anatomy__facts dt {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tv-episode-anatomy__facts dd {
+  margin-top: 0.45rem;
+  font-size: 0.7rem;
+  line-height: 1.55;
+}
+
+.tv-episode-nav {
+  padding-block: clamp(4rem, 8vw, 8rem);
+  border-top: 1px solid var(--color-line);
+}
+
+.tv-episode-nav__heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.tv-episode-nav__heading a {
+  color: var(--color-projector);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.tv-episode-nav__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  padding: 1px;
+  background: var(--color-line);
+}
+
+.tv-episode-nav__record,
+.tv-episode-nav__boundary {
+  display: grid;
+  min-height: 15rem;
+  align-content: end;
+  padding: clamp(1.5rem, 4vw, 4rem);
+  background: var(--color-ink-950);
+}
+
+.tv-episode-nav__record {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tv-episode-nav__record--next {
+  text-align: right;
+}
+
+.tv-episode-nav__record > span,
+.tv-episode-nav__record > small,
+.tv-episode-nav__boundary span {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tv-episode-nav__record strong {
+  margin-block: 0.7rem;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 400;
+  line-height: 0.95;
+}
+
+.tv-episode-nav__record:hover strong,
+.tv-episode-nav__record:focus-visible strong {
+  color: var(--color-projector);
+}
+
+.tv-episode-nav__boundary {
+  background:
+    linear-gradient(135deg, transparent 49.8%, var(--color-line) 50%, transparent 50.2%),
+    var(--color-ink-900);
+}
+
+.tv-episode-nav__boundary--next {
+  justify-items: end;
+}
+
+@media (max-width: 56rem) {
+  .tv-episode-hero__layout,
+  .tv-episode-anatomy__heading,
+  .tv-episode-anatomy__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tv-episode-hero__index {
+    min-height: 12rem;
+  }
+
+  .tv-episode-hero__facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tv-episode-hero__facts > div:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .tv-episode-hero__facts > div:nth-child(4) {
+    border-top: 1px solid var(--color-line);
+  }
+}
+
+@media (max-width: 40rem) {
+  .tv-episode-hero__shade {
+    background:
+      linear-gradient(0deg, var(--color-ink-950) 12%, rgb(5 7 6 / 0.7) 100%);
+  }
+
+  .tv-episode-hero__layout {
+    min-height: auto;
+    padding-top: 4rem;
+  }
+
+  .tv-episode-hero__copy h1 {
+    font-size: clamp(3.5rem, 17vw, 5.5rem);
+  }
+
+  .tv-episode-hero__facts,
+  .tv-episode-nav__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tv-episode-hero__facts > div + div {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .tv-episode-anatomy__heading h2 {
+    font-size: clamp(3rem, 15vw, 4.5rem);
+  }
+
+  .tv-episode-nav__heading {
+    display: grid;
+  }
+}
