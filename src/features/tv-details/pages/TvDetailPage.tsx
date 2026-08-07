@@ -542,7 +542,11 @@ export function TvDetailPage() {
           </div>
 
           {show.next_episode_to_air ? (
-            <aside className="tv-detail-next-episode">
+            <Link
+              aria-label={`Open ${show.next_episode_to_air.name} in the season register`}
+              className="tv-detail-next-episode"
+              to={`/tv/${show.id}/season/${show.next_episode_to_air.season_number}#episode-${show.next_episode_to_air.episode_number}`}
+            >
               <p>Next episode indexed</p>
               <h3 className="font-display">
                 {show.next_episode_to_air.name}
@@ -552,7 +556,7 @@ export function TvDetailPage() {
                 episode {show.next_episode_to_air.episode_number}{' '}
                 / {formatDate(show.next_episode_to_air.air_date)}
               </span>
-            </aside>
+            </Link>
           ) : null}
         </section>
 
@@ -593,54 +597,61 @@ export function TvDetailPage() {
                   )
 
                 return (
-                  <li
-                    className="tv-season-card"
-                    key={season.id}
-                  >
-                    <div className="tv-season-card__artwork">
-                      {seasonPosterUrl ? (
-                        <img
-                          alt={`${season.name} poster`}
-                          decoding="async"
-                          loading="lazy"
-                          sizes="(max-width: 40rem) 34vw, (max-width: 64rem) 24vw, 14vw"
-                          src={seasonPosterUrl}
-                          srcSet={seasonPosterSrcSet}
-                        />
-                      ) : (
-                        <span aria-hidden="true">
-                          {String(
-                            season.season_number,
-                          ).padStart(2, '0')}
-                        </span>
-                      )}
-                      <small>
-                        {String(index + 1).padStart(2, '0')}
-                      </small>
-                    </div>
+                  <li key={season.id}>
+                    <Link
+                      aria-label={`Open ${season.name} episode register`}
+                      className="tv-season-card"
+                      to={`/tv/${show.id}/season/${season.season_number}`}
+                    >
+                      <div className="tv-season-card__artwork">
+                        {seasonPosterUrl ? (
+                          <img
+                            alt={`${season.name} poster`}
+                            decoding="async"
+                            loading="lazy"
+                            sizes="(max-width: 40rem) 34vw, (max-width: 64rem) 24vw, 14vw"
+                            src={seasonPosterUrl}
+                            srcSet={seasonPosterSrcSet}
+                          />
+                        ) : (
+                          <span aria-hidden="true">
+                            {String(
+                              season.season_number,
+                            ).padStart(2, '0')}
+                          </span>
+                        )}
+                        <small>
+                          {String(index + 1).padStart(2, '0')}
+                        </small>
+                      </div>
 
-                    <div className="tv-season-card__copy">
-                      <p>
-                        {season.season_number === 0
-                          ? 'Special transmission'
-                          : `Season ${season.season_number}`}
-                      </p>
-                      <h3 className="font-display">
-                        {season.name}
-                      </h3>
-                      <span>
-                        {season.episode_count.toLocaleString()}{' '}
-                        {season.episode_count === 1
-                          ? 'episode'
-                          : 'episodes'}
-                        {' / '}
-                        {formatDate(season.air_date)}
-                      </span>
-                      <p className="text-pretty">
-                        {season.overview ||
-                          'No season overview is currently attached to this record.'}
-                      </p>
-                    </div>
+                      <div className="tv-season-card__copy">
+                        <p>
+                          {season.season_number === 0
+                            ? 'Special transmission'
+                            : `Season ${season.season_number}`}
+                        </p>
+                        <h3 className="font-display">
+                          {season.name}
+                        </h3>
+                        <span className="tv-season-card__metadata">
+                          {season.episode_count.toLocaleString()}{' '}
+                          {season.episode_count === 1
+                            ? 'episode'
+                            : 'episodes'}
+                          {' / '}
+                          {formatDate(season.air_date)}
+                        </span>
+                        <p className="tv-season-card__overview text-pretty">
+                          {season.overview ||
+                            'No season overview is currently attached to this record.'}
+                        </p>
+                        <span className="tv-season-card__action">
+                          Open episode register
+                          <span aria-hidden="true"> →</span>
+                        </span>
+                      </div>
+                    </Link>
                   </li>
                 )
               })}

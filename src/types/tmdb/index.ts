@@ -42,9 +42,12 @@ export type {
   TmdbTvCredits,
   TmdbTvCrewMember,
   TmdbTvDetails,
+  TmdbTvEpisodeGuestStar,
   TmdbTvEpisodeSummary,
   TmdbTvNetwork,
   TmdbTvSeason,
+  TmdbTvSeasonDetails,
+  TmdbTvSeasonEpisode,
   TmdbTvShow,
 } from './tv'
 

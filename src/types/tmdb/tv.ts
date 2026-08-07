@@ -50,6 +50,20 @@ export interface TmdbTvSeason {
   vote_average: number
 }
 
+export interface TmdbTvEpisodeGuestStar {
+  adult: boolean
+  character: string
+  credit_id: string
+  gender: number
+  id: number
+  known_for_department: string
+  name: string
+  order: number
+  original_name: string
+  popularity: number
+  profile_path: string | null
+}
+
 export interface TmdbTvEpisodeSummary {
   air_date: string | null
   episode_number: number
@@ -64,6 +78,12 @@ export interface TmdbTvEpisodeSummary {
   still_path: string | null
   vote_average: number
   vote_count: number
+}
+
+export interface TmdbTvSeasonEpisode
+  extends TmdbTvEpisodeSummary {
+  crew: TmdbTvCrewMember[]
+  guest_stars: TmdbTvEpisodeGuestStar[]
 }
 
 export interface TmdbTvCastMember {
@@ -98,6 +118,19 @@ export interface TmdbTvCredits {
   cast: TmdbTvCastMember[]
   crew: TmdbTvCrewMember[]
   id: number
+}
+
+export interface TmdbTvSeasonDetails {
+  _id: string
+  air_date: string | null
+  credits: TmdbTvCredits
+  episodes: TmdbTvSeasonEpisode[]
+  id: number
+  name: string
+  overview: string
+  poster_path: string | null
+  season_number: number
+  vote_average: number
 }
 
 export interface TmdbTvDetails {

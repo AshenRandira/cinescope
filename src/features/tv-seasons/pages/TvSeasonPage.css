@@ -1,0 +1,584 @@
+.tv-season-page {
+  --season-accent: var(--color-projector);
+  background: var(--color-ink-950);
+  color: var(--color-paper-100);
+}
+
+.tv-season-hero {
+  position: relative;
+  min-height: min(52rem, calc(100svh - 4rem));
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.tv-season-hero__backdrop,
+.tv-season-hero__shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tv-season-hero__backdrop {
+  object-fit: cover;
+  filter: saturate(0.48) contrast(1.1) brightness(0.5);
+}
+
+.tv-season-hero__shade {
+  background:
+    linear-gradient(90deg, rgb(5 7 6 / 0.98) 0%, rgb(5 7 6 / 0.82) 50%, rgb(5 7 6 / 0.52) 100%),
+    linear-gradient(0deg, var(--color-ink-950), transparent 55%);
+}
+
+.tv-season-hero__inner,
+.tv-season-episodes,
+.tv-season-cast,
+.tv-season-return {
+  position: relative;
+  width: min(100% - 2rem, 92rem);
+  margin-inline: auto;
+}
+
+.tv-season-hero__inner {
+  z-index: 1;
+  padding-block: clamp(2rem, 5vw, 5rem);
+}
+
+.tv-season-back-link {
+  display: inline-flex;
+  gap: 0.55rem;
+  align-items: center;
+  color: var(--color-paper-500);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.tv-season-back-link:hover,
+.tv-season-back-link:focus-visible {
+  color: var(--season-accent);
+}
+
+.tv-season-hero__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.28fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  align-items: end;
+  min-height: min(42rem, calc(100svh - 12rem));
+  padding-top: clamp(3rem, 8vw, 8rem);
+}
+
+.tv-season-hero__series {
+  margin: 1rem 0 0;
+  color: var(--season-accent);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tv-season-hero__copy h1 {
+  max-width: 13ch;
+  margin: 0.45rem 0 0;
+  font-size: clamp(4rem, 9vw, 9rem);
+  font-weight: 400;
+  line-height: 0.82;
+}
+
+.tv-season-hero__overview {
+  max-width: 52rem;
+  margin: 1.8rem 0 0;
+  color: var(--color-paper-400);
+  font-size: clamp(0.82rem, 1.3vw, 1rem);
+  line-height: 1.75;
+}
+
+.tv-season-hero__controls {
+  margin-top: 1.75rem;
+}
+
+.tv-season-hero__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 52rem;
+  margin: 2.5rem 0 0;
+  border-block: 1px solid var(--color-line);
+}
+
+.tv-season-hero__facts > div {
+  padding: 1rem 1rem 1rem 0;
+}
+
+.tv-season-hero__facts > div + div {
+  padding-left: 1rem;
+  border-left: 1px solid var(--color-line);
+}
+
+.tv-season-hero__facts dt,
+.tv-season-hero__facts dd {
+  margin: 0;
+}
+
+.tv-season-hero__facts dt {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tv-season-hero__facts dd {
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+}
+
+.tv-season-hero__poster {
+  position: relative;
+  margin: 0;
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-ink-850);
+}
+
+.tv-season-hero__poster > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
+
+.tv-season-hero__poster > span {
+  display: block;
+  padding: 0.7rem;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tv-season-hero__poster-fallback {
+  display: grid;
+  aspect-ratio: 2 / 3;
+  place-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  background:
+    linear-gradient(135deg, transparent 49.8%, var(--color-line) 50%, transparent 50.2%),
+    var(--color-ink-800);
+}
+
+.tv-season-hero__poster-fallback span {
+  color: var(--season-accent);
+  font-family: var(--font-display);
+  font-size: 5rem;
+}
+
+.tv-season-hero__poster-fallback small {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tv-season-episodes,
+.tv-season-cast {
+  padding-block: clamp(5rem, 10vw, 10rem);
+}
+
+.tv-season-cast {
+  border-top: 1px solid var(--color-line);
+}
+
+.tv-season-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.64fr) minmax(16rem, 0.36fr);
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 5rem);
+}
+
+.tv-season-section-heading h2 {
+  max-width: 13ch;
+  margin: 0.5rem 0 0;
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  font-weight: 400;
+  line-height: 0.88;
+}
+
+.tv-season-section-heading > p {
+  margin: 0;
+  color: var(--color-app-muted);
+  font-size: 0.75rem;
+  line-height: 1.75;
+}
+
+.tv-episode-list {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 1px;
+  background: var(--color-line);
+  list-style: none;
+}
+
+.tv-episode-card {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.42fr) minmax(0, 0.58fr);
+  min-width: 0;
+  scroll-margin-top: 6rem;
+  background: var(--color-ink-950);
+}
+
+.tv-episode-card:target {
+  outline: 1px solid var(--season-accent);
+  outline-offset: -1px;
+}
+
+.tv-episode-card__artwork {
+  position: relative;
+  min-height: 23rem;
+  overflow: hidden;
+  border-right: 1px solid var(--color-line);
+  background: var(--color-ink-800);
+}
+
+.tv-episode-card__artwork img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.76) contrast(1.06);
+}
+
+.tv-episode-card__fallback {
+  display: grid;
+  height: 100%;
+  place-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  background:
+    linear-gradient(135deg, transparent 49.8%, var(--color-line) 50%, transparent 50.2%);
+}
+
+.tv-episode-card__fallback span {
+  color: var(--season-accent);
+  font-family: var(--font-display);
+  font-size: 4rem;
+}
+
+.tv-episode-card__fallback small {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tv-episode-card__number {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.45rem 0.55rem;
+  color: var(--color-ink-950);
+  background: var(--season-accent);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+}
+
+.tv-episode-card__copy {
+  min-width: 0;
+  padding: clamp(1.5rem, 4vw, 4rem);
+}
+
+.tv-episode-card__heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+}
+
+.tv-episode-card__heading p,
+.tv-episode-card__heading h3 {
+  margin: 0;
+}
+
+.tv-episode-card__heading p {
+  color: var(--season-accent);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.tv-episode-card__heading h3 {
+  margin-top: 0.55rem;
+  font-size: clamp(2.2rem, 4vw, 4.5rem);
+  font-weight: 400;
+  line-height: 0.92;
+}
+
+.tv-episode-card__heading > span {
+  color: var(--color-paper-500);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  white-space: nowrap;
+}
+
+.tv-episode-card__metadata {
+  margin: 1.25rem 0 0;
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tv-episode-card__overview {
+  max-width: 52rem;
+  margin: 1.5rem 0 0;
+  color: var(--color-app-muted);
+  font-size: 0.78rem;
+  line-height: 1.8;
+}
+
+.tv-episode-card__credits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 2rem 0 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.tv-episode-card__credits > div {
+  padding: 1rem 1rem 0 0;
+}
+
+.tv-episode-card__credits > div + div {
+  padding-left: 1rem;
+  border-left: 1px solid var(--color-line);
+}
+
+.tv-episode-card__credits dt,
+.tv-episode-card__credits dd {
+  margin: 0;
+}
+
+.tv-episode-card__credits dt {
+  color: var(--color-paper-600);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tv-episode-card__credits dd {
+  margin-top: 0.45rem;
+  font-size: 0.67rem;
+  line-height: 1.5;
+}
+
+.tv-season-empty {
+  padding: clamp(3rem, 8vw, 8rem);
+  border: 1px solid var(--color-line);
+  text-align: center;
+}
+
+.tv-season-empty p,
+.tv-season-empty h3 {
+  margin: 0;
+}
+
+.tv-season-empty p {
+  color: var(--season-accent);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tv-season-empty h3 {
+  margin-top: 0.75rem;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 400;
+}
+
+.tv-season-cast__grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 1px;
+  background: var(--color-line);
+  list-style: none;
+}
+
+.tv-season-cast__grid > li {
+  min-width: 0;
+  padding-bottom: 1rem;
+  background: var(--color-ink-950);
+}
+
+.tv-season-cast__portrait {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--color-ink-800);
+}
+
+.tv-season-cast__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.66) contrast(1.06);
+}
+
+.tv-season-cast__portrait > span {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  color: var(--season-accent);
+  font-family: var(--font-display);
+  font-size: 2rem;
+}
+
+.tv-season-cast__portrait small {
+  position: absolute;
+  right: 0.45rem;
+  bottom: 0.45rem;
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+  color: var(--color-ink-950);
+  background: var(--season-accent);
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+}
+
+.tv-season-cast__grid h3,
+.tv-season-cast__grid p {
+  margin-inline: 0.75rem;
+}
+
+.tv-season-cast__grid h3 {
+  margin-block: 0.75rem 0;
+  overflow: hidden;
+  font-size: 0.7rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tv-season-cast__grid p {
+  margin-block: 0.25rem 0;
+  overflow: hidden;
+  color: var(--color-paper-600);
+  font-size: 0.58rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tv-season-cast__empty {
+  color: var(--color-app-muted);
+}
+
+.tv-season-return {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 2rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.tv-season-return p,
+.tv-season-return a {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tv-season-return p {
+  color: var(--color-paper-600);
+}
+
+.tv-season-return a {
+  color: var(--season-accent);
+  text-decoration: none;
+}
+
+@media (max-width: 72rem) {
+  .tv-season-cast__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 56rem) {
+  .tv-season-hero__layout,
+  .tv-season-section-heading,
+  .tv-episode-card {
+    grid-template-columns: 1fr;
+  }
+
+  .tv-season-hero__poster {
+    width: min(18rem, 60vw);
+  }
+
+  .tv-episode-card__artwork {
+    min-height: auto;
+    aspect-ratio: 16 / 9;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+}
+
+@media (max-width: 40rem) {
+  .tv-season-hero__shade {
+    background:
+      linear-gradient(0deg, var(--color-ink-950) 12%, rgb(5 7 6 / 0.72) 100%);
+  }
+
+  .tv-season-hero__layout {
+    min-height: auto;
+    padding-top: 4rem;
+  }
+
+  .tv-season-hero__copy h1 {
+    font-size: clamp(3.6rem, 18vw, 5.5rem);
+  }
+
+  .tv-season-hero__facts,
+  .tv-episode-card__credits {
+    grid-template-columns: 1fr;
+  }
+
+  .tv-season-hero__facts > div + div,
+  .tv-episode-card__credits > div + div {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .tv-season-section-heading h2 {
+    font-size: clamp(3rem, 15vw, 4.5rem);
+  }
+
+  .tv-episode-card__copy {
+    padding: 1.25rem;
+  }
+
+  .tv-episode-card__heading {
+    grid-template-columns: 1fr;
+  }
+
+  .tv-season-cast__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tv-season-return {
+    display: grid;
+    gap: 1rem;
+  }
+}

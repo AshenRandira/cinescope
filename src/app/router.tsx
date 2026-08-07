@@ -65,6 +65,18 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: 'tv/:tvId/season/:seasonNumber',
+        lazy: async () => {
+          const { TvSeasonPage } = await import(
+            '../features/tv-seasons/pages/TvSeasonPage'
+          )
+
+          return {
+            Component: TvSeasonPage,
+          }
+        },
+      },
+      {
         path: 'search',
         lazy: async () => {
           const { SearchPage } = await import(
