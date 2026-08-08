@@ -32,28 +32,7 @@ jobs:
           cache: npm
 
       - name: Install locked dependencies
-        id: install
-        shell: bash
-        run: |
-          set -o pipefail
-          npm ci 2>&1 | tee npm-ci.log
-
-      - name: Report dependency install failure
-        if: ${{ failure() && steps.install.outcome == 'failure' }}
-        shell: bash
-        run: |
-          {
-            echo '### npm ci failure'
-            echo '```text'
-            tail -n 80 npm-ci.log
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          details="$(head -n 50 npm-ci.log)"
-          details="${details//%/%25}"
-          details="${details//$'\r'/%0D}"
-          details="${details//$'\n'/%0A}"
-          echo "::error file=package-lock.json,line=1,title=npm ci failure::$details"
+        run: npm ci
 
       - name: Run unit tests
         run: npm test
