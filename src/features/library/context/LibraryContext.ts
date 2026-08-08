@@ -5,6 +5,7 @@ import type {
   LibraryMediaType,
   LibraryRecord,
   LibraryRecordPatch,
+  LibrarySyncStatus,
 } from '../data/library'
 
 export type LibraryContextValue = {
@@ -17,6 +18,9 @@ export type LibraryContextValue = {
     mediaType: LibraryMediaType,
     id: number,
   ) => void
+  retrySync: () => void
+  syncError: string | null
+  syncStatus: LibrarySyncStatus
   updateRecord: (
     candidate: LibraryCandidate,
     patch?: LibraryRecordPatch,

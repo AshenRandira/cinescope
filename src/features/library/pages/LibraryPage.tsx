@@ -15,6 +15,7 @@ import { LibraryControls } from '../components/LibraryControls'
 import type {
   LibraryRecord,
 } from '../data/library'
+import { getLibrarySyncCopy } from '../data/library'
 import { useLibrary } from '../hooks/useLibrary'
 
 import './LibraryPage.css'
@@ -249,7 +250,16 @@ function LibraryCard({
 export function LibraryPage() {
   const [searchParams, setSearchParams] =
     useSearchParams()
-  const { records } = useLibrary()
+  const {
+    records,
+    retrySync,
+    syncError,
+    syncStatus,
+  } = useLibrary()
+  const syncCopy = getLibrarySyncCopy(
+    syncStatus,
+    syncError,
+  )
   const view = parseLibraryView(
     searchParams.get('view'),
   )
@@ -301,11 +311,20 @@ export function LibraryPage() {
             series you save, watch, favour, or rate.
           </p>
 
-          <p>
-            This phase is local-first. Records remain
-            in this browser and are not synced to an
-            account or external service.
-          </p>
+          <div
+            className={`library-opening__sync library-opening__sync--${syncStatus}`}
+            role="status"
+          >
+            <p className="archive-label">
+              {syncCopy.label}
+            </p>
+            <p>{syncCopy.detail}</p>
+            {syncStatus === 'error' ? (
+              <button onClick={retrySync} type="button">
+                Retry cloud sync
+              </button>
+            ) : null}
+          </div>
         </div>
       </header>
 
@@ -328,8 +347,10 @@ export function LibraryPage() {
           </div>
 
           <p>
-            Status changes persist immediately in
-            local browser storage.
+            Every control saves locally first
+            {syncStatus === 'local'
+              ? ' in this browser.'
+              : ' while account sync runs in the background.'}
           </p>
         </header>
 

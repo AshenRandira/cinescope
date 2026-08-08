@@ -11,6 +11,7 @@ import {
   getAuthErrorMessage,
 } from '../../auth/data/auth'
 import { useAuth } from '../../auth/hooks/useAuth'
+import { getLibrarySyncCopy } from '../../library/data/library'
 import { useLibrary } from '../../library/hooks/useLibrary'
 
 import './ProfilePage.css'
@@ -57,7 +58,16 @@ export function ProfilePage() {
     updateDisplayName,
     user,
   } = useAuth()
-  const { records } = useLibrary()
+  const {
+    records,
+    retrySync,
+    syncError,
+    syncStatus,
+  } = useLibrary()
+  const syncCopy = getLibrarySyncCopy(
+    syncStatus,
+    syncError,
+  )
   const [displayName, setDisplayName] = useState(
     user?.displayName ?? '',
   )
@@ -194,13 +204,19 @@ export function ProfilePage() {
               Your collection at a glance.
             </h2>
           </div>
-          <aside className="profile-section-heading__note">
-            <p className="archive-label">Storage status</p>
-            <p>
-              Your library is saved in this browser for now.
-              Account sync will arrive in a future persistence
-              phase.
+          <aside
+            className={`profile-section-heading__note profile-section-heading__note--${syncStatus}`}
+            role="status"
+          >
+            <p className="archive-label">
+              {syncCopy.label}
             </p>
+            <p>{syncCopy.detail}</p>
+            {syncStatus === 'error' ? (
+              <button onClick={retrySync} type="button">
+                Retry cloud sync
+              </button>
+            ) : null}
           </aside>
         </header>
 

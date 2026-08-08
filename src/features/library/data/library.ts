@@ -25,14 +25,43 @@ export type LibraryRecordPatch = Partial<
   >
 >
 
+export type LibrarySyncStatus =
+  | 'local'
+  | 'connecting'
+  | 'syncing'
+  | 'synced'
+  | 'error'
+
+export type LibrarySyncCopy = {
+  detail: string
+  label: string
+}
+
 export const LIBRARY_STORAGE_KEY =
   'cinescope.library.v1'
+
+const LIBRARY_USER_STORAGE_PREFIX =
+  `${LIBRARY_STORAGE_KEY}.user`
 
 export function getLibraryRecordKey(
   mediaType: LibraryMediaType,
   id: number,
 ): string {
   return `${mediaType}:${id}`
+}
+
+export function getLibraryStorageKey(
+  userId: string | null,
+): string {
+  return userId
+    ? `${LIBRARY_USER_STORAGE_PREFIX}.${encodeURIComponent(userId)}`
+    : LIBRARY_STORAGE_KEY
+}
+
+export function getLibraryPendingDeletionStorageKey(
+  userId: string,
+): string {
+  return `${getLibraryStorageKey(userId)}.pending-deletions`
 }
 
 function isObject(
@@ -53,7 +82,7 @@ function getNullableString(
     : null
 }
 
-function parseLibraryRecord(
+export function parseLibraryRecord(
   value: unknown,
 ): LibraryRecord | null {
   if (!isObject(value)) return null
@@ -155,4 +184,69 @@ export function sortLibraryRecords(
   return [...records].sort((first, second) =>
     second.updatedAt.localeCompare(first.updatedAt),
   )
+}
+
+export function mergeLibraryRecords(
+  ...recordGroups: LibraryRecord[][]
+): LibraryRecord[] {
+  const recordsByKey = new Map<
+    string,
+    LibraryRecord
+  >()
+
+  recordGroups.flat().forEach((record) => {
+    const recordKey = getLibraryRecordKey(
+      record.mediaType,
+      record.id,
+    )
+    const existingRecord = recordsByKey.get(recordKey)
+
+    if (
+      !existingRecord ||
+      record.updatedAt > existingRecord.updatedAt
+    ) {
+      recordsByKey.set(recordKey, record)
+    }
+  })
+
+  return sortLibraryRecords([...recordsByKey.values()])
+}
+
+export function getLibrarySyncCopy(
+  status: LibrarySyncStatus,
+  error: string | null,
+): LibrarySyncCopy {
+  switch (status) {
+    case 'connecting':
+      return {
+        detail:
+          'Your browser archive is ready while CineScope connects to your account.',
+        label: 'Connecting archive',
+      }
+    case 'syncing':
+      return {
+        detail:
+          'Recent library changes are being saved to your account.',
+        label: 'Saving changes',
+      }
+    case 'synced':
+      return {
+        detail:
+          'This collection is saved locally and synced securely to your account.',
+        label: 'Account sync active',
+      }
+    case 'error':
+      return {
+        detail:
+          error ??
+          'Cloud sync is paused. Your changes remain saved in this browser.',
+        label: 'Cloud sync paused',
+      }
+    case 'local':
+      return {
+        detail:
+          'Saved on this browser. Sign in to keep the collection with your account.',
+        label: 'Browser archive',
+      }
+  }
 }

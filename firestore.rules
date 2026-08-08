@@ -1,0 +1,70 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function ownsLibrary(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function hasValidOptionalText(value) {
+      return value == null || value is string;
+    }
+
+    function hasValidLibraryRecord() {
+      let data = request.resource.data;
+
+      return data.keys().hasAll([
+          'backdropPath',
+          'id',
+          'isFavorite',
+          'isWatched',
+          'mediaType',
+          'overview',
+          'posterPath',
+          'releaseYear',
+          'savedAt',
+          'title',
+          'updatedAt',
+          'userRating'
+        ]) &&
+        data.keys().hasOnly([
+          'backdropPath',
+          'id',
+          'isFavorite',
+          'isWatched',
+          'mediaType',
+          'overview',
+          'posterPath',
+          'releaseYear',
+          'savedAt',
+          'title',
+          'updatedAt',
+          'userRating'
+        ]) &&
+        data.id is int &&
+        data.id > 0 &&
+        (data.mediaType == 'movie' || data.mediaType == 'tv') &&
+        data.title is string &&
+        data.title.size() > 0 &&
+        data.title.size() <= 300 &&
+        data.isFavorite is bool &&
+        data.isWatched is bool &&
+        data.savedAt is string &&
+        data.updatedAt is string &&
+        hasValidOptionalText(data.backdropPath) &&
+        hasValidOptionalText(data.overview) &&
+        hasValidOptionalText(data.posterPath) &&
+        hasValidOptionalText(data.releaseYear) &&
+        (data.userRating == null ||
+          (data.userRating is int &&
+            data.userRating >= 1 &&
+            data.userRating <= 10));
+    }
+
+    match /users/{userId}/library/{recordId} {
+      allow read, delete: if ownsLibrary(userId);
+      allow create, update: if ownsLibrary(userId) &&
+        hasValidLibraryRecord();
+    }
+  }
+}

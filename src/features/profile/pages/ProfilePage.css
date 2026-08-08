@@ -138,11 +138,46 @@
   color: var(--color-projector-strong);
 }
 
-.profile-section-heading__note > p:last-child {
+.profile-section-heading__note > p:last-of-type {
   margin-top: 0.75rem;
   color: var(--color-paper-200);
   font-size: clamp(1rem, 1.1vw, 1.08rem);
   line-height: 1.7;
+}
+
+.profile-section-heading__note--error {
+  border-color: var(--color-error);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 131, 120, 0.1),
+      transparent
+    );
+}
+
+.profile-section-heading__note--error .archive-label {
+  color: var(--color-error);
+}
+
+.profile-section-heading__note > button {
+  min-height: 2.75rem;
+  margin-top: 0.85rem;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-projector-strong);
+  background: transparent;
+  font-family: var(--font-annotation);
+  font-size: var(--font-size-caption);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.profile-section-heading__note > button:hover,
+.profile-section-heading__note > button:focus-visible {
+  color: var(--color-paper-100);
 }
 
 .profile-library__stats {
