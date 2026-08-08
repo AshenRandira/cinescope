@@ -1,29 +1,22 @@
 import { createBrowserRouter } from 'react-router'
 
 import { AppShell } from '../components/layout/AppShell'
-
-import { LoginPage } from '../features/auth/pages/LoginPage'
-import { RegisterPage } from '../features/auth/pages/RegisterPage'
-import { RequireAuth } from '../features/auth/components/RequireAuth'
-
-import { TmdbVerificationPage } from '../features/development/pages/TmdbVerificationPage'
-
-import { DiscoverPage } from '../features/discovery/pages/DiscoverPage'
 import { HomePage } from '../features/discovery/pages/HomePage'
-import { MoviesPage } from '../features/discovery/pages/MoviesPage'
-import { TvShowsPage } from '../features/discovery/pages/TvShowsPage'
-
-import { ProfilePage } from '../features/profile/pages/ProfilePage'
-
 import { NotFoundPage } from '../pages/NotFoundPage'
-
-import { MovieDetailPage } from '../features/movie-details/pages/MovieDetailPage'
 
 const developmentRoutes = import.meta.env.DEV
   ? [
       {
         path: 'dev/tmdb',
-        element: <TmdbVerificationPage />,
+        lazy: async () => {
+          const { TmdbVerificationPage } = await import(
+            '../features/development/pages/TmdbVerificationPage'
+          )
+
+          return {
+            Component: TmdbVerificationPage,
+          }
+        },
       },
     ]
   : []
@@ -39,19 +32,51 @@ export const router = createBrowserRouter([
       },
       {
         path: 'discover',
-        element: <DiscoverPage />,
+        lazy: async () => {
+          const { DiscoverPage } = await import(
+            '../features/discovery/pages/DiscoverPage'
+          )
+
+          return {
+            Component: DiscoverPage,
+          }
+        },
       },
       {
         path: 'movies',
-        element: <MoviesPage />,
+        lazy: async () => {
+          const { MoviesPage } = await import(
+            '../features/discovery/pages/MoviesPage'
+          )
+
+          return {
+            Component: MoviesPage,
+          }
+        },
       },
       {
         path: 'movies/:movieId',
-        element: <MovieDetailPage />,
+        lazy: async () => {
+          const { MovieDetailPage } = await import(
+            '../features/movie-details/pages/MovieDetailPage'
+          )
+
+          return {
+            Component: MovieDetailPage,
+          }
+        },
       },
       {
         path: 'tv',
-        element: <TvShowsPage />,
+        lazy: async () => {
+          const { TvShowsPage } = await import(
+            '../features/discovery/pages/TvShowsPage'
+          )
+
+          return {
+            Component: TvShowsPage,
+          }
+        },
       },
       {
         path: 'tv/:tvId',
@@ -127,19 +152,51 @@ export const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: (
-          <RequireAuth>
-            <ProfilePage />
-          </RequireAuth>
-        ),
+        lazy: async () => {
+          const [{ RequireAuth }, { ProfilePage }] =
+            await Promise.all([
+              import(
+                '../features/auth/components/RequireAuth'
+              ),
+              import(
+                '../features/profile/pages/ProfilePage'
+              ),
+            ])
+
+          return {
+            Component: function ProtectedProfileRoute() {
+              return (
+                <RequireAuth>
+                  <ProfilePage />
+                </RequireAuth>
+              )
+            },
+          }
+        },
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        lazy: async () => {
+          const { LoginPage } = await import(
+            '../features/auth/pages/LoginPage'
+          )
+
+          return {
+            Component: LoginPage,
+          }
+        },
       },
       {
         path: 'register',
-        element: <RegisterPage />,
+        lazy: async () => {
+          const { RegisterPage } = await import(
+            '../features/auth/pages/RegisterPage'
+          )
+
+          return {
+            Component: RegisterPage,
+          }
+        },
       },
       ...developmentRoutes,
       {
