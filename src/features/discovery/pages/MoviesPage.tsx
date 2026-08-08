@@ -531,6 +531,10 @@ export function MoviesPage() {
     )
 
   useEffect(() => {
+    document.title = 'Movies — CineScope'
+  }, [])
+
+  useEffect(() => {
     setSelectedMovieId(null)
   }, [
     filters.genreId,
@@ -699,7 +703,7 @@ export function MoviesPage() {
   }
 
   return (
-    <main className="movie-register-page projection-surface">
+    <div className="movie-register-page projection-surface">
       <header className="movie-register__opening">
         <div>
           <p className="archive-label">
@@ -778,6 +782,6 @@ export function MoviesPage() {
 
         {registerContent}
       </section>
-    </main>
+    </div>
   )
 }

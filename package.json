@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint src vite.config.ts",
+    "lint": "oxlint --jsx-a11y-plugin -A jsx-a11y/prefer-tag-over-role --deny-warnings src vite.config.ts",
     "preview": "vite preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",

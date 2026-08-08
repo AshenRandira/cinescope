@@ -2,7 +2,6 @@ import {
     useEffect,
     useRef,
     useState,
-    type MouseEvent,
   } from 'react'
 
   import {
@@ -215,14 +214,6 @@ import {
       dialogRef.current?.close()
     }
 
-    function handleDialogClick(
-      event: MouseEvent<HTMLDialogElement>,
-    ): void {
-      if (event.target === event.currentTarget) {
-        event.currentTarget.close()
-      }
-    }
-
     return (
       <section
         className="movie-video-section"
@@ -421,7 +412,6 @@ import {
           onCancel={() =>
             setActiveVideo(null)
           }
-          onClick={handleDialogClick}
           onClose={() =>
             setActiveVideo(null)
           }

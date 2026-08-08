@@ -1,7 +1,12 @@
 ﻿import { ArrowLeft } from 'lucide-react'
+import { useEffect } from 'react'
 import { Link } from 'react-router'
 
 export function NotFoundPage() {
+  useEffect(() => {
+    document.title = 'Page not found — CineScope'
+  }, [])
+
   return (
     <section className="grid min-h-[60vh] place-items-center text-center">
       <div className="max-w-xl">

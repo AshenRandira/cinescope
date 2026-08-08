@@ -402,32 +402,32 @@ export function HeaderSearch() {
             role="listbox"
           >
             {validationMessage ? (
-              <p
+              <div
                 aria-disabled="true"
                 aria-selected="false"
                 className="header-search__message header-search__message--warning"
                 role="option"
               >
                 {validationMessage}
-              </p>
+              </div>
             ) : isPreparing || search.isPending ? (
-              <p
+              <div
                 aria-disabled="true"
                 aria-selected="false"
                 className="header-search__message"
                 role="option"
               >
                 Matching records in the living archive.
-              </p>
+              </div>
             ) : search.isInitialError ? (
-              <p
+              <div
                 aria-disabled="true"
                 aria-selected="false"
                 className="header-search__message header-search__message--error"
                 role="option"
               >
                 Suggestions are unavailable. Full search is still available.
-              </p>
+              </div>
             ) : suggestions.length > 0 ? (
               <div className="header-search__suggestions">
                 {suggestions.map((record, index) => {
@@ -495,14 +495,14 @@ export function HeaderSearch() {
                 })}
               </div>
             ) : (
-              <p
+              <div
                 aria-disabled="true"
                 aria-selected="false"
                 className="header-search__message"
                 role="option"
               >
                 No names matched this projection.
-              </p>
+              </div>
             )}
           </div>
 

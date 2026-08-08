@@ -247,6 +247,7 @@ export function TelevisionSignal({
                         return (
                             <button
                                 aria-controls="television-signal-panel"
+                                aria-label={`Signal ${signal.index}: ${signal.label}. ${signal.cue}`}
                                 aria-selected={isActive}
                                 className="television-signal__tab"
                                 data-active={isActive}

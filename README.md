@@ -48,3 +48,5 @@ npm.cmd run lint
 npm.cmd run build
 git diff --check origin/develop...HEAD
 ```
+
+The lint command includes JSX accessibility rules and treats warnings as failures. Before a release, also verify the skip link, route focus, tabs, search suggestions, and dialogs with keyboard-only navigation in a browser.

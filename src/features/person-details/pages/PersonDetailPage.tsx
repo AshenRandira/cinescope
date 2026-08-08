@@ -287,7 +287,7 @@ export function PersonDetailPage() {
   )
 
   return (
-    <main className="person-detail-page">
+    <div className="person-detail-page">
       <section
         className="person-detail-hero"
         aria-labelledby="person-detail-heading"
@@ -530,6 +530,6 @@ export function PersonDetailPage() {
           <span aria-hidden="true"> →</span>
         </Link>
       </footer>
-    </main>
+    </div>
   )
 }

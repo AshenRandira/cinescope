@@ -293,7 +293,7 @@ export function LibraryPage() {
   }, [activeView.label])
 
   return (
-    <main className="library-page projection-surface">
+    <div className="library-page projection-surface">
       <header className="library-opening">
         <div>
           <p className="archive-label">
@@ -470,6 +470,6 @@ export function LibraryPage() {
           </div>
         )}
       </section>
-    </main>
+    </div>
   )
 }

@@ -462,7 +462,7 @@ export function DiscoverPage() {
   }
 
   return (
-    <main className="discover-page projection-surface">
+    <div className="discover-page projection-surface">
       <header className="discover-opening">
         <div>
           <p className="archive-label">
@@ -606,6 +606,6 @@ export function DiscoverPage() {
           {projectionContent}
         </div>
       </section>
-    </main>
+    </div>
   )
 }

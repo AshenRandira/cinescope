@@ -1,9 +1,23 @@
-import { Outlet } from 'react-router'
+import { useEffect, useRef } from 'react'
+import { Outlet, useLocation } from 'react-router'
 
 import { DesktopHeader } from './DesktopHeader'
 import { MobileBottomNavigation } from './MobileBottomNavigation'
 
 export function AppShell() {
+  const { pathname } = useLocation()
+  const mainRef = useRef<HTMLElement>(null)
+  const previousPathnameRef = useRef(pathname)
+
+  useEffect(() => {
+    if (previousPathnameRef.current === pathname) {
+      return
+    }
+
+    previousPathnameRef.current = pathname
+    mainRef.current?.focus()
+  }, [pathname])
+
   return (
     <div className="projection-surface min-h-screen">
       <a
@@ -16,8 +30,9 @@ export function AppShell() {
       <DesktopHeader />
 
       <main
-        className="w-full px-[var(--layout-gutter)] pb-[calc(var(--layout-mobile-nav-height)+env(safe-area-inset-bottom)+2rem)] pt-8 md:min-h-[calc(100svh-var(--layout-header-height))] md:pb-0 md:pt-10"
+        className="w-full px-[var(--layout-gutter)] pb-[calc(var(--layout-mobile-nav-height)+env(safe-area-inset-bottom)+2rem)] pt-8 focus:outline-none md:min-h-[calc(100svh-var(--layout-header-height))] md:pb-0 md:pt-10"
         id="main-content"
+        ref={mainRef}
         tabIndex={-1}
       >
         <Outlet />

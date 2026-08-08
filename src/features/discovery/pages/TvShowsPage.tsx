@@ -513,7 +513,7 @@ export function TvShowsPage() {
   }
 
   return (
-    <main className="tv-register-page projection-surface">
+    <div className="tv-register-page projection-surface">
       <header className="tv-register__opening">
         <div>
           <p className="archive-label">
@@ -659,6 +659,6 @@ export function TvShowsPage() {
 
         {registerContent}
       </section>
-    </main>
+    </div>
   )
 }

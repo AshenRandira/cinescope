@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import {
   CheckCircle2,
   Film,
@@ -32,6 +33,10 @@ function getReleaseYear(releaseDate: string): string {
 }
 
 export function TmdbVerificationPage() {
+  useEffect(() => {
+    document.title = 'TMDB verification — CineScope'
+  }, [])
+
   const {
     data,
     error,

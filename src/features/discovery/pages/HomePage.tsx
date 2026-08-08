@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import {
   EmptyState,
   ErrorState,
@@ -18,6 +20,10 @@ export function HomePage() {
     television,
     temporal,
   } = useHomeDiscoveryQueries()
+
+  useEffect(() => {
+    document.title = 'Discover your next story — CineScope'
+  }, [])
 
   let openingScene
 
