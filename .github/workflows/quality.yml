@@ -49,6 +49,12 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
+          details="$(tail -n 40 npm-ci.log)"
+          details="${details//%/%25}"
+          details="${details//$'\r'/%0D}"
+          details="${details//$'\n'/%0A}"
+          echo "::error file=package-lock.json,line=1,title=npm ci failure::$details"
+
       - name: Run unit tests
         run: npm test
 
