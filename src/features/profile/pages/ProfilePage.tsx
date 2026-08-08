@@ -194,11 +194,14 @@ export function ProfilePage() {
               Your collection at a glance.
             </h2>
           </div>
-          <p>
-            These records are still stored only in this
-            browser. Account-backed database synchronisation
-            belongs to the next persistence phase.
-          </p>
+          <aside className="profile-section-heading__note">
+            <p className="archive-label">Storage status</p>
+            <p>
+              Your library is saved in this browser for now.
+              Account sync will arrive in a future persistence
+              phase.
+            </p>
+          </aside>
         </header>
 
         <dl className="profile-library__stats">
@@ -242,11 +245,14 @@ export function ProfilePage() {
               Maintain your identity.
             </h2>
           </div>
-          <p>
-            Profile identity is managed by Firebase
-            Authentication. CineScope does not persist your
-            password.
-          </p>
+          <aside className="profile-section-heading__note">
+            <p className="archive-label">Authentication</p>
+            <p>
+              Firebase Authentication protects your profile
+              and sign-in. CineScope never stores your
+              password.
+            </p>
+          </aside>
         </header>
 
         <div className="profile-account__layout">

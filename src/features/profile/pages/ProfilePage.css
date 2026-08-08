@@ -91,8 +91,8 @@
 .profile-opening__session div > span {
   display: block;
   margin-top: 0.35rem;
-  color: var(--color-paper-600);
-  font-size: var(--font-size-label);
+  color: var(--color-paper-400);
+  font-size: var(--font-size-caption);
 }
 
 .profile-library,
@@ -117,11 +117,32 @@
   line-height: 0.88;
 }
 
-.profile-section-heading > p {
+.profile-section-heading__note {
+  width: min(100%, 31rem);
+  justify-self: end;
+  padding: 1.25rem 1.4rem;
+  border-left: 2px solid var(--color-projector);
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-projector-soft),
+      transparent
+    );
+}
+
+.profile-section-heading__note p {
   margin: 0;
-  color: var(--color-paper-500);
-  font-size: var(--font-size-small);
-  line-height: 1.75;
+}
+
+.profile-section-heading__note .archive-label {
+  color: var(--color-projector-strong);
+}
+
+.profile-section-heading__note > p:last-child {
+  margin-top: 0.75rem;
+  color: var(--color-paper-200);
+  font-size: clamp(1rem, 1.1vw, 1.08rem);
+  line-height: 1.7;
 }
 
 .profile-library__stats {
@@ -148,10 +169,11 @@
 }
 
 .profile-library__stats dt {
-  color: var(--color-paper-600);
+  color: var(--color-paper-400);
   font-family: var(--font-mono);
-  font-size: var(--font-size-micro);
-  letter-spacing: 0.1em;
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -171,7 +193,7 @@
   border-bottom: 1px solid currentColor;
   color: var(--color-projector);
   font-family: var(--font-annotation);
-  font-size: var(--font-size-label);
+  font-size: var(--font-size-caption);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -197,10 +219,11 @@
 
 .profile-account__form label span,
 .profile-account__metadata dt {
-  color: var(--color-paper-600);
+  color: var(--color-paper-400);
   font-family: var(--font-mono);
-  font-size: var(--font-size-micro);
-  letter-spacing: 0.09em;
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -228,7 +251,7 @@
   color: var(--color-paper-200);
   background: transparent;
   font-family: var(--font-annotation);
-  font-size: var(--font-size-label);
+  font-size: var(--font-size-caption);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
@@ -284,7 +307,7 @@
 .profile-account__metadata dd {
   margin-top: 0.5rem;
   color: var(--color-paper-200);
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-small);
 }
 
 .profile-account__logout {
@@ -316,6 +339,11 @@
   .profile-section-heading,
   .profile-account__layout {
     grid-template-columns: 1fr;
+  }
+
+  .profile-section-heading__note {
+    width: 100%;
+    justify-self: stretch;
   }
 
   .profile-library__stats {
