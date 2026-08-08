@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router'
 
 import { mobileNavigation } from '../../config/navigation'
+import { useAuth } from '../../features/auth/hooks/useAuth'
 
 function getMobileLinkClass(isActive: boolean): string {
   const baseClasses =
@@ -14,6 +15,9 @@ function getMobileLinkClass(isActive: boolean): string {
 }
 
 export function MobileBottomNavigation() {
+  const { status } = useAuth()
+  const isAuthenticated = status === 'authenticated'
+
   return (
     <nav
       aria-label="Mobile navigation"
@@ -22,6 +26,15 @@ export function MobileBottomNavigation() {
       <div className="grid grid-cols-5">
         {mobileNavigation.map((item) => {
           const Icon = item.icon
+          const isAccountItem = item.to === '/profile'
+          const target =
+            isAccountItem && !isAuthenticated
+              ? '/login'
+              : item.to
+          const label =
+            isAccountItem && !isAuthenticated
+              ? 'Sign in'
+              : item.label
 
           return (
             <NavLink
@@ -30,7 +43,7 @@ export function MobileBottomNavigation() {
               }
               end={item.end}
               key={item.to}
-              to={item.to}
+              to={target}
             >
               {({ isActive }) => (
                 <>
@@ -55,7 +68,7 @@ export function MobileBottomNavigation() {
                     ) : null}
                   </span>
 
-                  <span>{item.label}</span>
+                  <span>{label}</span>
                 </>
               )}
             </NavLink>

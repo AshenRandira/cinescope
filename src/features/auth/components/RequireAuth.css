@@ -1,0 +1,8 @@
+.auth-route-state {
+  width: min(100%, 52rem);
+  min-height: calc(
+    100svh - var(--layout-header-height) - 8rem
+  );
+  margin-inline: auto;
+  padding-block: clamp(4rem, 10vw, 8rem);
+}

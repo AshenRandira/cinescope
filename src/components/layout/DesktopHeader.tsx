@@ -3,6 +3,7 @@ import { NavLink } from 'react-router'
 
 import { CineScopeWordmark } from '../branding/CineScopeWordmark'
 import { desktopNavigation } from '../../config/navigation'
+import { useAuth } from '../../features/auth/hooks/useAuth'
 import { HeaderSearch } from '../../features/search/components/HeaderSearch'
 
 function getNavigationClass(isActive: boolean): string {
@@ -28,6 +29,17 @@ function getActionClass(isActive: boolean): string {
 }
 
 export function DesktopHeader() {
+  const { status, user } = useAuth()
+  const isAuthenticated = status === 'authenticated'
+  const accountTarget = isAuthenticated
+    ? '/profile'
+    : '/login'
+  const accountLabel = isAuthenticated
+    ? user?.displayName?.split(/\s+/)[0] || 'Profile'
+    : status === 'initializing'
+      ? 'Account'
+      : 'Sign in'
+
   return (
     <header className="sticky top-0 z-[var(--z-header)] hidden border-b border-[var(--color-line-soft)] bg-[color:rgb(7_8_6/0.86)] backdrop-blur-xl md:block">
       <div className="mx-auto grid h-[var(--layout-header-height)] max-w-[var(--layout-max)] grid-cols-[auto_1fr_auto] items-stretch gap-4 px-[var(--layout-gutter)] lg:gap-8">
@@ -106,12 +118,14 @@ export function DesktopHeader() {
             className={({ isActive }) =>
               getActionClass(isActive)
             }
-            to="/profile"
+            to={accountTarget}
           >
             {({ isActive }) => (
               <>
                 <UserRound aria-hidden="true" className="size-4" />
-                <span>Profile</span>
+                <span className="max-w-24 truncate">
+                  {accountLabel}
+                </span>
 
                 <span
                   aria-hidden="true"

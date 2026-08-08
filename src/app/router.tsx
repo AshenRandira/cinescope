@@ -4,6 +4,7 @@ import { AppShell } from '../components/layout/AppShell'
 
 import { LoginPage } from '../features/auth/pages/LoginPage'
 import { RegisterPage } from '../features/auth/pages/RegisterPage'
+import { RequireAuth } from '../features/auth/components/RequireAuth'
 
 import { TmdbVerificationPage } from '../features/development/pages/TmdbVerificationPage'
 
@@ -126,7 +127,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: <ProfilePage />,
+        element: (
+          <RequireAuth>
+            <ProfilePage />
+          </RequireAuth>
+        ),
       },
       {
         path: 'login',
