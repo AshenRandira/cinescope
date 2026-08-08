@@ -117,7 +117,7 @@
     display: grid;
     place-items: center;
     font-family: var(--font-annotation);
-    font-size: 0.62rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-app-muted);
@@ -172,7 +172,7 @@
 
   .movie-video-feature__caption span {
     font-family: var(--font-annotation);
-    font-size: 0.58rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.11em;
     text-transform: uppercase;
@@ -199,7 +199,7 @@
   .movie-video-empty__index {
     margin: 0;
     font-family: var(--font-annotation);
-    font-size: 0.59rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.11em;
     text-transform: uppercase;
@@ -228,7 +228,7 @@
 
   .movie-video-feature__record dt {
     font-family: var(--font-annotation);
-    font-size: 0.56rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-app-subtle);
@@ -236,7 +236,7 @@
 
   .movie-video-feature__record dd {
     margin: 0.35rem 0 0;
-    font-size: 0.85rem;
+    font-size: var(--font-size-small);
     color: var(--color-paper-200);
   }
 
@@ -251,7 +251,7 @@
     border: 1px solid var(--color-projector-strong);
     cursor: pointer;
     font-family: var(--font-annotation);
-    font-size: 0.62rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -287,7 +287,7 @@
   .movie-video-additional__heading span {
     margin: 0;
     font-family: var(--font-annotation);
-    font-size: 0.59rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
@@ -336,7 +336,7 @@
 
   .movie-video-additional__number {
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: var(--font-size-label);
     color: var(--color-app-subtle);
   }
 
@@ -357,7 +357,7 @@
 
   .movie-video-additional__name small {
     font-family: var(--font-annotation);
-    font-size: 0.56rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-app-muted);
@@ -431,7 +431,7 @@
   .movie-video-dialog__header p {
     margin: 0;
     font-family: var(--font-annotation);
-    font-size: 0.58rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-projector-strong);
@@ -492,7 +492,7 @@
 
   .movie-video-dialog__footer p {
     margin: 0;
-    font-size: 0.72rem;
+    font-size: var(--font-size-caption);
     color: var(--color-app-muted);
   }
 
@@ -502,7 +502,7 @@
     align-items: center;
     flex: 0 0 auto;
     font-family: var(--font-annotation);
-    font-size: 0.58rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.09em;
     text-decoration: none;

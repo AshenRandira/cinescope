@@ -5,7 +5,7 @@ import { useAuth } from '../../features/auth/hooks/useAuth'
 
 function getMobileLinkClass(isActive: boolean): string {
   const baseClasses =
-    'group relative flex min-h-16 flex-col items-center justify-center gap-1.5 px-1 pb-1 pt-2 text-[0.68rem] font-semibold transition-colors duration-[var(--duration-micro)]'
+    'group relative flex min-h-16 flex-col items-center justify-center gap-1.5 px-1 pb-1 pt-2 text-[var(--font-size-caption)] font-semibold transition-colors duration-[var(--duration-micro)]'
 
   const stateClasses = isActive
     ? 'text-[var(--color-projector)]'

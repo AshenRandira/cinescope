@@ -81,7 +81,7 @@
   right: 0.7rem;
   bottom: 0.6rem;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--font-size-label);
   color: var(--color-paper-100);
   text-shadow: 0 1px 8px var(--color-ink-950);
 }
@@ -98,7 +98,7 @@
   flex-wrap: wrap;
   gap: 0.35rem 0.8rem;
   font-family: var(--font-annotation);
-  font-size: 0.59rem;
+  font-size: var(--font-size-label);
   font-weight: 650;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -125,7 +125,7 @@
 .search-record__metadata {
   margin: 0.75rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-app-muted);
@@ -137,7 +137,7 @@
   margin: 1rem 0 0;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
-  font-size: 0.8rem;
+  font-size: var(--font-size-small);
   line-height: 1.7;
   color: var(--color-app-muted);
 }
@@ -154,7 +154,7 @@
   padding-top: 0.8rem;
   border-top: 1px solid var(--color-line-soft);
   font-family: var(--font-mono);
-  font-size: 0.61rem;
+  font-size: var(--font-size-label);
   color: var(--color-paper-400);
 }
 
@@ -179,7 +179,7 @@
   gap: 0.65rem;
   border-bottom: 1px solid currentColor;
   font-family: var(--font-annotation);
-  font-size: 0.62rem;
+  font-size: var(--font-size-label);
   font-weight: 650;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -199,7 +199,7 @@
 .search-record__footer p {
   margin: 0;
   font-family: var(--font-annotation);
-  font-size: 0.6rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-app-subtle);
@@ -230,7 +230,7 @@
 
   .search-record__overview {
     -webkit-line-clamp: 3;
-    font-size: 0.75rem;
+    font-size: var(--font-size-small);
   }
 }
 

@@ -44,7 +44,7 @@
   margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: 1px solid var(--color-line);
-  font-size: 0.78rem;
+  font-size: var(--font-size-small);
   line-height: 1.65;
   color: var(--color-app-muted);
 }
@@ -80,7 +80,7 @@
   justify-self: end;
   max-width: 31rem;
   margin: 0;
-  font-size: 0.83rem;
+  font-size: var(--font-size-small);
   line-height: 1.7;
   color: var(--color-app-muted);
 }
@@ -133,7 +133,7 @@
 
 .discover-console__signals button span {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
 }
 
 .discover-console__signals button strong {
@@ -164,7 +164,7 @@
 .discover-console__method > div > p:last-child {
   max-width: 55rem;
   margin: 0.85rem 0 0;
-  font-size: 0.8rem;
+  font-size: var(--font-size-small);
   line-height: 1.7;
   color: var(--color-app-muted);
 }
@@ -180,7 +180,7 @@
   color: var(--color-projector-strong);
   background: transparent;
   font-family: var(--font-annotation);
-  font-size: 0.63rem;
+  font-size: var(--font-size-label);
   font-weight: 650;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -218,7 +218,7 @@
   padding-block: 1rem;
   border-block: 1px solid var(--color-line);
   font-family: var(--font-annotation);
-  font-size: 0.64rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-app-muted);
@@ -285,7 +285,7 @@
   right: 0.8rem;
   bottom: 0.7rem;
   font-family: var(--font-mono);
-  font-size: 0.59rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.08em;
   color: var(--color-paper-100);
   text-shadow: 0 1px 8px var(--color-ink-950);
@@ -312,7 +312,7 @@
   gap: 0.35rem 0.55rem;
   margin: 1rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.61rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-app-muted);
@@ -324,7 +324,7 @@
 
 .discover-lead__overview {
   margin: 1.5rem 0 0;
-  font-size: 0.88rem;
+  font-size: var(--font-size-small);
   line-height: 1.8;
   color: var(--color-app-muted);
 }
@@ -346,7 +346,7 @@
 
 .discover-lead__facts dt {
   font-family: var(--font-annotation);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-app-subtle);
@@ -354,7 +354,7 @@
 
 .discover-lead__facts dd {
   margin: 0.4rem 0 0;
-  font-size: 0.78rem;
+  font-size: var(--font-size-small);
   color: var(--color-paper-200);
 }
 
@@ -368,7 +368,7 @@
   margin-top: 1.5rem;
   border-bottom: 1px solid currentColor;
   font-family: var(--font-annotation);
-  font-size: 0.61rem;
+  font-size: var(--font-size-label);
   font-weight: 650;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -449,7 +449,7 @@
 .discover-card__classification {
   margin: 0;
   font-family: var(--font-annotation);
-  font-size: 0.59rem;
+  font-size: var(--font-size-label);
   font-weight: 650;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -473,7 +473,7 @@
   margin: 1rem 0 0;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
-  font-size: 0.79rem;
+  font-size: var(--font-size-small);
   line-height: 1.72;
   color: var(--color-app-muted);
 }
@@ -487,7 +487,7 @@
   padding-top: 0.85rem;
   border-top: 1px solid var(--color-line-soft);
   font-family: var(--font-mono);
-  font-size: 0.59rem;
+  font-size: var(--font-size-label);
   color: var(--color-paper-400);
 }
 
@@ -595,7 +595,7 @@
 
   .discover-card__overview {
     -webkit-line-clamp: 3;
-    font-size: 0.74rem;
+    font-size: var(--font-size-caption);
   }
 
   .discover-card__rating {

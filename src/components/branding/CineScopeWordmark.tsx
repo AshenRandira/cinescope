@@ -34,7 +34,7 @@ export function CineScopeWordmark({
         </span>
 
         {showDescriptor ? (
-          <span className="mt-0.5 text-[0.5rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-paper-600)]">
+          <span className="mt-0.5 text-[var(--font-size-micro)] font-semibold uppercase tracking-[0.24em] text-[var(--color-paper-600)]">
             The living archive
           </span>
         ) : null}

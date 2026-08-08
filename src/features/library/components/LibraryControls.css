@@ -9,7 +9,7 @@
   color: var(--color-app-muted);
   background: transparent;
   font-family: var(--font-annotation);
-  font-size: 0.6rem;
+  font-size: var(--font-size-label);
   font-weight: 650;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -48,7 +48,7 @@
   color: var(--color-app-muted);
   background: rgb(5 7 6 / 0.42);
   font-family: var(--font-annotation);
-  font-size: 0.61rem;
+  font-size: var(--font-size-label);
   font-weight: 650;
   letter-spacing: 0.08em;
   text-transform: uppercase;

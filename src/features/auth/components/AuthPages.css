@@ -98,7 +98,7 @@
 .auth-page__protocol dt {
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.46rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -106,7 +106,7 @@
 .auth-page__protocol dd {
   margin-top: 0.45rem;
   color: var(--color-paper-600);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
   line-height: 1.55;
 }
 
@@ -127,7 +127,7 @@
 .auth-form__heading p {
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -154,7 +154,7 @@
 .auth-form label > span {
   color: var(--color-paper-500);
   font-family: var(--font-annotation);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
   font-weight: 650;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -196,7 +196,7 @@
 .auth-form__guidance {
   margin: -0.35rem 0 0;
   color: var(--color-paper-600);
-  font-size: 0.67rem;
+  font-size: var(--font-size-caption);
   line-height: 1.6;
 }
 
@@ -204,7 +204,7 @@
   margin: 0;
   padding: 0.9rem 1rem;
   border-left: 2px solid currentColor;
-  font-size: 0.72rem;
+  font-size: var(--font-size-caption);
   line-height: 1.6;
 }
 
@@ -230,7 +230,7 @@
   color: var(--color-ink-950);
   background: var(--color-projector);
   font-family: var(--font-annotation);
-  font-size: 0.62rem;
+  font-size: var(--font-size-label);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -261,7 +261,7 @@
 .auth-form__alternate p {
   margin: 0;
   color: var(--color-paper-600);
-  font-size: 0.68rem;
+  font-size: var(--font-size-caption);
   line-height: 1.5;
 }
 
@@ -294,14 +294,14 @@
 .auth-configuration > p:not(.archive-label) {
   margin-top: 1.5rem;
   color: var(--color-paper-400);
-  font-size: 0.78rem;
+  font-size: var(--font-size-small);
   line-height: 1.75;
 }
 
 .auth-configuration code {
   color: var(--color-paper-200);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--font-size-caption);
 }
 
 .auth-configuration ul {
@@ -329,7 +329,7 @@
   border-bottom: 1px solid currentColor;
   color: var(--color-projector);
   font-family: var(--font-annotation);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }

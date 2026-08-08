@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.95rem;
+  --text-sm--line-height: 1.55;
+}
+
 :root {
   color-scheme: dark;
 
@@ -16,9 +23,9 @@
 
   --color-paper-100: #f5f1e9;
   --color-paper-200: #e8e2d8;
-  --color-paper-400: #b7b0a5;
-  --color-paper-500: #918b82;
-  --color-paper-600: #6d6962;
+  --color-paper-400: #c4bdb3;
+  --color-paper-500: #aaa39a;
+  --color-paper-600: #8f8981;
 
   --color-line-soft: rgba(245, 241, 233, 0.08);
   --color-line: rgba(245, 241, 233, 0.14);
@@ -97,6 +104,18 @@
   --tracking-heading: -0.02em;
   --tracking-interface: -0.01em;
   --tracking-annotation: 0.18em;
+
+  /*
+   * Readable interface scale
+   *
+   * Labels remain intentionally smaller than editorial copy, but no
+   * authored interface text should fall back to the 7-10px range.
+   */
+
+  --font-size-micro: 0.75rem;
+  --font-size-label: 0.8rem;
+  --font-size-caption: 0.875rem;
+  --font-size-small: 0.95rem;
 
   /*
    * Layout
@@ -331,7 +350,7 @@ img {
 
 .archive-label {
   font-family: var(--font-annotation);
-  font-size: 0.6875rem;
+  font-size: var(--font-size-caption);
   font-weight: 650;
   line-height: 1.2;
   letter-spacing: var(--tracking-annotation);

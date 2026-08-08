@@ -48,7 +48,7 @@
   align-items: center;
   color: var(--color-paper-500);
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.11em;
   text-decoration: none;
   text-transform: uppercase;
@@ -72,7 +72,7 @@
   margin: 1rem 0 0;
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--font-size-caption);
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
@@ -111,7 +111,7 @@
 .tv-episode-hero__index > small {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -148,14 +148,14 @@
 .tv-episode-hero__facts dt {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.48rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
 .tv-episode-hero__facts dd {
   margin-top: 0.4rem;
-  font-size: 0.7rem;
+  font-size: var(--font-size-caption);
 }
 
 .tv-episode-anatomy {
@@ -182,7 +182,7 @@
 .tv-episode-anatomy__heading > p {
   margin: 0;
   color: var(--color-app-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   line-height: 1.75;
 }
 
@@ -206,7 +206,7 @@
   margin: 0;
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -237,14 +237,14 @@
 .tv-episode-anatomy__facts dt {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.48rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .tv-episode-anatomy__facts dd {
   margin-top: 0.45rem;
-  font-size: 0.7rem;
+  font-size: var(--font-size-caption);
   line-height: 1.55;
 }
 
@@ -264,7 +264,7 @@
 .tv-episode-nav__heading a {
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
@@ -301,7 +301,7 @@
 .tv-episode-nav__boundary span {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }

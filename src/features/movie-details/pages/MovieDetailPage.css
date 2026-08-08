@@ -63,7 +63,7 @@
   .movie-detail-hero__fallback span,
   .movie-detail-hero__poster-fallback span {
     font-family: var(--font-annotation);
-    font-size: 0.65rem;
+    font-size: var(--font-size-caption);
     letter-spacing: var(--tracking-annotation);
     text-transform: uppercase;
     color: var(--color-app-muted);
@@ -108,7 +108,7 @@
     min-height: 2.75rem;
     border-bottom: 1px solid currentColor;
     font-family: var(--font-annotation);
-    font-size: 0.64rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.1em;
     text-decoration: none;
@@ -164,7 +164,7 @@
     padding: 0;
     list-style: none;
     font-family: var(--font-annotation);
-    font-size: 0.68rem;
+    font-size: var(--font-size-caption);
     font-weight: 650;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -185,7 +185,7 @@
   .movie-detail-hero__genres {
     margin: 0.8rem 0 0;
     font-family: var(--font-annotation);
-    font-size: 0.65rem;
+    font-size: var(--font-size-caption);
     line-height: 1.6;
     letter-spacing: 0.09em;
     text-transform: uppercase;
@@ -216,7 +216,7 @@
 
   .movie-detail-hero__ratings dt {
     font-family: var(--font-annotation);
-    font-size: 0.57rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.11em;
     text-transform: uppercase;
     color: var(--color-app-subtle);
@@ -232,7 +232,7 @@
 
   .movie-detail-hero__ratings dd span {
     font-family: var(--font-annotation);
-    font-size: 0.58rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-app-muted);
@@ -282,7 +282,7 @@
     bottom: 0.7rem;
     z-index: 2;
     font-family: var(--font-mono);
-    font-size: 0.58rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.08em;
     color: var(--color-paper-100);
     text-shadow: 0 1px 8px var(--color-ink-950);
@@ -331,7 +331,7 @@
     margin-top: 1.75rem;
     border-bottom: 1px solid currentColor;
     font-family: var(--font-annotation);
-    font-size: 0.64rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.1em;
     text-decoration: none;

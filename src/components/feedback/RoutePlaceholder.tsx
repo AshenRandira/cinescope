@@ -41,11 +41,11 @@ export function RoutePlaceholder({
             </div>
 
             <div className="self-end lg:self-start">
-              <p className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[var(--color-paper-600)]">
+              <p className="font-mono text-[var(--font-size-label)] uppercase tracking-[0.14em] text-[var(--color-paper-600)]">
                 Status / Configured
               </p>
 
-              <p className="mt-2 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[var(--color-paper-600)]">
+              <p className="mt-2 font-mono text-[var(--font-size-label)] uppercase tracking-[0.14em] text-[var(--color-paper-600)]">
                 Target / {release}
               </p>
             </div>

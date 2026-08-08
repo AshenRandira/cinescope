@@ -67,7 +67,7 @@ export function HomepageClosingFrame() {
                     className="homepage-closing-frame__route group"
                     to={route.to}
                   >
-                    <span className="font-mono text-[0.65rem] tracking-[0.16em] text-[var(--color-app-subtle)]">
+                    <span className="font-mono text-[var(--font-size-caption)] tracking-[0.16em] text-[var(--color-app-subtle)]">
                       {route.index}
                     </span>
 
@@ -148,7 +148,7 @@ export function HomepageClosingFrame() {
             className="homepage-closing-frame__end-rule mx-auto block h-px w-full max-w-3xl"
           />
 
-          <p className="mt-7 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-[var(--color-app-subtle)]">
+          <p className="mt-7 font-mono text-[var(--font-size-caption)] uppercase tracking-[0.2em] text-[var(--color-app-subtle)]">
             End of homepage sequence / The archive remains open
           </p>
         </div>

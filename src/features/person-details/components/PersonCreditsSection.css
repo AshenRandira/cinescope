@@ -24,7 +24,7 @@
 .person-section-heading > p {
   margin: 0;
   color: var(--color-app-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   line-height: 1.75;
 }
 
@@ -93,7 +93,7 @@
   color: var(--color-ink-950);
   background: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.45rem;
+  font-size: var(--font-size-micro);
 }
 
 .person-credit-card__copy {
@@ -110,7 +110,7 @@
 .person-credit-card__copy span {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
@@ -156,7 +156,7 @@
 .person-chronology__heading span {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -202,13 +202,13 @@
 .person-chronology li small {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .person-chronology li strong {
-  font-size: 0.72rem;
+  font-size: var(--font-size-caption);
   font-weight: 500;
 }
 

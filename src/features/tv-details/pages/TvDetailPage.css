@@ -35,7 +35,7 @@
   margin: 0;
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -48,7 +48,7 @@
 
 .tv-detail-next-episode > span {
   color: var(--color-app-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
 }
 
 .tv-detail-seasons {
@@ -137,7 +137,7 @@
   color: var(--color-ink-950);
   background: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
 }
 
 .tv-season-card__copy {
@@ -149,7 +149,7 @@
   margin: 0;
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.57rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -166,7 +166,7 @@
   margin-top: 0.8rem;
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.56rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.06em;
   line-height: 1.6;
   text-transform: uppercase;
@@ -177,7 +177,7 @@
   margin: 1.4rem 0 0;
   overflow: hidden;
   color: var(--color-app-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   line-height: 1.65;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
@@ -188,7 +188,7 @@
   margin-top: 1.25rem;
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }

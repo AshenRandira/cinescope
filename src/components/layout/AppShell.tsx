@@ -25,11 +25,11 @@ export function AppShell() {
 
       <footer className="hidden border-t border-[var(--color-line-soft)] md:block">
         <div className="mx-auto flex min-h-20 max-w-[var(--layout-max)] items-center justify-between gap-8 px-[var(--layout-gutter)] text-[var(--color-paper-600)]">
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.16em]">
+          <p className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.16em]">
             CineScope / The Living Archive
           </p>
 
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em]">
+          <p className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.14em]">
             {'\u00A9'} {new Date().getFullYear()}
           </p>
         </div>

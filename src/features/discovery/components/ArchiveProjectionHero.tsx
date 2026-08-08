@@ -324,7 +324,7 @@ export function ArchiveProjectionHero({
                   className="h-px w-14 bg-[var(--color-projector)]"
                 />
 
-                <p className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-[var(--color-paper-500)]">
+                <p className="font-mono text-[var(--font-size-label)] uppercase tracking-[0.16em] text-[var(--color-paper-500)]">
                   Reel{' '}
                   {String(activeMovieIndex + 1).padStart(2, '0')}
                   {' / '}
@@ -385,7 +385,7 @@ export function ArchiveProjectionHero({
                       tabIndex={isActive ? 0 : -1}
                       type="button"
                     >
-                      <span className="font-mono text-[0.58rem] tracking-[0.14em] text-[var(--color-projector)]">
+                      <span className="font-mono text-[var(--font-size-label)] tracking-[0.14em] text-[var(--color-projector)]">
                         {frame.index}
                       </span>
 
@@ -529,7 +529,7 @@ export function ArchiveProjectionHero({
                     />
 
                     <span className="flex items-center justify-between gap-4">
-                      <span className="font-mono text-[0.58rem] tracking-[0.14em] text-[var(--color-projector)]">
+                      <span className="font-mono text-[var(--font-size-label)] tracking-[0.14em] text-[var(--color-projector)]">
                         {String(index + 1).padStart(2, '0')}
                       </span>
 

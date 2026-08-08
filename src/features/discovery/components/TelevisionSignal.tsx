@@ -266,11 +266,11 @@ export function TelevisionSignal({
                                 type="button"
                             >
                                 <span className="flex items-center justify-between gap-4">
-                                    <span className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[var(--color-app-subtle)]">
+                                    <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.18em] text-[var(--color-app-subtle)]">
                                         Signal {signal.index}
                                     </span>
 
-                                    <span className="font-mono text-[0.65rem] uppercase tracking-[0.15em] text-[var(--color-projector)]">
+                                    <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.15em] text-[var(--color-projector)]">
                                         {signal.cue}
                                     </span>
                                 </span>
@@ -337,7 +337,7 @@ export function TelevisionSignal({
                                         ).padStart(2, '0')}
                                     </p>
 
-                                    <p className="inline-flex items-center gap-2 font-mono text-[0.65rem] uppercase tracking-[0.15em] text-[var(--color-app-subtle)]">
+                                    <p className="inline-flex items-center gap-2 font-mono text-[var(--font-size-caption)] uppercase tracking-[0.15em] text-[var(--color-app-subtle)]">
                                         <Radio
                                             aria-hidden="true"
                                             className="size-3.5 text-[var(--color-projector)]"
@@ -465,14 +465,14 @@ export function TelevisionSignal({
                                                     type="button"
                                                 >
                                                     <span className="flex items-center justify-between gap-4">
-                                                        <span className="font-mono text-[0.65rem] tracking-[0.16em] text-[var(--color-app-subtle)]">
+                                                        <span className="font-mono text-[var(--font-size-caption)] tracking-[0.16em] text-[var(--color-app-subtle)]">
                                                             {String(index + 1).padStart(
                                                                 2,
                                                                 '0',
                                                             )}
                                                         </span>
 
-                                                        <span className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-[var(--color-app-subtle)]">
+                                                        <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.12em] text-[var(--color-app-subtle)]">
                                                             {getFirstAirYear(
                                                                 show.first_air_date,
                                                             )}

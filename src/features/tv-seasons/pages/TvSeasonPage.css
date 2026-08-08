@@ -50,7 +50,7 @@
   align-items: center;
   color: var(--color-paper-500);
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.12em;
   text-decoration: none;
   text-transform: uppercase;
@@ -74,7 +74,7 @@
   margin: 1rem 0 0;
   color: var(--season-accent);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--font-size-caption);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -124,14 +124,14 @@
 .tv-season-hero__facts dt {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .tv-season-hero__facts dd {
   margin-top: 0.4rem;
-  font-size: 0.72rem;
+  font-size: var(--font-size-caption);
 }
 
 .tv-season-hero__poster {
@@ -154,7 +154,7 @@
   border-top: 1px solid var(--color-line);
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.48rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -179,7 +179,7 @@
 .tv-season-hero__poster-fallback small {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.48rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -212,7 +212,7 @@
 .tv-season-section-heading > p {
   margin: 0;
   color: var(--color-app-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   line-height: 1.75;
 }
 
@@ -283,7 +283,7 @@
 .tv-episode-card__fallback small {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -296,7 +296,7 @@
   color: var(--color-ink-950);
   background: var(--season-accent);
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.06em;
 }
 
@@ -320,7 +320,7 @@
 .tv-episode-card__heading p {
   color: var(--season-accent);
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
@@ -335,7 +335,7 @@
 .tv-episode-card__heading > span {
   color: var(--color-paper-500);
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: var(--font-size-label);
   white-space: nowrap;
 }
 
@@ -343,7 +343,7 @@
   margin: 1.25rem 0 0;
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -352,7 +352,7 @@
   max-width: 52rem;
   margin: 1.5rem 0 0;
   color: var(--color-app-muted);
-  font-size: 0.78rem;
+  font-size: var(--font-size-small);
   line-height: 1.8;
 }
 
@@ -380,14 +380,14 @@
 .tv-episode-card__credits dt {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.48rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .tv-episode-card__credits dd {
   margin-top: 0.45rem;
-  font-size: 0.67rem;
+  font-size: var(--font-size-caption);
   line-height: 1.5;
 }
 
@@ -396,7 +396,7 @@
   margin-top: 1.5rem;
   color: var(--season-accent);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -415,7 +415,7 @@
 .tv-season-empty p {
   color: var(--season-accent);
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -487,7 +487,7 @@
   color: var(--color-ink-950);
   background: var(--season-accent);
   font-family: var(--font-mono);
-  font-size: 0.45rem;
+  font-size: var(--font-size-micro);
 }
 
 .tv-season-cast__grid h3,
@@ -498,7 +498,7 @@
 .tv-season-cast__grid h3 {
   margin-block: 0.75rem 0;
   overflow: hidden;
-  font-size: 0.7rem;
+  font-size: var(--font-size-caption);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -507,7 +507,7 @@
   margin-block: 0.25rem 0;
   overflow: hidden;
   color: var(--color-paper-600);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -527,7 +527,7 @@
 .tv-season-return a {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }

@@ -253,7 +253,7 @@ export function DiscoverySplice({
                                 type="button"
                             >
                                 <span className="flex items-center justify-between gap-4">
-                                    <span className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[var(--color-app-subtle)]">
+                                    <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.18em] text-[var(--color-app-subtle)]">
                                         Cut {cut.index}
                                     </span>
 
@@ -378,7 +378,7 @@ export function DiscoverySplice({
                         <div className="discovery-splice__poster-frame relative mx-auto w-full max-w-[15rem] self-center lg:self-end">
                             <span
                                 aria-hidden="true"
-                                className="absolute -left-4 -top-4 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-[var(--color-projector)]"
+                                className="absolute -left-4 -top-4 font-mono text-[var(--font-size-caption)] uppercase tracking-[0.16em] text-[var(--color-projector)]"
                             >
                                 Focus plane
                             </span>
@@ -419,7 +419,7 @@ export function DiscoverySplice({
                                     </p>
                                 </div>
 
-                                <span className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-[var(--color-app-subtle)]">
+                                <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.16em] text-[var(--color-app-subtle)]">
                                     Not personalized
                                 </span>
                             </div>
@@ -444,7 +444,7 @@ export function DiscoverySplice({
                                                 }}
                                                 type="button"
                                             >
-                                                <span className="font-mono text-[0.65rem] tracking-[0.16em] text-[var(--color-app-subtle)]">
+                                                <span className="font-mono text-[var(--font-size-caption)] tracking-[0.16em] text-[var(--color-app-subtle)]">
                                                     {String(index + 1).padStart(2, '0')}
                                                 </span>
 

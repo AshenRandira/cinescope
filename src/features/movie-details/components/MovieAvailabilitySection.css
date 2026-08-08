@@ -47,7 +47,7 @@
 
   .movie-availability__region-control span {
     font-family: var(--font-annotation);
-    font-size: 0.59rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.11em;
     text-transform: uppercase;
@@ -91,7 +91,7 @@
   .movie-availability__region-index p {
     margin: 0;
     font-family: var(--font-annotation);
-    font-size: 0.59rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.11em;
     text-transform: uppercase;
     color: var(--color-app-subtle);
@@ -110,7 +110,7 @@
     display: inline-block;
     margin-top: 0.75rem;
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: var(--font-size-caption);
     letter-spacing: 0.1em;
     color: var(--color-projector-strong);
   }
@@ -138,7 +138,7 @@
   .movie-provider-group header > span {
     margin: 0;
     font-family: var(--font-annotation);
-    font-size: 0.58rem;
+    font-size: var(--font-size-label);
     letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--color-app-subtle);
@@ -197,7 +197,7 @@
   .movie-provider-group li > p {
     min-width: 0;
     margin: 0;
-    font-size: 0.78rem;
+    font-size: var(--font-size-small);
     line-height: 1.4;
     overflow-wrap: anywhere;
     color: var(--color-paper-200);
@@ -212,7 +212,7 @@
   .movie-availability-state__index {
     margin: 0;
     font-family: var(--font-annotation);
-    font-size: 0.59rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.11em;
     text-transform: uppercase;
@@ -248,7 +248,7 @@
     border-bottom: 1px solid currentColor;
     cursor: pointer;
     font-family: var(--font-annotation);
-    font-size: 0.61rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -273,7 +273,7 @@
 
   .movie-availability__footer p {
     margin: 0;
-    font-size: 0.72rem;
+    font-size: var(--font-size-caption);
     color: var(--color-app-muted);
   }
 
@@ -287,7 +287,7 @@
     align-items: center;
     flex: 0 0 auto;
     font-family: var(--font-annotation);
-    font-size: 0.59rem;
+    font-size: var(--font-size-label);
     font-weight: 650;
     letter-spacing: 0.09em;
     text-decoration: none;

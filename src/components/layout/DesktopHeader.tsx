@@ -69,7 +69,7 @@ export function DesktopHeader() {
                   >
                     {({ isActive }) => (
                       <>
-                        <span className="font-mono text-[0.56rem] tracking-[0.12em] text-[var(--color-paper-600)] transition-colors group-hover:text-[var(--color-projector)]">
+                        <span className="font-mono text-[var(--font-size-label)] tracking-[0.12em] text-[var(--color-paper-600)] transition-colors group-hover:text-[var(--color-projector)]">
                           {String(index + 1).padStart(2, '0')}
                         </span>
 

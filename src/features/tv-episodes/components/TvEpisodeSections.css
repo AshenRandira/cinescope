@@ -28,7 +28,7 @@
 .tv-episode-section-heading > p {
   margin: 0;
   color: var(--color-app-muted);
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   line-height: 1.75;
 }
 
@@ -91,7 +91,7 @@
   place-items: center;
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -113,7 +113,7 @@
 .tv-episode-video__record > span {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -137,7 +137,7 @@
   margin-top: 2rem;
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
@@ -165,7 +165,7 @@
 .tv-episode-video-empty p {
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -204,14 +204,14 @@
 .tv-episode-video-list small {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.48rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .tv-episode-video-list strong {
   overflow: hidden;
-  font-size: 0.65rem;
+  font-size: var(--font-size-caption);
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -241,7 +241,7 @@
   margin: 0;
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -285,7 +285,7 @@
   color: var(--color-ink-950);
   background: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.45rem;
+  font-size: var(--font-size-micro);
 }
 
 .tv-episode-credits__layout {
@@ -311,7 +311,7 @@
 .tv-episode-crew > p {
   color: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -340,14 +340,14 @@
 .tv-episode-crew dt {
   color: var(--color-paper-600);
   font-family: var(--font-mono);
-  font-size: 0.47rem;
+  font-size: var(--font-size-micro);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .tv-episode-crew dd {
   margin-top: 0.4rem;
-  font-size: 0.68rem;
+  font-size: var(--font-size-caption);
   line-height: 1.55;
 }
 
@@ -418,7 +418,7 @@
   color: var(--color-ink-950);
   background: var(--color-projector);
   font-family: var(--font-mono);
-  font-size: 0.45rem;
+  font-size: var(--font-size-micro);
 }
 
 .tv-episode-performers__grid h4,
@@ -431,13 +431,13 @@
 
 .tv-episode-performers__grid h4 {
   margin-block: 0.75rem 0;
-  font-size: 0.68rem;
+  font-size: var(--font-size-caption);
 }
 
 .tv-episode-performers__grid p {
   margin-block: 0.25rem 0;
   color: var(--color-paper-600);
-  font-size: 0.58rem;
+  font-size: var(--font-size-label);
 }
 
 .tv-episode-performers__empty {
