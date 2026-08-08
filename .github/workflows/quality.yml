@@ -32,7 +32,22 @@ jobs:
           cache: npm
 
       - name: Install locked dependencies
-        run: npm ci
+        id: install
+        shell: bash
+        run: |
+          set -o pipefail
+          npm ci 2>&1 | tee npm-ci.log
+
+      - name: Report dependency install failure
+        if: ${{ failure() && steps.install.outcome == 'failure' }}
+        shell: bash
+        run: |
+          {
+            echo '### npm ci failure'
+            echo '```text'
+            tail -n 80 npm-ci.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Run unit tests
         run: npm test
