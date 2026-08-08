@@ -20,6 +20,7 @@ import {
   selectDiscoverRecords,
   type DiscoverSignalId,
 } from '../data/discoverExperience'
+import { useArchiveRecommendations } from './useArchiveRecommendations'
 
 type DiscoverApiRecord =
   | TmdbMovie
@@ -32,11 +33,21 @@ export function useDiscoverExperience(
 ) {
   const definition =
     getDiscoverSignalDefinition(signal)
+  const isArchiveSignal = signal === 'archive'
+  const archiveRecommendations =
+    useArchiveRecommendations(isArchiveSignal, page)
 
   const query = useQuery({
+    enabled: !isArchiveSignal,
     queryKey: getDiscoverQueryKey(signal, page),
-    queryFn: ({ signal: requestSignal }) =>
-      tmdbFetch<
+    queryFn: ({ signal: requestSignal }) => {
+      if (!definition.endpoint) {
+        throw new Error(
+          'This discovery signal does not use a catalogue endpoint.',
+        )
+      }
+
+      return tmdbFetch<
         TmdbPaginatedResponse<DiscoverApiRecord>
       >(definition.endpoint, {
         query: buildDiscoverQuery(
@@ -44,7 +55,8 @@ export function useDiscoverExperience(
           page,
         ),
         signal: requestSignal,
-      }),
+      })
+    },
   })
 
   const records = query.data
@@ -53,6 +65,13 @@ export function useDiscoverExperience(
 
   function retry(): void {
     void query.refetch()
+  }
+
+  if (isArchiveSignal) {
+    return {
+      ...archiveRecommendations,
+      definition,
+    }
   }
 
   return {
@@ -69,6 +88,8 @@ export function useDiscoverExperience(
     isPending: query.isPending,
     records,
     retry,
+    seedTitles: [] as string[],
+    hasSeeds: false,
     totalResults:
       query.data?.total_results ?? 0,
   }

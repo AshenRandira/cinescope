@@ -5,6 +5,7 @@ import {
 import { useEffect } from 'react'
 import {
   Link,
+  useNavigate,
   useSearchParams,
 } from 'react-router'
 
@@ -292,6 +293,7 @@ function DiscoverCard({
 }
 
 export function DiscoverPage() {
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] =
     useSearchParams()
   const signal = parseDiscoverSignal(
@@ -304,6 +306,7 @@ export function DiscoverPage() {
     signal,
     page,
   )
+  const isArchiveSignal = signal === 'archive'
 
   useEffect(() => {
     document.title = `${discovery.definition.label} — Discover — CineScope`
@@ -334,7 +337,11 @@ export function DiscoverPage() {
     projectionContent = (
       <LoadingState
         title="Cutting a new discovery reel"
-        message={`Reading the ${discovery.definition.label.toLowerCase()} signal from TMDB.`}
+        message={
+          isArchiveSignal
+            ? 'Following TMDB recommendation paths from the strongest records in your archive.'
+            : `Reading the ${discovery.definition.label.toLowerCase()} signal from TMDB.`
+        }
       />
     )
   } else if (discovery.isError) {
@@ -350,14 +357,34 @@ export function DiscoverPage() {
       />
     )
   } else if (discovery.isEmpty) {
+    const needsArchiveRecords =
+      isArchiveSignal && !discovery.hasSeeds
+
     projectionContent = (
       <EmptyState
-        actionLabel="Return to current collision"
-        message="TMDB responded successfully, but this cut contained no usable film or series artwork."
-        onAction={() =>
-          setSearchParams(new URLSearchParams())
+        actionLabel={
+          needsArchiveRecords
+            ? 'Explore films to save'
+            : 'Return to current collision'
         }
-        title="This discovery reel is empty"
+        message={
+          needsArchiveRecords
+            ? 'Favourite a record, rate it 7 or higher, or keep a few unrated films and series. CineScope will use those visible choices as recommendation anchors.'
+            : 'TMDB responded successfully, but this cut contained no new film or series artwork outside your existing archive.'
+        }
+        onAction={() => {
+          if (needsArchiveRecords) {
+            navigate('/movies')
+            return
+          }
+
+          setSearchParams(new URLSearchParams())
+        }}
+        title={
+          needsArchiveRecords
+            ? 'Your archive needs a few signals'
+            : 'This discovery reel is empty'
+        }
       />
     )
   } else {
@@ -379,8 +406,13 @@ export function DiscoverPage() {
           </p>
 
           <p>
-            Cut {page} of{' '}
-            {discovery.availablePages} available
+            {isArchiveSignal
+              ? `${discovery.seedTitles.length} archive ${
+                  discovery.seedTitles.length === 1
+                    ? 'anchor'
+                    : 'anchors'
+                } / cut ${page}`
+              : `Cut ${page} of ${discovery.availablePages} available`}
           </p>
         </div>
 
@@ -406,9 +438,9 @@ export function DiscoverPage() {
               </div>
 
               <p>
-                These records share a transparent
-                catalogue method, not a prediction
-                about personal taste.
+                {isArchiveSignal
+                  ? 'These records recur across recommendation paths connected to your archive. They are suggestions, not guarantees.'
+                  : 'These records share a transparent catalogue method, not a prediction about personal taste.'}
               </p>
             </header>
 
@@ -444,15 +476,16 @@ export function DiscoverPage() {
 
         <div className="discover-opening__copy">
           <p className="text-pretty">
-            Choose a visible catalogue signal, then
-            move through alternate cuts without
-            pretending an algorithm knows you.
+            Choose a visible catalogue signal, or
+            follow recommendation paths grounded in
+            the records you have kept.
           </p>
 
           <p>
-            Every result comes from TMDB. The method
-            for each signal is stated below and the
-            URL preserves the active cut.
+            Every result comes from TMDB. Each method
+            is stated below, personal signals remain
+            inspectable, and the URL preserves the
+            active cut.
           </p>
         </div>
       </header>
@@ -464,7 +497,7 @@ export function DiscoverPage() {
         <header className="discover-console__heading">
           <div>
             <p className="archive-label">
-              Editorial signals
+              Discovery signals
             </p>
 
             <h2
@@ -476,8 +509,9 @@ export function DiscoverPage() {
           </div>
 
           <p>
-            Each signal changes the source endpoint
-            or its concrete catalogue constraints.
+            Each signal changes the source endpoint,
+            catalogue constraints, or visible archive
+            anchors.
           </p>
         </header>
 
@@ -517,12 +551,26 @@ export function DiscoverPage() {
               {discovery.definition.title}
             </h3>
 
-            <p>{discovery.definition.method}</p>
+            <p className="discover-console__method-copy">
+              {discovery.definition.method}
+            </p>
+
+            {isArchiveSignal ? (
+              <p className="discover-console__anchors">
+                <strong>Active anchors</strong>
+                {discovery.seedTitles.length > 0
+                  ? discovery.seedTitles.join(' / ')
+                  : 'Add records to your library to begin.'}
+              </p>
+            ) : null}
           </div>
 
           <button
             aria-label={`Re-cut ${discovery.definition.label} discovery results`}
-            disabled={discovery.isPending}
+            disabled={
+              discovery.isPending ||
+              (isArchiveSignal && !discovery.hasSeeds)
+            }
             onClick={handleRecut}
             type="button"
           >

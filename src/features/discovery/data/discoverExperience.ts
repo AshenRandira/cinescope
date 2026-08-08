@@ -11,6 +11,7 @@ export type DiscoverSignalId =
   | 'pressure'
   | 'brief'
   | 'episodic'
+  | 'archive'
 
 export type DiscoverMediaType = 'movie' | 'tv'
 
@@ -38,6 +39,7 @@ export type DiscoverSignalDefinition = {
     | '/trending/all/week'
     | '/discover/movie'
     | '/discover/tv'
+    | null
   index: string
   label: string
   mediaType: DiscoverMediaType | 'mixed'
@@ -152,6 +154,19 @@ export const discoverSignalDefinitions: ReadonlyArray<DiscoverSignalDefinition> 
       title: 'Stay with a story beyond one sitting.',
       value: 'episodic',
     },
+    {
+      description:
+        'Films and series connected to the strongest signals in your own CineScope archive.',
+      endpoint: null,
+      index: '06',
+      label: 'From your archive',
+      mediaType: 'mixed',
+      method:
+        'Up to four favourites and ratings of 7 or higher become visible anchors. If no positive rating signal exists, CineScope falls back to recent unrated saves, then combines their TMDB recommendation paths and removes titles already in your archive.',
+      query: {},
+      title: 'Follow the traces left by your archive.',
+      value: 'archive',
+    },
   ]
 
 export function parseDiscoverSignal(
@@ -239,7 +254,9 @@ function getYear(value: string): string | null {
   return match?.[1] ?? null
 }
 
-function adaptMovie(movie: TmdbMovie): DiscoverRecord {
+export function adaptMovie(
+  movie: TmdbMovie,
+): DiscoverRecord {
   return {
     backdropPath: movie.backdrop_path,
     dateYear: getYear(movie.release_date),
@@ -261,7 +278,9 @@ function adaptMovie(movie: TmdbMovie): DiscoverRecord {
   }
 }
 
-function adaptTv(show: TmdbTvShow): DiscoverRecord {
+export function adaptTv(
+  show: TmdbTvShow,
+): DiscoverRecord {
   return {
     backdropPath: show.backdrop_path,
     dateYear: getYear(show.first_air_date),

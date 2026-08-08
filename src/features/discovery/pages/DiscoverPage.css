@@ -88,7 +88,7 @@
 .discover-console__signals {
   display: grid;
   grid-template-columns:
-    repeat(5, minmax(0, 1fr));
+    repeat(6, minmax(0, 1fr));
   margin-top: clamp(2rem, 4vw, 3.5rem);
   border-block: 1px solid var(--color-line);
 }
@@ -161,12 +161,31 @@
   color: var(--color-paper-100);
 }
 
-.discover-console__method > div > p:last-child {
+.discover-console__method-copy {
   max-width: 55rem;
   margin: 0.85rem 0 0;
   font-size: var(--font-size-small);
   line-height: 1.7;
   color: var(--color-app-muted);
+}
+
+.discover-console__anchors {
+  max-width: 55rem;
+  margin: 0.8rem 0 0;
+  color: var(--color-paper-300);
+  font-size: var(--font-size-caption);
+  line-height: 1.65;
+}
+
+.discover-console__anchors strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--color-projector-strong);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .discover-console__method > button {
