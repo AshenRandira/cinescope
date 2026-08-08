@@ -53,3 +53,7 @@ git diff --check origin/develop...HEAD
 The lint command includes JSX accessibility rules and treats warnings as failures. Before a release, also verify the skip link, route focus, tabs, search suggestions, and dialogs with keyboard-only navigation in a browser.
 
 The bundle check reads the generated `dist/index.html` and fails if the initial JavaScript and CSS payload exceeds the recorded raw or gzip budgets. Run it after the production build.
+
+## Continuous integration
+
+The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24 with the committed npm lockfile, then runs the unit tests, accessibility-aware lint, production build, and initial bundle budget without requiring Firebase or TMDB secrets.
