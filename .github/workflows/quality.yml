@@ -49,7 +49,7 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-          details="$(tail -n 40 npm-ci.log)"
+          details="$(head -n 50 npm-ci.log)"
           details="${details//%/%25}"
           details="${details//$'\r'/%0D}"
           details="${details//$'\n'/%0A}"
