@@ -42,6 +42,8 @@ The browser archive remains the immediate source of truth. On sign-in, guest rec
 ## Validation
 
 ```powershell
+npm.cmd test
+npm.cmd run test:coverage
 npm.cmd run lint
 npm.cmd run build
 git diff --check origin/develop...HEAD
