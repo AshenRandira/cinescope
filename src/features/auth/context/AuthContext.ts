@@ -22,6 +22,13 @@ export type RegisterCredentials = {
 }
 
 export type AuthContextValue = {
+  changePassword: (
+    currentPassword: string,
+    newPassword: string,
+  ) => Promise<void>
+  deleteAccount: (
+    currentPassword: string,
+  ) => Promise<void>
   getIdToken: (
     forceRefresh?: boolean,
   ) => Promise<string | null>
@@ -34,6 +41,8 @@ export type AuthContextValue = {
     credentials: RegisterCredentials,
   ) => Promise<void>
   resetPassword: (email: string) => Promise<void>
+  refreshUser: () => Promise<void>
+  sendVerificationEmail: () => Promise<void>
   sessionError: string | null
   status: AuthStatus
   updateDisplayName: (

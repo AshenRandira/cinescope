@@ -22,7 +22,7 @@
     "test:api": "npm run build:preview && npm run build:functions && node scripts/run-tmdb-api-emulator-test.mjs",
     "test:emulator:e2e": "playwright test --config playwright.emulator.config.ts",
     "test:emulator:integration": "vitest run --config vitest.emulator.config.ts",
-    "test:emulators": "npm run build:emulator && node scripts/run-firebase-emulators.mjs --only auth,firestore -- \"npm run test:emulator:integration && npm run test:emulator:e2e\"",
+    "test:emulators": "npm run build:emulator && npm run build:functions && node scripts/run-firebase-emulators.mjs --only auth,firestore,functions -- \"npm run test:emulator:integration && npm run test:emulator:e2e\"",
     "test:hosting": "npm run build:preview && node scripts/run-firebase-emulators.mjs --only hosting -- node scripts/check-hosting-response.mjs",
     "test:coverage": "vitest run --coverage",
     "test:functions": "vitest run --config vitest.functions.config.ts",

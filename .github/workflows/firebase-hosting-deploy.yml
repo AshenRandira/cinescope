@@ -131,11 +131,23 @@ jobs:
           service_account: ${{ vars.FIREBASE_DEPLOY_SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
 
+      - name: Deploy preview Functions
+        if: inputs.target == 'preview'
+        env:
+          ACCOUNT_APP_CHECK_ENFORCED: ${{ vars.ACCOUNT_APP_CHECK_ENFORCED }}
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          TMDB_APP_CHECK_ENFORCED: ${{ vars.TMDB_APP_CHECK_ENFORCED }}
+        run: >-
+          npx firebase-tools deploy
+          --only functions
+          --project "$FIREBASE_PROJECT_ID"
+          --message "GitHub Actions ${GITHUB_SHA}"
+          --non-interactive
+
       - name: Deploy expiring preview channel
         if: inputs.target == 'preview'
         env:
           FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
-          TMDB_APP_CHECK_ENFORCED: ${{ vars.TMDB_APP_CHECK_ENFORCED }}
         run: >-
           npx firebase-tools hosting:channel:deploy manual-${{ github.run_number }}
           --expires 7d
@@ -145,6 +157,7 @@ jobs:
       - name: Deploy protected live channel
         if: inputs.target == 'production'
         env:
+          ACCOUNT_APP_CHECK_ENFORCED: ${{ vars.ACCOUNT_APP_CHECK_ENFORCED }}
           FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
           TMDB_APP_CHECK_ENFORCED: ${{ vars.TMDB_APP_CHECK_ENFORCED }}
         run: >-

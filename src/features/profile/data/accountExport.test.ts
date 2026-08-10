@@ -1,0 +1,63 @@
+import { describe, expect, it } from 'vitest'
+
+import type { AuthUser } from '../../auth/context/AuthContext'
+import type { LibraryRecord } from '../../library/data/library'
+import {
+  ACCOUNT_EXPORT_SCHEMA_VERSION,
+  buildAccountExport,
+} from './accountExport'
+
+const user: AuthUser = {
+  createdAt: '2026-01-01T00:00:00.000Z',
+  displayName: 'Archive Member',
+  email: 'member@example.test',
+  emailVerified: true,
+  lastSignInAt: '2026-08-11T00:00:00.000Z',
+  uid: 'member-123',
+}
+
+function createRecord(
+  id: number,
+  updatedAt: string,
+): LibraryRecord {
+  return {
+    backdropPath: null,
+    id,
+    isFavorite: false,
+    isWatched: false,
+    mediaType: 'movie',
+    overview: null,
+    posterPath: null,
+    releaseYear: '2026',
+    savedAt: updatedAt,
+    title: `Film ${id}`,
+    updatedAt,
+    userRating: null,
+  }
+}
+
+describe('account export', () => {
+  it('creates a versioned, deterministic snapshot without credentials', () => {
+    const accountExport = buildAccountExport({
+      exportedAt: '2026-08-11T01:02:03.000Z',
+      records: [
+        createRecord(1, '2026-08-01T00:00:00.000Z'),
+        createRecord(2, '2026-08-02T00:00:00.000Z'),
+      ],
+      syncStatus: 'synced',
+      user,
+    })
+
+    expect(accountExport.schemaVersion).toBe(
+      ACCOUNT_EXPORT_SCHEMA_VERSION,
+    )
+    expect(
+      accountExport.archive.records.map(
+        (record) => record.id,
+      ),
+    ).toEqual([2, 1])
+    expect(JSON.stringify(accountExport)).not.toMatch(
+      /password|token/i,
+    )
+  })
+})

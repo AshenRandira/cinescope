@@ -9,9 +9,9 @@ CineScope uses six deterministic validation layers:
 3. Playwright exercises public journeys against a local production preview in Chromium.
 4. Firebase Emulator Suite exercises authenticated integration journeys and deployed Firestore Security Rules without touching a real project.
 5. Firebase Hosting Emulator exercises the built application shell, SPA rewrites, browser security headers, and cache policy without deploying.
-6. Functions unit tests and a Hosting-to-Functions emulator journey exercise the TMDB route allowlist, validation, server-only authentication, normalized failures, cache controls, and method rejection against a fake local upstream.
+6. Functions unit tests and local Functions emulator journeys exercise the TMDB route allowlist, server-only authentication, account-deletion identity and recent-login checks, recursive data cleanup ordering, normalized failures, cache controls, and method rejection.
 
-The component suite currently covers header-search validation and keyboard selection, library save/watch/favourite/rating controls, authentication-form validation, protected-route behavior, and route focus transfer. Coverage enforcement includes the existing library and recommendation engines plus the authentication helpers, protected route, and library controls.
+The component suite currently covers header-search validation and keyboard selection, library save/watch/favourite/rating controls, authentication-form validation, protected-route behavior, route focus transfer, verification controls, password change, account export, and explicit destructive confirmation. Coverage enforcement includes the existing library and recommendation engines plus the authentication helpers, protected route, library controls, and account export contract.
 
 The browser suite covers these public journeys:
 
@@ -33,9 +33,13 @@ The emulator layer uses the fixed `demo-cinescope` project ID and non-secret val
 - authenticated save, watch, favourite, and rating synchronization;
 - cloud restoration after the member-local cache is cleared and the page reloads;
 - offline local edits followed by cloud reconciliation on reconnect;
-- synchronized cloud deletion.
+- synchronized cloud deletion;
+- current-password reauthentication and password change;
+- rejection of the previous password;
+- callable deletion of the Firebase Auth user and nested Firestore archive;
+- cleanup of the user-scoped browser archive after successful deletion.
 
-The suite clears both emulators before each browser journey and intercepts TMDB with deterministic fixtures. It never uses a personal Firebase account, Firebase credentials, or live catalogue data.
+The suite clears Authentication and Firestore before each browser journey, runs the Functions emulator locally, and intercepts TMDB with deterministic fixtures. It never uses a personal Firebase account, Firebase credentials, live project data, or live catalogue data.
 
 The Hosting layer builds in `preview` mode under the fixed `demo-cinescope` project ID. It asserts that `/` and `/movies/550` return the same application shell, document responses carry the reviewed CSP without direct TMDB connectivity, and Vite's hashed JavaScript carries the one-year immutable policy.
 
@@ -89,9 +93,12 @@ Automation does not replace the following human checks:
 - Chrome, Firefox, and Safari smoke testing;
 - two-device Firestore synchronization and account switching;
 - password-reset email delivery;
+- verification-email delivery, template branding, and action-link return behavior;
+- account export inspection with a non-production representative archive;
+- account deletion smoke testing in an approved disposable staging account;
 - hosted deep-link refresh behavior;
 - production CSP and security-header verification.
 
 ## Deferred test work
 
-The remaining high-value expansion is multi-device and account-switch synchronization, followed by authenticated Firefox/WebKit coverage and a staging-project smoke test for hosted Firebase and password-reset email delivery. Those checks require either multiple browser contexts, additional browser runtimes, or explicitly approved non-production external infrastructure.
+The remaining high-value expansion is multi-device and account-switch synchronization, followed by authenticated Firefox/WebKit coverage and a staging-project smoke test for hosted Firebase, password-reset/verification email delivery, App Check enforcement, and deletion with a disposable account. Those checks require either multiple browser contexts, additional browser runtimes, or explicitly approved non-production external infrastructure.

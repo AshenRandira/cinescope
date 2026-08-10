@@ -9,6 +9,8 @@ import type { Auth, User } from 'firebase/auth'
 
 import {
   getFirebaseAuth,
+  getFirebaseAppCheckToken,
+  getFirebaseFunctions,
   isFirebaseConfigured,
 } from '../../../config/firebase'
 
@@ -46,6 +48,49 @@ function toAuthUser(user: User): AuthUser {
       user.metadata.lastSignInTime ?? null,
     uid: user.uid,
   }
+}
+
+async function getCurrentFirebaseUser(
+  auth: Auth,
+): Promise<User> {
+  const firebaseUser = auth.currentUser
+
+  if (!firebaseUser) {
+    throw new Error(
+      'Sign in again before updating this account.',
+    )
+  }
+
+  return firebaseUser
+}
+
+async function reauthenticateWithPassword(
+  auth: Auth,
+  password: string,
+): Promise<User> {
+  const firebaseUser = await getCurrentFirebaseUser(auth)
+
+  if (!firebaseUser.email) {
+    throw new Error(
+      'This account does not have an email address available for password confirmation.',
+    )
+  }
+
+  const {
+    EmailAuthProvider,
+    reauthenticateWithCredential,
+  } = await import('firebase/auth')
+  const credential = EmailAuthProvider.credential(
+    firebaseUser.email,
+    password,
+  )
+
+  await reauthenticateWithCredential(
+    firebaseUser,
+    credential,
+  )
+
+  return firebaseUser
 }
 
 export function AuthProvider({
@@ -213,18 +258,105 @@ export function AuthProvider({
           getConfiguredAuth(),
           import('firebase/auth'),
         ])
-      const firebaseUser = auth.currentUser
-
-      if (!firebaseUser) {
-        throw new Error(
-          'Sign in again before updating this profile.',
-        )
-      }
+      const firebaseUser = await getCurrentFirebaseUser(
+        auth,
+      )
 
       await updateProfile(firebaseUser, {
         displayName: displayName.trim(),
       })
       setUser(toAuthUser(firebaseUser))
+    },
+    [],
+  )
+
+  const sendVerificationEmail = useCallback(
+    async (): Promise<void> => {
+      const [auth, { sendEmailVerification }] =
+        await Promise.all([
+          getConfiguredAuth(),
+          import('firebase/auth'),
+        ])
+      const firebaseUser = await getCurrentFirebaseUser(
+        auth,
+      )
+
+      if (firebaseUser.emailVerified) return
+
+      await sendEmailVerification(firebaseUser)
+    },
+    [],
+  )
+
+  const refreshUser = useCallback(
+    async (): Promise<void> => {
+      const [auth, { reload }] = await Promise.all([
+        getConfiguredAuth(),
+        import('firebase/auth'),
+      ])
+      const firebaseUser = await getCurrentFirebaseUser(
+        auth,
+      )
+
+      await reload(firebaseUser)
+      setUser(toAuthUser(firebaseUser))
+    },
+    [],
+  )
+
+  const changePassword = useCallback(
+    async (
+      currentPassword: string,
+      newPassword: string,
+    ): Promise<void> => {
+      const [auth, { updatePassword }] =
+        await Promise.all([
+          getConfiguredAuth(),
+          import('firebase/auth'),
+        ])
+      const firebaseUser = await reauthenticateWithPassword(
+        auth,
+        currentPassword,
+      )
+
+      await updatePassword(firebaseUser, newPassword)
+      setUser(toAuthUser(firebaseUser))
+    },
+    [],
+  )
+
+  const deleteAccount = useCallback(
+    async (currentPassword: string): Promise<void> => {
+      const [auth, functions] = await Promise.all([
+        getConfiguredAuth(),
+        getFirebaseFunctions(),
+      ])
+
+      if (!functions) {
+        throw new Error(
+          'The secure account service is not configured for this environment.',
+        )
+      }
+
+      await reauthenticateWithPassword(
+        auth,
+        currentPassword,
+      )
+      await getFirebaseAppCheckToken()
+
+      const { httpsCallable } = await import(
+        'firebase/functions'
+      )
+      const result = await httpsCallable<
+        undefined,
+        { deleted?: boolean }
+      >(functions, 'deleteAccount')()
+
+      if (result.data.deleted !== true) {
+        throw new Error(
+          'Firebase returned an incomplete account-deletion response. Try again.',
+        )
+      }
     },
     [],
   )
@@ -246,22 +378,30 @@ export function AuthProvider({
 
   const value = useMemo<AuthContextValue>(
     () => ({
+      changePassword,
+      deleteAccount,
       getIdToken,
       login,
       logout,
       register,
+      refreshUser,
       resetPassword,
+      sendVerificationEmail,
       sessionError,
       status,
       updateDisplayName,
       user,
     }),
     [
+      changePassword,
+      deleteAccount,
       getIdToken,
       login,
       logout,
       register,
+      refreshUser,
       resetPassword,
+      sendVerificationEmail,
       sessionError,
       status,
       updateDisplayName,

@@ -10,6 +10,7 @@ Requirements:
 - A TMDB API read access token
 - A Firebase web app with Email/Password Authentication enabled
 - Cloud Firestore when account-backed library sync is required
+- Cloud Functions when secure account deletion is required
 - Java 21 or newer when running Firebase emulator validation
 
 Create `.env.local` from `.env.example` and replace the Firebase placeholders. Store the TMDB token only in the ignored Functions secret file:
@@ -51,6 +52,8 @@ Library records are stored at `users/{uid}/library/{movie:id|tv:id}`. Rules only
 
 The browser archive remains the immediate source of truth. On sign-in, guest records move into a user-scoped local archive, reconcile by their latest update time, and then sync to Firestore. If the network or Firestore configuration is unavailable, edits stay local and the interface exposes a retry action.
 
+The protected profile also supports verification-email resend/status refresh, password changes after current-password reauthentication, a versioned JSON account export, and permanent account deletion. Deletion uses the Firebase-issued identity token with the `deleteAccount` callable, recursively removes the member's Firestore tree, deletes the Firebase Authentication user, and then clears the user-scoped browser archive. CineScope does not issue or store a parallel JWT. See [the account security boundary](docs/security/account-security.md).
+
 ## Validation
 
 Install the Chromium test browser once after installing dependencies:
@@ -82,7 +85,7 @@ The bundle check reads the generated `dist/index.html` and fails if the initial 
 
 The public Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. Firebase is disabled and every same-origin catalogue API response is intercepted, so the suite needs no Firebase or TMDB credential.
 
-The API test starts a fake local TMDB server and the Functions plus Hosting emulators, then verifies the `/api/tmdb/**` rewrite, allowlist, cache policy, method rejection, and secret-bearing upstream request. It never contacts TMDB. The authenticated emulator command builds in the committed `emulator` mode, starts local Authentication and Firestore emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
+The API test starts a fake local TMDB server and the Functions plus Hosting emulators, then verifies the `/api/tmdb/**` rewrite, allowlist, cache policy, method rejection, and secret-bearing upstream request. It never contacts TMDB. The authenticated emulator command builds in the committed `emulator` mode, starts local Authentication, Firestore, and Functions emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys including password change and destructive account cleanup. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
 
 ## Continuous integration
 
@@ -90,7 +93,7 @@ The `Quality gates` GitHub Actions workflow runs on every branch push, pull requ
 
 ## Hosting and deployment
 
-Firebase Hosting publishes `dist`, sends `/api/tmdb/**` to the `tmdbApi` Function before the React Router fallback, applies reviewed browser security headers, and caches Vite's hashed assets immutably. The Function reads `TMDB_READ_ACCESS_TOKEN` from Secret Manager; it is not a Vite build value. See [the TMDB API boundary guide](docs/security/tmdb-api-boundary.md).
+Firebase Hosting publishes `dist`, sends `/api/tmdb/**` to the `tmdbApi` Function before the React Router fallback, permits the Firebase callable origin for authenticated account deletion, applies reviewed browser security headers, and caches Vite's hashed assets immutably. The TMDB Function reads `TMDB_READ_ACCESS_TOKEN` from Secret Manager; it is not a Vite build value. See [the TMDB API boundary guide](docs/security/tmdb-api-boundary.md).
 
 The `Firebase Hosting deployment` workflow is manual and protected. It uses GitHub OIDC and Google Workload Identity Federation for short-lived credentials, creates seven-day preview channels, and permits a live production release only from `main`. No Firebase project ID, `.firebaserc`, service-account key, or active deployment is committed by this foundation.
 

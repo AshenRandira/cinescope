@@ -5,8 +5,10 @@ import type {
 import type { Auth } from 'firebase/auth'
 import type { AppCheck } from 'firebase/app-check'
 import type { Firestore } from 'firebase/firestore'
+import type { Functions } from 'firebase/functions'
 
 const FIREBASE_APP_NAME = 'cinescope-web'
+export const FIREBASE_FUNCTIONS_REGION = 'asia-east1'
 const isEmulatorMode = import.meta.env.MODE === 'emulator'
 
 export const FIREBASE_REQUIRED_ENV_NAMES = [
@@ -52,8 +54,11 @@ let authPromise: Promise<Auth | null> | null = null
 let appCheckPromise: Promise<AppCheck | null> | null = null
 let firestorePromise: Promise<Firestore | null> | null =
   null
+let functionsPromise: Promise<Functions | null> | null =
+  null
 let isAuthEmulatorConnected = false
 let isFirestoreEmulatorConnected = false
+let isFunctionsEmulatorConnected = false
 
 function getOptionalEnvironmentValue(
   value: string | undefined,
@@ -244,4 +249,56 @@ export async function getFirebaseFirestore(): Promise<Firestore | null> {
   })()
 
   return firestorePromise
+}
+
+export async function getFirebaseFunctions(): Promise<Functions | null> {
+  if (!isFirebaseConfigured) {
+    return null
+  }
+
+  if (functionsPromise) {
+    return functionsPromise
+  }
+
+  functionsPromise = (async () => {
+    const [app, firebaseFunctions] =
+      await Promise.all([
+        getFirebaseApp(),
+        import('firebase/functions'),
+      ])
+
+    if (!app) return null
+
+    const functions = firebaseFunctions.getFunctions(
+      app,
+      FIREBASE_FUNCTIONS_REGION,
+    )
+    const emulatorHost = getOptionalEnvironmentValue(
+      import.meta.env.VITE_FIREBASE_FUNCTIONS_EMULATOR_HOST,
+    )
+    const emulatorPort = Number(
+      getOptionalEnvironmentValue(
+        import.meta.env.VITE_FIREBASE_FUNCTIONS_EMULATOR_PORT,
+      ),
+    )
+
+    if (
+      isEmulatorMode &&
+      emulatorHost &&
+      Number.isInteger(emulatorPort) &&
+      emulatorPort > 0 &&
+      !isFunctionsEmulatorConnected
+    ) {
+      firebaseFunctions.connectFunctionsEmulator(
+        functions,
+        emulatorHost,
+        emulatorPort,
+      )
+      isFunctionsEmulatorConnected = true
+    }
+
+    return functions
+  })()
+
+  return functionsPromise
 }

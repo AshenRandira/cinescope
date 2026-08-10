@@ -266,6 +266,7 @@ function LibraryStore({
   const recordsRef = useRef(records)
   const cloudErrorRef = useRef<string | null>(null)
   const pendingCloudOperationsRef = useRef(0)
+  const isAccountDataClearedRef = useRef(false)
 
   const commitRecords = useCallback(
     (nextRecords: LibraryRecord[]) => {
@@ -312,6 +313,11 @@ function LibraryStore({
   )
 
   useEffect(() => {
+    if (isAccountDataClearedRef.current) {
+      window.localStorage.removeItem(storageKey)
+      return
+    }
+
     saveLibraryRecords(storageKey, records)
   }, [records, storageKey])
 
@@ -614,8 +620,20 @@ function LibraryStore({
     }
   }, [userId])
 
+  const clearAccountData = useCallback(() => {
+    if (!userId) return
+
+    isAccountDataClearedRef.current = true
+    window.localStorage.removeItem(storageKey)
+    window.localStorage.removeItem(
+      getLibraryPendingDeletionStorageKey(userId),
+    )
+    commitRecords([])
+  }, [commitRecords, storageKey, userId])
+
   const value = useMemo<LibraryContextValue>(
     () => ({
+      clearAccountData,
       getRecord,
       records,
       removeRecord,
@@ -625,6 +643,7 @@ function LibraryStore({
       updateRecord,
     }),
     [
+      clearAccountData,
       getRecord,
       records,
       removeRecord,

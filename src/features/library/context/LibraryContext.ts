@@ -9,6 +9,7 @@ import type {
 } from '../data/library'
 
 export type LibraryContextValue = {
+  clearAccountData: () => void
   getRecord: (
     mediaType: LibraryMediaType,
     id: number,

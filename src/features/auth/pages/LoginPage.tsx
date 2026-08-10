@@ -12,6 +12,7 @@ import {
 import { AuthConfigurationNotice } from '../components/AuthConfigurationNotice'
 import { AuthPageFrame } from '../components/AuthPageFrame'
 import {
+  consumeAccountDeletionNotice,
   getAuthErrorMessage,
   getAuthRedirectTarget,
   normalizeAuthEmail,
@@ -37,11 +38,21 @@ export function LoginPage() {
   const [successMessage, setSuccessMessage] = useState<
     string | null
   >(null)
+  const [storedAccountNotice] = useState(
+    consumeAccountDeletionNotice,
+  )
   const [isSubmitting, setIsSubmitting] =
     useState(false)
   const redirectTarget = getAuthRedirectTarget(
     location.state,
   )
+  const accountNotice =
+    typeof location.state === 'object' &&
+    location.state !== null &&
+    'notice' in location.state &&
+    typeof location.state.notice === 'string'
+      ? location.state.notice
+      : storedAccountNotice
 
   useEffect(() => {
     document.title = 'Sign In — CineScope'
@@ -166,12 +177,12 @@ export function LoginPage() {
               </p>
             ) : null}
 
-            {successMessage ? (
+            {successMessage ?? accountNotice ? (
               <p
                 aria-live="polite"
                 className="auth-form__message auth-form__message--success"
               >
-                {successMessage}
+                {successMessage ?? accountNotice}
               </p>
             ) : null}
 

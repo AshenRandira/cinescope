@@ -2,7 +2,7 @@
 
 ## Scope and release boundary
 
-This repository contains a deployment foundation, not an active Firebase release. It includes Hosting, the `tmdbApi` Function, environment-specific builds, local response checks, and a protected manual GitHub Actions workflow. It does not create Firebase projects, set secrets, connect a domain, configure GitHub environments, or deploy a preview or production version.
+This repository contains a deployment foundation, not an active Firebase release. It includes Hosting, the `tmdbApi` HTTP Function, the authenticated `deleteAccount` callable, environment-specific builds, local response checks, and a protected manual GitHub Actions workflow. It does not create Firebase projects, set secrets, connect a domain, configure GitHub environments, or deploy a preview or production version.
 
 Keep preview and production in separate Firebase projects. Preview channels are publicly reachable URLs, so the preview project must contain only non-production test accounts and data.
 
@@ -68,9 +68,10 @@ Configure these variables independently in each environment:
 - `VITE_FIREBASE_APP_CHECK_SITE_KEY`
 - `VITE_FIREBASE_APP_ID`
 - `VITE_FIREBASE_AUTH_DOMAIN`
+- `ACCOUNT_APP_CHECK_ENFORCED`
 - `TMDB_APP_CHECK_ENFORCED`
 
-Set `TMDB_APP_CHECK_ENFORCED` to `false` for the first preview verification. Change it to `true` only after the App Check provider, preview domain, and client token flow have been tested. The TMDB read token is not stored in GitHub; set `TMDB_READ_ACCESS_TOKEN` directly in Secret Manager for each Firebase project before the first approved Function deployment.
+Set both App Check enforcement variables to `false` for the first preview verification. Change `TMDB_APP_CHECK_ENFORCED` and `ACCOUNT_APP_CHECK_ENFORCED` to `true` only after the App Check provider, preview domain, and client token flow have been tested. Account deletion also consumes the App Check token when enforcement is active because it is a low-volume security-critical action. The TMDB read token is not stored in GitHub; set `TMDB_READ_ACCESS_TOKEN` directly in Secret Manager for each Firebase project before the first approved Function deployment.
 
 Protect `firebase-production` with required reviewers and restrict it to the `main` branch. Require the repository `Quality gates` check before production approval. Protect `firebase-preview` with at least one reviewer while the deployment process is being established.
 
@@ -84,7 +85,7 @@ In Google Cloud:
 2. Restrict the provider by repository identity, and restrict production trust to the intended branch or protected GitHub environment.
 3. Create a dedicated web/API deploy service account for each Firebase project.
 4. Grant the GitHub principal `roles/iam.workloadIdentityUser` on only that service account.
-5. Grant the deploy service account only the Hosting, Functions deployment, build/artifact, and runtime-service-account impersonation permissions demonstrated by a reviewed Firebase CLI dry run. Grant Secret Manager access to the Function runtime identity only for `TMDB_READ_ACCESS_TOKEN`.
+5. Grant the deploy service account only the Hosting, Functions deployment, build/artifact, and runtime-service-account impersonation permissions demonstrated by a reviewed Firebase CLI dry run. Grant Secret Manager access to the Function runtime identity only for `TMDB_READ_ACCESS_TOKEN`. Separately, verify that the `deleteAccount` runtime identity has the minimum permissions required to delete Firebase Authentication users and documents beneath `users/{uid}`; do not give those data-plane permissions to the GitHub deploy identity.
 6. Store the provider resource name and service-account email in the matching GitHub environment variables.
 
 Do not grant Firebase Authentication Admin, Firestore Admin, Editor, or Owner to the deployment workflow. Authorized authentication domains and Firestore rules are separate reviewed operations.
@@ -96,7 +97,7 @@ The `Firebase Hosting deployment` workflow has no push or pull-request trigger. 
 - preview: `DEPLOY PREVIEW`
 - production: `DEPLOY PRODUCTION`
 
-The workflow repeats unit, Functions, coverage, lint, build, browser-security, API-emulator, bundle, and Hosting-config gates before authenticating. Preview creates a public channel named `manual-RUN_NUMBER` that expires after seven days and uses the pinned `tmdbApi` Function. Production deploys Functions and Hosting together and refuses any ref other than `refs/heads/main`.
+The workflow repeats unit, Functions, coverage, lint, build, browser-security, API-emulator, bundle, and Hosting-config gates before authenticating. Preview deploys the reviewed Functions revision, then creates a public Hosting channel named `manual-RUN_NUMBER` that expires after seven days. Production deploys Functions and Hosting together and refuses any ref other than `refs/heads/main`.
 
 The first deployment that introduces a pinned Function rewrite must be an explicitly approved live-channel deployment in the target Firebase project before preview channels can pin later Function revisions. Confirm the Blaze plan, secret, App Check setting, runtime identity, and budget alerts before that operation.
 
@@ -111,7 +112,7 @@ Connect the production domain through Firebase Console > Hosting only after the 
 3. Wait for Firebase to show the domain as connected and the certificate as provisioned.
 4. Confirm HTTP redirects to HTTPS and the certificate covers the exact hostname.
 5. Add the final domain to Firebase Authentication authorized domains.
-6. Test `/`, `/search`, a movie deep link, a TV deep link, `/login`, and `/profile` with direct navigation and refresh.
+6. Test `/`, `/search`, a movie deep link, a TV deep link, `/login`, and `/profile` with direct navigation and refresh. With a disposable preview account, also test verification-email delivery, password change, data export, and deletion only after reviewing the destructive confirmation.
 7. Inspect CSP, cache, HSTS, frame, referrer, and content-type headers on both HTML and a hashed asset.
 
 Example read-only checks:

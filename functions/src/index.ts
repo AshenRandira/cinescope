@@ -1,12 +1,18 @@
 import { getApps, initializeApp } from 'firebase-admin/app'
 import { getAppCheck } from 'firebase-admin/app-check'
+import { getAuth } from 'firebase-admin/auth'
+import { getFirestore } from 'firebase-admin/firestore'
 import { logger } from 'firebase-functions'
 import {
   defineBoolean,
   defineSecret,
 } from 'firebase-functions/params'
-import { onRequest } from 'firebase-functions/v2/https'
+import {
+  onCall,
+  onRequest,
+} from 'firebase-functions/v2/https'
 
+import { createDeleteAccountHandler } from './account/deleteAccount.js'
 import { createTmdbApiHandler } from './tmdb/proxy.js'
 
 if (getApps().length === 0) initializeApp()
@@ -16,6 +22,10 @@ const tmdbReadAccessToken = defineSecret(
 )
 const tmdbAppCheckEnforced = defineBoolean(
   'TMDB_APP_CHECK_ENFORCED',
+  { default: false },
+)
+const accountAppCheckEnforced = defineBoolean(
+  'ACCOUNT_APP_CHECK_ENFORCED',
   { default: false },
 )
 const fixtureToken =
@@ -57,4 +67,29 @@ export const tmdbApi = onRequest(
     timeoutSeconds: 15,
   },
   handler,
+)
+
+const deleteAccountHandler = createDeleteAccountHandler({
+  deleteAuthUser: (userId) =>
+    getAuth().deleteUser(userId),
+  deleteUserData: (userId) => {
+    const firestore = getFirestore()
+
+    return firestore.recursiveDelete(
+      firestore.doc(`users/${userId}`),
+    )
+  },
+  logger,
+})
+
+export const deleteAccount = onCall(
+  {
+    consumeAppCheckToken: accountAppCheckEnforced,
+    enforceAppCheck: accountAppCheckEnforced,
+    maxInstances: 10,
+    memory: '256MiB',
+    region: 'asia-east1',
+    timeoutSeconds: 60,
+  },
+  deleteAccountHandler,
 )

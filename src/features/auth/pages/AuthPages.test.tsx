@@ -8,6 +8,10 @@ import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { AuthContextValue } from '../context/AuthContext'
+import {
+  ACCOUNT_DELETION_NOTICE,
+  storeAccountDeletionNotice,
+} from '../data/auth'
 import { useAuth } from '../hooks/useAuth'
 import { LoginPage } from './LoginPage'
 import { RegisterPage } from './RegisterPage'
@@ -20,11 +24,15 @@ function createAuthValue(
   overrides: Partial<AuthContextValue> = {},
 ): AuthContextValue {
   return {
+    changePassword: vi.fn(async () => undefined),
+    deleteAccount: vi.fn(async () => undefined),
     getIdToken: vi.fn(async () => null),
     login: vi.fn(async () => undefined),
     logout: vi.fn(async () => undefined),
     register: vi.fn(async () => undefined),
+    refreshUser: vi.fn(async () => undefined),
     resetPassword: vi.fn(async () => undefined),
+    sendVerificationEmail: vi.fn(async () => undefined),
     sessionError: null,
     status: 'unauthenticated',
     updateDisplayName: vi.fn(async () => undefined),
@@ -35,6 +43,7 @@ function createAuthValue(
 
 describe('authentication pages', () => {
   beforeEach(() => {
+    window.sessionStorage.clear()
     vi.mocked(useAuth).mockReturnValue(createAuthValue())
   })
 
@@ -89,5 +98,30 @@ describe('authentication pages', () => {
       'The two passwords do not match.',
     )
     expect(register).not.toHaveBeenCalled()
+  })
+
+  it('shows a one-time confirmation after account deletion', () => {
+    storeAccountDeletionNotice()
+
+    const { unmount } = render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>,
+    )
+
+    expect(
+      screen.getByText(ACCOUNT_DELETION_NOTICE),
+    ).toBeVisible()
+    unmount()
+
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>,
+    )
+
+    expect(
+      screen.queryByText(ACCOUNT_DELETION_NOTICE),
+    ).not.toBeInTheDocument()
   })
 })

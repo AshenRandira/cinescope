@@ -52,6 +52,8 @@ const child = spawn(
       ...childEnvironment,
       CI: process.env.CI || 'true',
       FIREBASE_FUNCTIONS_DISCOVERY_OUTPUT_PATH: 'true',
+      FUNCTIONS_DISCOVERY_TIMEOUT:
+        process.env.FUNCTIONS_DISCOVERY_TIMEOUT || '120',
       XDG_CONFIG_HOME: firebaseConfigHome,
     },
     stdio: 'inherit',

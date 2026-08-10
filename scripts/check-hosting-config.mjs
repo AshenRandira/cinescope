@@ -67,7 +67,7 @@ assert.ok(contentSecurityPolicy, 'Hosting must define a Content-Security-Policy.
 
 for (const directive of [
   "default-src 'self'",
-  "connect-src 'self' https://*.googleapis.com wss://*.firebaseio.com",
+  "connect-src 'self' https://*.googleapis.com https://*.cloudfunctions.net wss://*.firebaseio.com",
   "frame-ancestors 'none'",
   'frame-src https://www.youtube-nocookie.com',
   "img-src 'self' data: https://image.tmdb.org",

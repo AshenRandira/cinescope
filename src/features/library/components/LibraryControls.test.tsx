@@ -46,6 +46,7 @@ function LibraryHarness({ variant }: { variant?: 'full' | 'save' }) {
   return (
     <LibraryContext.Provider
       value={{
+        clearAccountData: () => undefined,
         getRecord: () => record,
         records: record ? [record] : [],
         removeRecord: () => setRecord(null),

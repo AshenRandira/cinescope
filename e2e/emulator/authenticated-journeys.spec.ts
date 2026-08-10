@@ -54,6 +54,7 @@ async function submitAuthRequest(
   operation: 'signInWithPassword' | 'signUp',
   email: string,
   displayName?: string,
+  password = TEST_PASSWORD,
 ): Promise<AuthSession> {
   const response = await request.post(
     `${AUTH_EMULATOR_URL}/identitytoolkit.googleapis.com/v1/accounts:${operation}?key=${FIREBASE_API_KEY}`,
@@ -61,7 +62,7 @@ async function submitAuthRequest(
       data: {
         displayName,
         email,
-        password: TEST_PASSWORD,
+        password,
         returnSecureToken: true,
       },
     },
@@ -338,4 +339,139 @@ test('returns to a protected route and preserves signed-in library edits through
       { timeout: 10_000 },
     )
     .toBe(404)
+})
+
+test('changes a password and permanently deletes account data behind fresh credentials', async ({
+  page,
+  request,
+}) => {
+  const email = 'account-security@example.test'
+  const newPassword = 'NewEmulatorPass456!'
+  const session = await submitAuthRequest(
+    request,
+    'signUp',
+    email,
+    'Security Member',
+  )
+
+  await page.goto('/login', {
+    waitUntil: 'domcontentloaded',
+  })
+  await page.getByLabel('Email address').fill(email)
+  await page.getByLabel('Password').fill(TEST_PASSWORD)
+  await page
+    .getByRole('button', { name: 'Sign in to CineScope' })
+    .click()
+  await expect(page).toHaveURL(/\/profile$/)
+
+  await page.goto('/movies/550', {
+    waitUntil: 'domcontentloaded',
+  })
+  await page
+    .getByRole('button', { name: 'Save to library' })
+    .click()
+  await expectCloudRecord(
+    request,
+    session,
+    (fields) => fields.title?.stringValue === 'Fixture Film',
+  )
+
+  await page.goto('/profile', {
+    waitUntil: 'domcontentloaded',
+  })
+  const passwordCard = page
+    .getByRole('article')
+    .filter({
+      has: page.getByRole('heading', {
+        name: 'Change the access key.',
+      }),
+    })
+
+  await passwordCard
+    .getByLabel('Current password')
+    .fill(TEST_PASSWORD)
+  await passwordCard
+    .getByLabel('New password', { exact: true })
+    .fill(newPassword)
+  await passwordCard
+    .getByLabel('Confirm new password')
+    .fill(newPassword)
+  await passwordCard
+    .getByRole('button', { name: 'Change password' })
+    .click()
+  await expect(
+    passwordCard.getByText(
+      'Your password was changed securely.',
+    ),
+  ).toBeVisible()
+
+  const oldPasswordResponse = await request.post(
+    `${AUTH_EMULATOR_URL}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
+    {
+      data: {
+        email,
+        password: TEST_PASSWORD,
+        returnSecureToken: true,
+      },
+    },
+  )
+
+  expect(oldPasswordResponse.ok()).toBe(false)
+
+  const dangerCard = page
+    .getByRole('article')
+    .filter({
+      has: page.getByRole('heading', {
+        name: 'Close the archive.',
+      }),
+    })
+
+  await dangerCard
+    .getByLabel('Current password')
+    .fill(newPassword)
+  await dangerCard
+    .getByLabel('Type DELETE MY ACCOUNT to confirm')
+    .fill('DELETE MY ACCOUNT')
+  await dangerCard
+    .getByRole('button', {
+      name: 'Permanently delete my account',
+    })
+    .click()
+
+  await expect(page).toHaveURL(/\/login$/, {
+    timeout: 15_000,
+  })
+  await expect(
+    page.getByText(
+      'Your CineScope account and archive were permanently deleted.',
+    ),
+  ).toBeVisible()
+
+  const deletedAccountResponse = await request.post(
+    `${AUTH_EMULATOR_URL}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
+    {
+      data: {
+        email,
+        password: newPassword,
+        returnSecureToken: true,
+      },
+    },
+  )
+
+  expect(deletedAccountResponse.ok()).toBe(false)
+  await expect
+    .poll(
+      async () =>
+        (await readLibraryDocument(request, session)).status,
+      { timeout: 10_000 },
+    )
+    .toBe(404)
+
+  const memberStorage = await page.evaluate((userId) => {
+    return globalThis.localStorage.getItem(
+      `cinescope.library.v1.user.${encodeURIComponent(userId)}`,
+    )
+  }, session.localId)
+
+  expect(memberStorage).toBeNull()
 })
