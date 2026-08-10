@@ -54,6 +54,8 @@ npm.cmd run test:coverage
 npm.cmd run lint
 npm.cmd run build
 npm.cmd run check:bundle
+npm.cmd run check:hosting
+npm.cmd run test:hosting
 npm.cmd run test:e2e
 npm.cmd run test:emulators
 git diff --check origin/develop...HEAD
@@ -65,8 +67,16 @@ The bundle check reads the generated `dist/index.html` and fails if the initial 
 
 The public Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. That mode uses a non-secret placeholder TMDB token, disables Firebase, and intercepts every external catalogue response.
 
-The emulator command builds in the committed `emulator` mode, starts local Authentication and Firestore emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys. Its configuration contains only non-secret demo values and cannot access a real Firebase project. The first local run downloads the Firestore emulator runtime. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
+The Hosting checks validate the committed SPA rewrite, security policy, and cache policy, then exercise root, deep-link, and hashed-asset responses through the local Hosting emulator. The authenticated emulator command builds in the committed `emulator` mode, starts local Authentication and Firestore emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys. Its configuration contains only non-secret demo values and cannot access a real Firebase project. The first local run downloads the Firestore emulator runtime. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
 
 ## Continuous integration
 
 The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24, Java 21, and the committed npm lockfile, then runs unit tests, coverage thresholds, accessibility-aware lint, the production build, the initial bundle budget, public Chromium journeys, Firestore rules tests, and authenticated emulator journeys without Firebase or TMDB secrets. Failed browser runs retain traces and screenshots for seven days.
+
+## Hosting and deployment
+
+Firebase Hosting publishes `dist`, preserves React Router deep links, applies reviewed browser security headers, prevents stale application-shell caching, and caches Vite's hashed assets immutably. Separate preview and production example files document the required build-time values; populated environment files remain ignored.
+
+The `Firebase Hosting deployment` workflow is manual and protected. It uses GitHub OIDC and Google Workload Identity Federation for short-lived credentials, creates seven-day preview channels, and permits a live production release only from `main`. No Firebase project ID, `.firebaserc`, service-account key, or active deployment is committed by this foundation.
+
+Before enabling that workflow, follow [the Firebase Hosting operations guide](docs/deployment/firebase-hosting.md). Monitoring ownership and response expectations are in [the incident-response runbook](docs/operations/monitoring-and-incident-response.md).

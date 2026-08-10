@@ -2,12 +2,13 @@
 
 ## Automated layers
 
-CineScope uses four deterministic validation layers:
+CineScope uses five deterministic validation layers:
 
 1. Vitest exercises pure data behavior.
 2. React Testing Library and jsdom exercise stable component, form, and routing behavior.
 3. Playwright exercises public journeys against a local production preview in Chromium.
 4. Firebase Emulator Suite exercises authenticated integration journeys and deployed Firestore Security Rules without touching a real project.
+5. Firebase Hosting Emulator exercises the built application shell, SPA rewrites, browser security headers, and cache policy without deploying.
 
 The component suite currently covers header-search validation and keyboard selection, library save/watch/favourite/rating controls, authentication-form validation, protected-route behavior, and route focus transfer. Coverage enforcement includes the existing library and recommendation engines plus the authentication helpers, protected route, and library controls.
 
@@ -35,6 +36,8 @@ The emulator layer uses the fixed `demo-cinescope` project ID and non-secret val
 
 The suite clears both emulators before each browser journey and intercepts TMDB with deterministic fixtures. It never uses a personal Firebase account, Firebase credentials, or live catalogue data.
 
+The Hosting layer builds in `preview` mode under the fixed `demo-cinescope` project ID. It asserts that `/` and `/movies/550` return the same application shell, document responses carry the reviewed CSP and security headers without cache persistence, and Vite's hashed JavaScript carries the one-year immutable policy.
+
 ## Commands
 
 Run the fast suite during development:
@@ -50,6 +53,8 @@ npm.cmd run test:coverage
 npm.cmd run lint
 npm.cmd run build
 npm.cmd run check:bundle
+npm.cmd run check:hosting
+npm.cmd run test:hosting
 npm.cmd run test:e2e
 npm.cmd run test:emulators
 git diff --check origin/develop...HEAD

@@ -61,6 +61,12 @@ jobs:
       - name: Enforce initial bundle budget
         run: npm run check:bundle
 
+      - name: Validate Firebase Hosting policy
+        run: npm run check:hosting
+
+      - name: Exercise Firebase Hosting responses
+        run: npm run test:hosting
+
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
