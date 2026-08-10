@@ -17,9 +17,9 @@ concurrency:
 
 jobs:
   quality:
-    name: Test, lint, and build
+    name: Test, lint, build, and E2E
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Check out repository
@@ -37,6 +37,9 @@ jobs:
       - name: Run unit tests
         run: npm test
 
+      - name: Enforce coverage thresholds
+        run: npm run test:coverage
+
       - name: Run accessibility-aware lint
         run: npm run lint
 
@@ -45,3 +48,20 @@ jobs:
 
       - name: Enforce initial bundle budget
         run: npm run check:bundle
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run deterministic browser journeys
+        run: npm run test:e2e
+
+      - name: Preserve Playwright diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-diagnostics
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7

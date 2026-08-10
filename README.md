@@ -41,12 +41,19 @@ The browser archive remains the immediate source of truth. On sign-in, guest rec
 
 ## Validation
 
+Install the Chromium test browser once after installing dependencies:
+
+```powershell
+npx.cmd playwright install chromium
+```
+
 ```powershell
 npm.cmd test
 npm.cmd run test:coverage
 npm.cmd run lint
 npm.cmd run build
 npm.cmd run check:bundle
+npm.cmd run test:e2e
 git diff --check origin/develop...HEAD
 ```
 
@@ -54,6 +61,8 @@ The lint command includes JSX accessibility rules and treats warnings as failure
 
 The bundle check reads the generated `dist/index.html` and fails if the initial JavaScript and CSS payload exceeds the recorded raw or gzip budgets. Run it after the production build.
 
+The Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. That mode uses a non-secret placeholder TMDB token, disables Firebase, and intercepts every external catalogue response; it never uses a real account or production API data. See [docs/quality-assurance.md](docs/quality-assurance.md) for the current test matrix and the remaining human checks.
+
 ## Continuous integration
 
-The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24 with the committed npm lockfile, then runs the unit tests, accessibility-aware lint, production build, and initial bundle budget without requiring Firebase or TMDB secrets.
+The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24 with the committed npm lockfile, then runs unit tests, coverage thresholds, accessibility-aware lint, the production build, the initial bundle budget, and deterministic Chromium journeys without requiring Firebase or TMDB secrets. Failed browser runs retain traces and screenshots for seven days.

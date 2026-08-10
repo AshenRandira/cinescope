@@ -1,0 +1,245 @@
+import type { Page, Route } from '@playwright/test'
+
+const movieSummary = {
+  adult: false,
+  backdrop_path: null,
+  genre_ids: [18],
+  id: 550,
+  original_language: 'en',
+  original_title: 'Fixture Film',
+  overview: 'A stable feature record used only by automated browser tests.',
+  popularity: 100,
+  poster_path: null,
+  release_date: '1999-10-15',
+  title: 'Fixture Film',
+  video: false,
+  vote_average: 8.4,
+  vote_count: 250,
+}
+
+const fixtureVideo = {
+  id: 'fixture-video',
+  iso_639_1: 'en',
+  iso_3166_1: 'US',
+  key: 'fixture-trailer',
+  name: 'Fixture Trailer',
+  official: true,
+  published_at: '2026-01-15T00:00:00.000Z',
+  site: 'YouTube',
+  size: 1080,
+  type: 'Trailer',
+}
+
+const movieDetails = {
+  ...movieSummary,
+  belongs_to_collection: null,
+  budget: 63_000_000,
+  credits: { cast: [], crew: [], id: 550 },
+  genres: [{ id: 18, name: 'Drama' }],
+  homepage: '',
+  imdb_id: 'tt0137523',
+  origin_country: ['US'],
+  production_companies: [],
+  production_countries: [{ iso_3166_1: 'US', name: 'United States' }],
+  recommendations: {
+    page: 1,
+    results: [],
+    total_pages: 0,
+    total_results: 0,
+  },
+  revenue: 100_000_000,
+  runtime: 139,
+  spoken_languages: [{ english_name: 'English', iso_639_1: 'en', name: 'English' }],
+  status: 'Released',
+  tagline: 'Deterministic cinema.',
+  videos: { id: 550, results: [fixtureVideo] },
+}
+
+const tvSummary = {
+  adult: false,
+  backdrop_path: null,
+  first_air_date: '2024-01-10',
+  genre_ids: [18],
+  id: 1399,
+  name: 'Fixture Series',
+  origin_country: ['US'],
+  original_language: 'en',
+  original_name: 'Fixture Series',
+  overview: 'A stable television record used only by automated browser tests.',
+  popularity: 80,
+  poster_path: null,
+  vote_average: 8.2,
+  vote_count: 180,
+}
+
+const episodeSummary = {
+  air_date: '2024-01-10',
+  crew: [],
+  episode_number: 1,
+  episode_type: 'standard',
+  guest_stars: [],
+  id: 1401,
+  name: 'Pilot Projection',
+  overview: 'The first frame in the deterministic season fixture.',
+  production_code: 'FIX-101',
+  runtime: 52,
+  season_number: 1,
+  show_id: 1399,
+  still_path: null,
+  vote_average: 8,
+  vote_count: 42,
+}
+
+const seasonSummary = {
+  air_date: '2024-01-10',
+  episode_count: 1,
+  id: 1400,
+  name: 'Season 1',
+  overview: 'A deterministic single-episode season.',
+  poster_path: null,
+  season_number: 1,
+  vote_average: 8,
+}
+
+const tvDetails = {
+  ...tvSummary,
+  created_by: [],
+  credits: { cast: [], crew: [], id: 1399 },
+  episode_run_time: [52],
+  genres: [{ id: 18, name: 'Drama' }],
+  homepage: '',
+  in_production: false,
+  languages: ['en'],
+  last_air_date: '2024-01-10',
+  last_episode_to_air: episodeSummary,
+  networks: [],
+  next_episode_to_air: null,
+  number_of_episodes: 1,
+  number_of_seasons: 1,
+  production_companies: [],
+  production_countries: [{ iso_3166_1: 'US', name: 'United States' }],
+  recommendations: {
+    page: 1,
+    results: [],
+    total_pages: 0,
+    total_results: 0,
+  },
+  seasons: [seasonSummary],
+  spoken_languages: [{ english_name: 'English', iso_639_1: 'en', name: 'English' }],
+  status: 'Ended',
+  tagline: 'Every signal has a beginning.',
+  type: 'Scripted',
+  videos: { id: 1399, results: [] },
+}
+
+const seasonDetails = {
+  _id: 'fixture-season',
+  air_date: seasonSummary.air_date,
+  credits: { cast: [], crew: [], id: 1400 },
+  episodes: [episodeSummary],
+  id: seasonSummary.id,
+  name: seasonSummary.name,
+  overview: seasonSummary.overview,
+  poster_path: null,
+  season_number: 1,
+  vote_average: 8,
+}
+
+const episodeDetails = {
+  ...episodeSummary,
+  credits: { cast: [], crew: [], guest_stars: [], id: 1401 },
+  images: { id: 1401, stills: [] },
+  videos: { id: 1401, results: [] },
+}
+
+const searchResponse = {
+  page: 1,
+  results: [{ ...movieSummary, media_type: 'movie' }],
+  total_pages: 1,
+  total_results: 1,
+}
+
+const tvDiscoveryResponse = {
+  page: 1,
+  results: [tvSummary],
+  total_pages: 1,
+  total_results: 1,
+}
+
+function fulfillJson(route: Route, json: unknown): Promise<void> {
+  return route.fulfill({ json })
+}
+
+export async function installPublicApiFixtures(page: Page): Promise<void> {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+
+  await page.addInitScript(() => {
+    const browserGlobal = globalThis as typeof globalThis & {
+      localStorage: { clear: () => void }
+      sessionStorage: { clear: () => void }
+    }
+
+    browserGlobal.localStorage.clear()
+    browserGlobal.sessionStorage.clear()
+  })
+
+  await page.route(/\.(?:woff2?|ttf|otf)(?:\?.*)?$/, (route) =>
+    route.abort(),
+  )
+
+  if (
+    process.env.CINESCOPE_PLAYWRIGHT_CHANNEL &&
+    process.env.CINESCOPE_PLAYWRIGHT_CHANNEL !== 'chromium'
+  ) {
+    await page.route(/\.css(?:\?.*)?$/, (route) =>
+      route.fulfill({ body: '', contentType: 'text/css' }),
+    )
+  }
+
+  await page.route('https://www.youtube-nocookie.com/**', (route) =>
+    route.fulfill({ body: '<!doctype html><title>Fixture video</title>', contentType: 'text/html' }),
+  )
+
+  await page.route('https://api.themoviedb.org/3/**', async (route) => {
+    const pathname = new URL(route.request().url()).pathname.replace('/3', '')
+
+    switch (pathname) {
+      case '/search/multi':
+        await fulfillJson(route, searchResponse)
+        return
+      case '/movie/550':
+        await fulfillJson(route, movieDetails)
+        return
+      case '/movie/550/watch/providers':
+        await fulfillJson(route, { id: 550, results: {} })
+        return
+      case '/genre/tv/list':
+        await fulfillJson(route, { genres: [{ id: 18, name: 'Drama' }] })
+        return
+      case '/tv/popular':
+        await fulfillJson(route, tvDiscoveryResponse)
+        return
+      case '/tv/1399':
+        await fulfillJson(route, tvDetails)
+        return
+      case '/tv/1399/watch/providers':
+        await fulfillJson(route, { id: 1399, results: {} })
+        return
+      case '/tv/1399/season/1':
+        await fulfillJson(route, seasonDetails)
+        return
+      case '/tv/1399/season/1/episode/1':
+        await fulfillJson(route, episodeDetails)
+        return
+      default:
+        await route.fulfill({
+          json: {
+            status_code: 34,
+            status_message: `Unhandled E2E fixture: ${pathname}`,
+            success: false,
+          },
+          status: 404,
+        })
+    }
+  })
+}

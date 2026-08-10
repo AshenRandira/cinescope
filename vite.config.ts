@@ -9,6 +9,9 @@ export default defineConfig({
       include: [
         'src/features/library/data/library.ts',
         'src/features/discovery/data/archiveRecommendations.ts',
+        'src/features/auth/data/auth.ts',
+        'src/features/auth/components/RequireAuth.tsx',
+        'src/features/library/components/LibraryControls.tsx',
       ],
       provider: 'v8',
       reporter: ['text', 'json-summary'],
@@ -21,6 +24,6 @@ export default defineConfig({
       },
     },
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.{ts,tsx}'],
   },
 })
