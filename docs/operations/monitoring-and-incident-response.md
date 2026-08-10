@@ -11,11 +11,11 @@ The production readiness review must confirm:
 - Hosting release history and rollback access are tested by the operators;
 - Authentication usage, error rates, and authorized domains are reviewed;
 - Firestore usage, denied-request trends, and rules releases are reviewed;
-- TMDB quota and error behavior have an owner;
+- TMDB Function errors, latency, cache behavior, quota pressure, and App Check enforcement have an owner;
 - GitHub environment approvers and workload-identity trust are current;
 - DNS ownership and registrar recovery access are documented privately.
 
-No third-party browser error-monitoring vendor is selected in Phase 16A. If one is introduced, review its data retention, region, source-map access, sampling, and personally identifiable information handling before enabling it. Never send passwords, Firebase tokens, TMDB tokens, full email addresses, library contents, or raw API responses to telemetry.
+No third-party browser error-monitoring vendor is selected. If one is introduced, review its data retention, region, source-map access, sampling, and personally identifiable information handling before enabling it. The `tmdbApi` Function logs only route categories, status, latency, cache result, error category, and request reference. Never send passwords, Firebase tokens, App Check tokens, TMDB tokens, raw search queries, full email addresses, library contents, or raw API responses to telemetry.
 
 ## Severity guide
 

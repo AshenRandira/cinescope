@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+functions/lib
 coverage
 playwright-report
 test-results
@@ -18,6 +19,7 @@ blob-report
 .env.preview
 .env.production
 .firebase
+functions/.secret.local
 .firebaserc
 gha-creds-*.json
 

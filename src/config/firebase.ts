@@ -3,6 +3,7 @@ import type {
   FirebaseOptions,
 } from 'firebase/app'
 import type { Auth } from 'firebase/auth'
+import type { AppCheck } from 'firebase/app-check'
 import type { Firestore } from 'firebase/firestore'
 
 const FIREBASE_APP_NAME = 'cinescope-web'
@@ -18,10 +19,24 @@ export const FIREBASE_REQUIRED_ENV_NAMES = [
 export type FirebaseEnvironmentName =
   (typeof FIREBASE_REQUIRED_ENV_NAMES)[number]
 
+const firebaseEnvironmentValues: Record<
+  FirebaseEnvironmentName,
+  string | undefined
+> = {
+  VITE_FIREBASE_API_KEY:
+    import.meta.env.VITE_FIREBASE_API_KEY,
+  VITE_FIREBASE_APP_ID:
+    import.meta.env.VITE_FIREBASE_APP_ID,
+  VITE_FIREBASE_AUTH_DOMAIN:
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  VITE_FIREBASE_PROJECT_ID:
+    import.meta.env.VITE_FIREBASE_PROJECT_ID,
+}
+
 function getFirebaseEnvironmentValue(
   name: FirebaseEnvironmentName,
 ): string {
-  return import.meta.env[name]?.trim() ?? ''
+  return firebaseEnvironmentValues[name]?.trim() ?? ''
 }
 
 export const missingFirebaseEnvironmentNames =
@@ -34,6 +49,7 @@ export const isFirebaseConfigured =
 
 let appPromise: Promise<FirebaseApp | null> | null = null
 let authPromise: Promise<Auth | null> | null = null
+let appCheckPromise: Promise<AppCheck | null> | null = null
 let firestorePromise: Promise<Firestore | null> | null =
   null
 let isAuthEmulatorConnected = false
@@ -136,6 +152,47 @@ async function getFirebaseApp(): Promise<FirebaseApp | null> {
   })()
 
   return appPromise
+}
+
+export async function getFirebaseAppCheckToken(): Promise<
+  string | null
+> {
+  const siteKey = getOptionalEnvironmentValue(
+    import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY,
+  )
+
+  if (!isFirebaseConfigured || !siteKey) {
+    return null
+  }
+
+  if (!appCheckPromise) {
+    appCheckPromise = (async () => {
+      const [app, firebaseAppCheck] = await Promise.all([
+        getFirebaseApp(),
+        import('firebase/app-check'),
+      ])
+
+      if (!app) return null
+
+      return firebaseAppCheck.initializeAppCheck(app, {
+        isTokenAutoRefreshEnabled: true,
+        provider:
+          new firebaseAppCheck.ReCaptchaEnterpriseProvider(
+            siteKey,
+          ),
+      })
+    })()
+  }
+
+  const appCheck = await appCheckPromise
+
+  if (!appCheck) return null
+
+  const { token } = await import('firebase/app-check').then(
+    ({ getToken }) => getToken(appCheck),
+  )
+
+  return token
 }
 
 export async function getFirebaseFirestore(): Promise<Firestore | null> {

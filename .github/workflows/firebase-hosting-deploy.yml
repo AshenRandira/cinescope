@@ -52,6 +52,8 @@ jobs:
     needs: authorize
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      FUNCTIONS_DISCOVERY_TIMEOUT: 120
     environment:
       name: firebase-${{ inputs.target }}
     permissions:
@@ -67,12 +69,27 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
+
+      - name: Set up Java for Firebase emulators
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
 
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Install locked Functions dependencies
+        run: npm ci --prefix functions
+
       - name: Run unit tests
         run: npm test
+
+      - name: Run Functions contract tests
+        run: npm run test:functions
 
       - name: Enforce coverage thresholds
         run: npm run test:coverage
@@ -83,14 +100,23 @@ jobs:
       - name: Exercise local Hosting policy
         run: npm run test:hosting
 
+      - name: Exercise local TMDB API policy
+        run: npm run test:api
+
       - name: Build selected environment
         env:
           VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_APP_CHECK_SITE_KEY: ${{ vars.VITE_FIREBASE_APP_CHECK_SITE_KEY }}
           VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
           VITE_FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
-          VITE_TMDB_READ_ACCESS_TOKEN: ${{ secrets.VITE_TMDB_READ_ACCESS_TOKEN }}
         run: npm run build:${{ inputs.target }}
+
+      - name: Build Firebase Functions
+        run: npm run build:functions
+
+      - name: Verify the browser TMDB security boundary
+        run: npm run check:client-security
 
       - name: Enforce bundle budget
         run: npm run check:bundle
@@ -109,6 +135,7 @@ jobs:
         if: inputs.target == 'preview'
         env:
           FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          TMDB_APP_CHECK_ENFORCED: ${{ vars.TMDB_APP_CHECK_ENFORCED }}
         run: >-
           npx firebase-tools hosting:channel:deploy manual-${{ github.run_number }}
           --expires 7d
@@ -119,9 +146,10 @@ jobs:
         if: inputs.target == 'production'
         env:
           FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          TMDB_APP_CHECK_ENFORCED: ${{ vars.TMDB_APP_CHECK_ENFORCED }}
         run: >-
           npx firebase-tools deploy
-          --only hosting
+          --only functions,hosting
           --project "$FIREBASE_PROJECT_ID"
           --message "GitHub Actions ${GITHUB_SHA}"
           --non-interactive

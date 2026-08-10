@@ -71,8 +71,8 @@ assert.ok(
   'The served CSP must prevent framing.',
 )
 assert.ok(
-  contentSecurityPolicy?.includes('https://api.themoviedb.org'),
-  'The served CSP must allow the current TMDB client boundary.',
+  !contentSecurityPolicy?.includes('https://api.themoviedb.org'),
+  'The served CSP must block direct TMDB API connections.',
 )
 
 const scriptPath = root.body.match(/src="(\/assets\/[^"]+\.js)"/)?.[1]

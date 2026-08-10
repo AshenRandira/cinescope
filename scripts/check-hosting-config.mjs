@@ -10,8 +10,18 @@ assert.ok(hosting, 'firebase.json must define Hosting configuration.')
 assert.equal(hosting.public, 'dist', 'Hosting must publish the Vite dist directory.')
 assert.deepEqual(
   hosting.rewrites,
-  [{ destination: '/index.html', source: '**' }],
-  'Hosting must preserve React Router deep links with one final SPA rewrite.',
+  [
+    {
+      function: {
+        functionId: 'tmdbApi',
+        pinTag: true,
+        region: 'asia-east1',
+      },
+      source: '/api/tmdb/**',
+    },
+    { destination: '/index.html', source: '**' },
+  ],
+  'Hosting must route the controlled TMDB API before the final SPA rewrite.',
 )
 assert.equal(hosting.trailingSlash, false, 'Hosting must use canonical URLs without trailing slashes.')
 
@@ -24,13 +34,13 @@ const headerRules = new Map(
 assert.equal(
   hosting.headers.at(-1)?.regex,
   '^[/\\\\]assets[/\\\\].*$',
-  'The immutable asset rule must be last so it overrides the broad document cache policy.',
+  'The immutable asset rule must remain the final cache rule.',
 )
 const applicationHeaders = headerRules.get('^.*$')
 
 assert.ok(
   applicationHeaders,
-  'Hosting must define application-document security and cache headers.',
+  'Hosting must define global application security headers.',
 )
 
 const expectedSecurityHeaders = {
@@ -57,7 +67,7 @@ assert.ok(contentSecurityPolicy, 'Hosting must define a Content-Security-Policy.
 
 for (const directive of [
   "default-src 'self'",
-  "connect-src 'self' https://api.themoviedb.org https://*.googleapis.com wss://*.firebaseio.com",
+  "connect-src 'self' https://*.googleapis.com wss://*.firebaseio.com",
   "frame-ancestors 'none'",
   'frame-src https://www.youtube-nocookie.com',
   "img-src 'self' data: https://image.tmdb.org",
@@ -73,15 +83,42 @@ for (const directive of [
   )
 }
 
+assert.ok(
+  !contentSecurityPolicy.includes('https://api.themoviedb.org'),
+  'The browser CSP must not allow direct TMDB API connections.',
+)
+
+const noStoreCacheControl =
+  'no-cache, no-store, max-age=0, must-revalidate'
+
 assert.equal(
   applicationHeaders.get('Cache-Control'),
-  'no-cache, no-store, max-age=0, must-revalidate',
-  'Application routes and unhashed files must always be revalidated.',
+  undefined,
+  'The global security rule must not override Function cache responses.',
+)
+assert.equal(
+  headerRules.get('^[/\\\\](?:index\\.html)?$')?.get('Cache-Control'),
+  noStoreCacheControl,
+  'The application shell must never be cached.',
+)
+assert.equal(
+  headerRules
+    .get(
+      '^[/\\\\](?:discover|movies|tv|people|search|library|profile|login|register)(?:[/\\\\].*)?$',
+    )
+    ?.get('Cache-Control'),
+  noStoreCacheControl,
+  'Known React Router paths must never be cached.',
 )
 assert.equal(
   headerRules.get('^[/\\\\]assets[/\\\\].*$')?.get('Cache-Control'),
   'public, max-age=31536000, immutable',
   'Vite hashed assets must be cached immutably for one year.',
+)
+assert.deepEqual(
+  firebaseConfig.emulators.functions,
+  { host: '127.0.0.1', port: 5001 },
+  'The local Functions emulator must use the documented loopback address and port.',
 )
 assert.deepEqual(
   firebaseConfig.emulators.hosting,
@@ -91,6 +128,7 @@ assert.deepEqual(
 
 console.log('Firebase Hosting configuration')
 console.log('- dist publication and SPA rewrite: valid')
+console.log('- /api/tmdb Functions rewrite: valid')
 console.log('- CSP and security headers: valid')
-console.log('- HTML and immutable asset caching: valid')
+console.log('- SPA route and immutable asset caching: valid')
 console.log('- local Hosting emulator: 127.0.0.1:5000')

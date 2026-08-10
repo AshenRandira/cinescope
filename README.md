@@ -6,21 +6,32 @@ CineScope is a cinematic React archive for discovering films, television, and co
 
 Requirements:
 
-- Node.js 20 or newer
+- Node.js 22 or newer
 - A TMDB API read access token
 - A Firebase web app with Email/Password Authentication enabled
 - Cloud Firestore when account-backed library sync is required
 - Java 21 or newer when running Firebase emulator validation
 
-Create `.env.local` from `.env.example` and replace every placeholder:
+Create `.env.local` from `.env.example` and replace the Firebase placeholders. Store the TMDB token only in the ignored Functions secret file:
 
 ```powershell
 Copy-Item .env.example .env.local
+Copy-Item functions/.secret.local.example functions/.secret.local
 npm.cmd install
+npm.cmd ci --prefix functions
+```
+
+Start the local Functions API in one terminal and Vite in another:
+
+```powershell
+npm.cmd run dev:api
+```
+
+```powershell
 npm.cmd run dev
 ```
 
-Vite prints the local URL after startup. Firebase web configuration identifies the project; Firestore Security Rules protect user data. Never add a Firebase Admin service-account file or other server credential to this client repository.
+Vite proxies `/api/tmdb/**` to the local Functions emulator. The browser never receives the TMDB bearer token. Firebase web configuration identifies the project; Firestore Security Rules protect user data. Never add a Firebase Admin service-account file, TMDB token, or other server credential to browser environment variables.
 
 ## Firebase setup
 
@@ -51,11 +62,15 @@ npx.cmd playwright install chromium
 ```powershell
 npm.cmd test
 npm.cmd run test:coverage
+npm.cmd run test:functions
 npm.cmd run lint
 npm.cmd run build
+npm.cmd run build:functions
 npm.cmd run check:bundle
+npm.cmd run check:client-security
 npm.cmd run check:hosting
 npm.cmd run test:hosting
+npm.cmd run test:api
 npm.cmd run test:e2e
 npm.cmd run test:emulators
 git diff --check origin/develop...HEAD
@@ -65,17 +80,17 @@ The lint command includes JSX accessibility rules and treats warnings as failure
 
 The bundle check reads the generated `dist/index.html` and fails if the initial JavaScript and CSS payload exceeds the recorded raw or gzip budgets. Run it after the production build.
 
-The public Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. That mode uses a non-secret placeholder TMDB token, disables Firebase, and intercepts every external catalogue response.
+The public Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. Firebase is disabled and every same-origin catalogue API response is intercepted, so the suite needs no Firebase or TMDB credential.
 
-The Hosting checks validate the committed SPA rewrite, security policy, and cache policy, then exercise root, deep-link, and hashed-asset responses through the local Hosting emulator. The authenticated emulator command builds in the committed `emulator` mode, starts local Authentication and Firestore emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys. Its configuration contains only non-secret demo values and cannot access a real Firebase project. The first local run downloads the Firestore emulator runtime. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
+The API test starts a fake local TMDB server and the Functions plus Hosting emulators, then verifies the `/api/tmdb/**` rewrite, allowlist, cache policy, method rejection, and secret-bearing upstream request. It never contacts TMDB. The authenticated emulator command builds in the committed `emulator` mode, starts local Authentication and Firestore emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
 
 ## Continuous integration
 
-The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24, Java 21, and the committed npm lockfile, then runs unit tests, coverage thresholds, accessibility-aware lint, the production build, the initial bundle budget, public Chromium journeys, Firestore rules tests, and authenticated emulator journeys without Firebase or TMDB secrets. Failed browser runs retain traces and screenshots for seven days.
+The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24, Java 21, both committed npm lockfiles, and validates the frontend, Functions contracts, browser security scan, Hosting-to-Functions API, public Chromium journeys, Firestore rules, and authenticated emulator journeys without Firebase or TMDB secrets. Failed browser runs retain traces and screenshots for seven days.
 
 ## Hosting and deployment
 
-Firebase Hosting publishes `dist`, preserves React Router deep links, applies reviewed browser security headers, prevents stale application-shell caching, and caches Vite's hashed assets immutably. Separate preview and production example files document the required build-time values; populated environment files remain ignored.
+Firebase Hosting publishes `dist`, sends `/api/tmdb/**` to the `tmdbApi` Function before the React Router fallback, applies reviewed browser security headers, and caches Vite's hashed assets immutably. The Function reads `TMDB_READ_ACCESS_TOKEN` from Secret Manager; it is not a Vite build value. See [the TMDB API boundary guide](docs/security/tmdb-api-boundary.md).
 
 The `Firebase Hosting deployment` workflow is manual and protected. It uses GitHub OIDC and Google Workload Identity Federation for short-lived credentials, creates seven-day preview channels, and permits a live production release only from `main`. No Firebase project ID, `.firebaserc`, service-account key, or active deployment is committed by this foundation.
 

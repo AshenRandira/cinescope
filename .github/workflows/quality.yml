@@ -30,6 +30,9 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
 
       - name: Set up Java for Firebase emulators
         uses: actions/setup-java@v5
@@ -46,8 +49,14 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Install locked Functions dependencies
+        run: npm ci --prefix functions
+
       - name: Run unit tests
         run: npm test
+
+      - name: Run Functions contract tests
+        run: npm run test:functions
 
       - name: Enforce coverage thresholds
         run: npm run test:coverage
@@ -58,6 +67,12 @@ jobs:
       - name: Build production application
         run: npm run build
 
+      - name: Build Firebase Functions
+        run: npm run build:functions
+
+      - name: Verify the browser TMDB security boundary
+        run: npm run check:client-security
+
       - name: Enforce initial bundle budget
         run: npm run check:bundle
 
@@ -66,6 +81,9 @@ jobs:
 
       - name: Exercise Firebase Hosting responses
         run: npm run test:hosting
+
+      - name: Exercise the Hosting to Functions API boundary
+        run: npm run test:api
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium

@@ -1,5 +1,4 @@
 export type {
-  TmdbApiErrorResponse,
   TmdbPaginatedResponse,
 } from './common'
 

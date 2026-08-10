@@ -1,7 +1,6 @@
-import { getTmdbReadAccessToken } from '../../config/env'
-import type { TmdbApiErrorResponse } from '../../types/tmdb'
+import { getFirebaseAppCheckToken } from '../../config/firebase'
 
-const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3/'
+const TMDB_API_BASE_PATH = '/api/tmdb/'
 
 type TmdbQueryValue = string | number | boolean | null | undefined
 
@@ -12,43 +11,55 @@ interface TmdbRequestOptions extends Omit<RequestInit, 'headers'> {
 
 interface TmdbApiErrorOptions {
   endpoint: string
+  requestId?: string
   status: number
-  tmdbCode?: number
 }
 
 export class TmdbApiError extends Error {
   readonly endpoint: string
+  readonly requestId?: string
   readonly status: number
-  readonly tmdbCode?: number
 
   constructor(message: string, options: TmdbApiErrorOptions) {
     super(message)
 
     this.name = 'TmdbApiError'
     this.endpoint = options.endpoint
+    this.requestId = options.requestId
     this.status = options.status
-    this.tmdbCode = options.tmdbCode
   }
 }
 
-function buildTmdbUrl(
+export function buildTmdbApiUrl(
   path: string,
   query?: Record<string, TmdbQueryValue>,
-): URL {
+): string {
   const normalizedPath = path.replace(/^\/+/, '')
-  const url = new URL(normalizedPath, TMDB_API_BASE_URL)
+  const url = new URL(
+    `${TMDB_API_BASE_PATH}${normalizedPath}`,
+    'https://cinescope.invalid',
+  )
 
-  if (!query) {
-    return url
+  if (
+    !normalizedPath ||
+    normalizedPath.includes('..') ||
+    /[?#]/.test(normalizedPath)
+  ) {
+    throw new TmdbApiError(
+      'The catalogue request path is not valid.',
+      { endpoint: path, status: 0 },
+    )
   }
 
-  Object.entries(query).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      url.searchParams.set(key, String(value))
-    }
-  })
+  if (query) {
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.set(key, String(value))
+      }
+    })
+  }
 
-  return url
+  return `${url.pathname}${url.search}`
 }
 
 async function readJsonResponse(response: Response): Promise<unknown> {
@@ -61,22 +72,35 @@ async function readJsonResponse(response: Response): Promise<unknown> {
   try {
     return JSON.parse(responseText) as unknown
   } catch {
-    throw new TmdbApiError('TMDB returned an invalid JSON response.', {
-      endpoint: response.url,
-      status: response.status,
-    })
+    throw new TmdbApiError(
+      'The catalogue service returned an invalid response.',
+      {
+        endpoint: response.url,
+        status: response.status,
+      },
+    )
   }
 }
 
-function isTmdbApiErrorResponse(
+type CineScopeApiErrorResponse = {
+  error: {
+    code: string
+    message: string
+    requestId?: string
+  }
+}
+
+function isCineScopeApiErrorResponse(
   value: unknown,
-): value is TmdbApiErrorResponse {
+): value is CineScopeApiErrorResponse {
   return (
     typeof value === 'object' &&
     value !== null &&
-    ('status_message' in value ||
-      'status_code' in value ||
-      'success' in value)
+    'error' in value &&
+    typeof value.error === 'object' &&
+    value.error !== null &&
+    'message' in value.error &&
+    typeof value.error.message === 'string'
   )
 }
 
@@ -85,15 +109,17 @@ export async function tmdbFetch<T>(
   options: TmdbRequestOptions = {},
 ): Promise<T> {
   const { headers: customHeaders, query, ...requestOptions } = options
-  const url = buildTmdbUrl(path, query)
+  const url = buildTmdbApiUrl(path, query)
 
   const headers = new Headers(customHeaders)
 
   headers.set('Accept', 'application/json')
-  headers.set(
-    'Authorization',
-    `Bearer ${getTmdbReadAccessToken()}`,
-  )
+
+  const appCheckToken = await getFirebaseAppCheckToken()
+
+  if (appCheckToken) {
+    headers.set('X-Firebase-AppCheck', appCheckToken)
+  }
 
   let response: Response
 
@@ -108,7 +134,7 @@ export async function tmdbFetch<T>(
     }
 
     throw new TmdbApiError(
-      'Unable to connect to TMDB. Check your internet connection and try again.',
+      'Unable to reach the catalogue service. Check your internet connection and try again.',
       {
         endpoint: url.toString(),
         status: 0,
@@ -119,17 +145,17 @@ export async function tmdbFetch<T>(
   const responseBody = await readJsonResponse(response)
 
   if (!response.ok) {
-    const tmdbError = isTmdbApiErrorResponse(responseBody)
+    const apiError = isCineScopeApiErrorResponse(responseBody)
       ? responseBody
       : undefined
 
     throw new TmdbApiError(
-      tmdbError?.status_message ??
-      `TMDB request failed with status ${response.status}.`,
+      apiError?.error.message ??
+      `The catalogue request failed with status ${response.status}.`,
       {
         endpoint: url.toString(),
+        requestId: apiError?.error.requestId,
         status: response.status,
-        tmdbCode: tmdbError?.status_code,
       },
     )
   }
@@ -146,5 +172,5 @@ export function getTmdbErrorMessage(error: unknown): string {
     return error.message
   }
 
-  return 'An unexpected error occurred while loading TMDB data.'
+  return 'An unexpected error occurred while loading catalogue data.'
 }

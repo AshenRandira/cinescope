@@ -2,6 +2,13 @@
   "firestore": {
     "rules": "firestore.rules"
   },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs22",
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ]
+  },
   "hosting": {
     "public": "dist",
     "ignore": [
@@ -10,6 +17,14 @@
       "**/node_modules/**"
     ],
     "rewrites": [
+      {
+        "source": "/api/tmdb/**",
+        "function": {
+          "functionId": "tmdbApi",
+          "region": "asia-east1",
+          "pinTag": true
+        }
+      },
       {
         "source": "**",
         "destination": "/index.html"
@@ -21,7 +36,7 @@
         "headers": [
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'self'; base-uri 'self'; connect-src 'self' https://api.themoviedb.org https://*.googleapis.com wss://*.firebaseio.com; font-src 'self'; form-action 'self'; frame-ancestors 'none'; frame-src https://www.youtube-nocookie.com; img-src 'self' data: https://image.tmdb.org; manifest-src 'self'; media-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; upgrade-insecure-requests; worker-src 'self' blob:"
+            "value": "default-src 'self'; base-uri 'self'; connect-src 'self' https://*.googleapis.com wss://*.firebaseio.com; font-src 'self'; form-action 'self'; frame-ancestors 'none'; frame-src https://www.youtube-nocookie.com; img-src 'self' data: https://image.tmdb.org; manifest-src 'self'; media-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; upgrade-insecure-requests; worker-src 'self' blob:"
           },
           {
             "key": "Cross-Origin-Opener-Policy",
@@ -50,7 +65,21 @@
           {
             "key": "X-Frame-Options",
             "value": "DENY"
-          },
+          }
+        ]
+      },
+      {
+        "regex": "^[/\\\\](?:index\\.html)?$",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "regex": "^[/\\\\](?:discover|movies|tv|people|search|library|profile|login|register)(?:[/\\\\].*)?$",
+        "headers": [
           {
             "key": "Cache-Control",
             "value": "no-cache, no-store, max-age=0, must-revalidate"
@@ -78,6 +107,10 @@
     "firestore": {
       "host": "127.0.0.1",
       "port": 8080
+    },
+    "functions": {
+      "host": "127.0.0.1",
+      "port": 5001
     },
     "hosting": {
       "host": "127.0.0.1",

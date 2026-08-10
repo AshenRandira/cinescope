@@ -205,8 +205,11 @@ export async function installPublicApiFixtures(
     route.fulfill({ body: '<!doctype html><title>Fixture video</title>', contentType: 'text/html' }),
   )
 
-  await page.route('https://api.themoviedb.org/3/**', async (route) => {
-    const pathname = new URL(route.request().url()).pathname.replace('/3', '')
+  await page.route('**/api/tmdb/**', async (route) => {
+    const pathname = new URL(route.request().url()).pathname.replace(
+      '/api/tmdb',
+      '',
+    )
 
     switch (pathname) {
       case '/search/multi':

@@ -112,10 +112,10 @@ export function TmdbVerificationPage() {
           </h1>
 
           <p className="max-w-2xl text-sm leading-7 text-[var(--color-app-muted)] sm:text-base">
-            This temporary page confirms that environment configuration,
-            Bearer authentication, the typed TMDB client, TanStack Query,
-            shared models, image utilities, and reusable feedback states
-            are working together.
+            This temporary page confirms that the same-origin API
+            boundary, server-side catalogue authentication, typed client,
+            TanStack Query, shared models, image utilities, and reusable
+            feedback states are working together.
           </p>
         </div>
 

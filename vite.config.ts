@@ -4,12 +4,23 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    proxy: {
+      '/api/tmdb': {
+        changeOrigin: true,
+        rewrite: (path) =>
+          `/demo-cinescope/asia-east1/tmdbApi${path}`,
+        target: 'http://127.0.0.1:5001',
+      },
+    },
+  },
   test: {
     coverage: {
       include: [
         'src/features/library/data/library.ts',
         'src/features/discovery/data/archiveRecommendations.ts',
         'src/features/auth/data/auth.ts',
+        'src/lib/tmdb/client.ts',
         'src/features/auth/components/RequireAuth.tsx',
         'src/features/library/components/LibraryControls.tsx',
       ],

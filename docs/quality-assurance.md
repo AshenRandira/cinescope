@@ -2,13 +2,14 @@
 
 ## Automated layers
 
-CineScope uses five deterministic validation layers:
+CineScope uses six deterministic validation layers:
 
 1. Vitest exercises pure data behavior.
 2. React Testing Library and jsdom exercise stable component, form, and routing behavior.
 3. Playwright exercises public journeys against a local production preview in Chromium.
 4. Firebase Emulator Suite exercises authenticated integration journeys and deployed Firestore Security Rules without touching a real project.
 5. Firebase Hosting Emulator exercises the built application shell, SPA rewrites, browser security headers, and cache policy without deploying.
+6. Functions unit tests and a Hosting-to-Functions emulator journey exercise the TMDB route allowlist, validation, server-only authentication, normalized failures, cache controls, and method rejection against a fake local upstream.
 
 The component suite currently covers header-search validation and keyboard selection, library save/watch/favourite/rating controls, authentication-form validation, protected-route behavior, and route focus transfer. Coverage enforcement includes the existing library and recommendation engines plus the authentication helpers, protected route, and library controls.
 
@@ -20,7 +21,7 @@ The browser suite covers these public journeys:
 - media-dialog open/close with focus restoration;
 - unknown and malformed deep-route handling.
 
-`e2e/fixtures.ts` intercepts every TMDB request used by these journeys. `.env.e2e` contains only a fake token and deliberately leaves Firebase unconfigured, so CI does not depend on real credentials, accounts, or live third-party data.
+`e2e/fixtures.ts` intercepts every same-origin catalogue request used by these journeys. `.env.e2e` deliberately leaves Firebase and App Check unconfigured, so CI does not depend on real credentials, accounts, or live third-party data.
 
 The emulator layer uses the fixed `demo-cinescope` project ID and non-secret values from `.env.emulator`. It covers:
 
@@ -36,7 +37,9 @@ The emulator layer uses the fixed `demo-cinescope` project ID and non-secret val
 
 The suite clears both emulators before each browser journey and intercepts TMDB with deterministic fixtures. It never uses a personal Firebase account, Firebase credentials, or live catalogue data.
 
-The Hosting layer builds in `preview` mode under the fixed `demo-cinescope` project ID. It asserts that `/` and `/movies/550` return the same application shell, document responses carry the reviewed CSP and security headers without cache persistence, and Vite's hashed JavaScript carries the one-year immutable policy.
+The Hosting layer builds in `preview` mode under the fixed `demo-cinescope` project ID. It asserts that `/` and `/movies/550` return the same application shell, document responses carry the reviewed CSP without direct TMDB connectivity, and Vite's hashed JavaScript carries the one-year immutable policy.
+
+The API layer supplies an in-process fixture token to the Functions emulator and a fake upstream HTTP server. It proves the token is attached only to the upstream server request, verifies the Hosting rewrite and canonical cache behavior, and rejects unsupported routes, parameters, and methods. The client-security scan also fails if browser sources, environment templates, workflows, or built assets contain the former Vite token variable or the direct TMDB API origin.
 
 ## Commands
 
@@ -50,11 +53,15 @@ Run the complete phase gate:
 
 ```powershell
 npm.cmd run test:coverage
+npm.cmd run test:functions
 npm.cmd run lint
 npm.cmd run build
+npm.cmd run build:functions
 npm.cmd run check:bundle
+npm.cmd run check:client-security
 npm.cmd run check:hosting
 npm.cmd run test:hosting
+npm.cmd run test:api
 npm.cmd run test:e2e
 npm.cmd run test:emulators
 git diff --check origin/develop...HEAD
