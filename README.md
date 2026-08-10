@@ -10,6 +10,7 @@ Requirements:
 - A TMDB API read access token
 - A Firebase web app with Email/Password Authentication enabled
 - Cloud Firestore when account-backed library sync is required
+- Java 21 or newer when running Firebase emulator validation
 
 Create `.env.local` from `.env.example` and replace every placeholder:
 
@@ -54,6 +55,7 @@ npm.cmd run lint
 npm.cmd run build
 npm.cmd run check:bundle
 npm.cmd run test:e2e
+npm.cmd run test:emulators
 git diff --check origin/develop...HEAD
 ```
 
@@ -61,8 +63,10 @@ The lint command includes JSX accessibility rules and treats warnings as failure
 
 The bundle check reads the generated `dist/index.html` and fails if the initial JavaScript and CSS payload exceeds the recorded raw or gzip budgets. Run it after the production build.
 
-The Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. That mode uses a non-secret placeholder TMDB token, disables Firebase, and intercepts every external catalogue response; it never uses a real account or production API data. See [docs/quality-assurance.md](docs/quality-assurance.md) for the current test matrix and the remaining human checks.
+The public Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. That mode uses a non-secret placeholder TMDB token, disables Firebase, and intercepts every external catalogue response.
+
+The emulator command builds in the committed `emulator` mode, starts local Authentication and Firestore emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys. Its configuration contains only non-secret demo values and cannot access a real Firebase project. The first local run downloads the Firestore emulator runtime. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
 
 ## Continuous integration
 
-The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24 with the committed npm lockfile, then runs unit tests, coverage thresholds, accessibility-aware lint, the production build, the initial bundle budget, and deterministic Chromium journeys without requiring Firebase or TMDB secrets. Failed browser runs retain traces and screenshots for seven days.
+The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24, Java 21, and the committed npm lockfile, then runs unit tests, coverage thresholds, accessibility-aware lint, the production build, the initial bundle budget, public Chromium journeys, Firestore rules tests, and authenticated emulator journeys without Firebase or TMDB secrets. Failed browser runs retain traces and screenshots for seven days.

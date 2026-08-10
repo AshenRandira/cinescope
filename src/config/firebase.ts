@@ -6,6 +6,7 @@ import type { Auth } from 'firebase/auth'
 import type { Firestore } from 'firebase/firestore'
 
 const FIREBASE_APP_NAME = 'cinescope-web'
+const isEmulatorMode = import.meta.env.MODE === 'emulator'
 
 export const FIREBASE_REQUIRED_ENV_NAMES = [
   'VITE_FIREBASE_API_KEY',
@@ -35,6 +36,14 @@ let appPromise: Promise<FirebaseApp | null> | null = null
 let authPromise: Promise<Auth | null> | null = null
 let firestorePromise: Promise<Firestore | null> | null =
   null
+let isAuthEmulatorConnected = false
+let isFirestoreEmulatorConnected = false
+
+function getOptionalEnvironmentValue(
+  value: string | undefined,
+): string {
+  return value?.trim() ?? ''
+}
 
 function getFirebaseOptions(): FirebaseOptions {
   return {
@@ -71,6 +80,23 @@ export async function getFirebaseAuth(): Promise<Auth | null> {
     if (!app) return null
 
     const auth = firebaseAuth.getAuth(app)
+
+    const authEmulatorUrl = getOptionalEnvironmentValue(
+      import.meta.env.VITE_FIREBASE_AUTH_EMULATOR_URL,
+    )
+
+    if (
+      isEmulatorMode &&
+      authEmulatorUrl &&
+      !isAuthEmulatorConnected
+    ) {
+      firebaseAuth.connectAuthEmulator(
+        auth,
+        authEmulatorUrl,
+        { disableWarnings: true },
+      )
+      isAuthEmulatorConnected = true
+    }
 
     await firebaseAuth.setPersistence(
       auth,
@@ -128,9 +154,36 @@ export async function getFirebaseFirestore(): Promise<Firestore | null> {
         import('firebase/firestore'),
       ])
 
-    return app
-      ? firebaseFirestore.getFirestore(app)
-      : null
+    if (!app) return null
+
+    const firestore =
+      firebaseFirestore.getFirestore(app)
+    const firestoreEmulatorHost =
+      getOptionalEnvironmentValue(
+        import.meta.env.VITE_FIRESTORE_EMULATOR_HOST,
+      )
+    const firestoreEmulatorPort = Number(
+      getOptionalEnvironmentValue(
+        import.meta.env.VITE_FIRESTORE_EMULATOR_PORT,
+      ),
+    )
+
+    if (
+      isEmulatorMode &&
+      firestoreEmulatorHost &&
+      Number.isInteger(firestoreEmulatorPort) &&
+      firestoreEmulatorPort > 0 &&
+      !isFirestoreEmulatorConnected
+    ) {
+      firebaseFirestore.connectFirestoreEmulator(
+        firestore,
+        firestoreEmulatorHost,
+        firestoreEmulatorPort,
+      )
+      isFirestoreEmulatorConnected = true
+    }
+
+    return firestore
   })()
 
   return firestorePromise

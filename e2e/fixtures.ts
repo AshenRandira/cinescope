@@ -170,18 +170,23 @@ function fulfillJson(route: Route, json: unknown): Promise<void> {
   return route.fulfill({ json })
 }
 
-export async function installPublicApiFixtures(page: Page): Promise<void> {
+export async function installPublicApiFixtures(
+  page: Page,
+  options: { clearStorage?: boolean } = {},
+): Promise<void> {
   await page.emulateMedia({ reducedMotion: 'reduce' })
 
-  await page.addInitScript(() => {
-    const browserGlobal = globalThis as typeof globalThis & {
-      localStorage: { clear: () => void }
-      sessionStorage: { clear: () => void }
-    }
+  if (options.clearStorage ?? true) {
+    await page.addInitScript(() => {
+      const browserGlobal = globalThis as typeof globalThis & {
+        localStorage: { clear: () => void }
+        sessionStorage: { clear: () => void }
+      }
 
-    browserGlobal.localStorage.clear()
-    browserGlobal.sessionStorage.clear()
-  })
+      browserGlobal.localStorage.clear()
+      browserGlobal.sessionStorage.clear()
+    })
+  }
 
   await page.route(/\.(?:woff2?|ttf|otf)(?:\?.*)?$/, (route) =>
     route.abort(),

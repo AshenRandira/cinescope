@@ -22,6 +22,9 @@
   "include": [
     "vite.config.ts",
     "playwright.config.ts",
-    "e2e/**/*.ts"
+    "playwright.emulator.config.ts",
+    "vitest.emulator.config.ts",
+    "e2e/**/*.ts",
+    "test/**/*.ts"
   ]
 }
