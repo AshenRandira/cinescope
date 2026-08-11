@@ -8,10 +8,11 @@ Email verification uses Firebase's verification-email flow. Members can send or 
 
 ## Personal data export
 
-The profile can download a schema-versioned JSON snapshot. Version 1 contains:
+The profile can download a schema-versioned JSON snapshot. Version 2 contains:
 
 - Firebase profile metadata already visible to the member;
 - the current device's reconciled library records;
+- bounded TV episode progress and the current resume pointer when present;
 - the current library synchronization status;
 - an export timestamp and product/schema identifiers.
 

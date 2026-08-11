@@ -31,6 +31,7 @@ function createRecord(
     releaseYear: '2026',
     savedAt: updatedAt,
     title: `Film ${id}`,
+    tvProgress: null,
     updatedAt,
     userRating: null,
   }

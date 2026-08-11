@@ -11,29 +11,32 @@ CineScope uses six deterministic validation layers:
 5. Firebase Hosting Emulator exercises the built application shell, SPA rewrites, browser security headers, and cache policy without deploying.
 6. Functions unit tests and local Functions emulator journeys exercise the TMDB route allowlist, server-only authentication, account-deletion identity and recent-login checks, recursive data cleanup ordering, normalized failures, cache controls, and method rejection.
 
-The component suite currently covers header-search validation and keyboard selection, library save/watch/favourite/rating controls, authentication-form validation, protected-route behavior, route focus transfer, verification controls, password change, account export, and explicit destructive confirmation. Coverage enforcement includes the existing library and recommendation engines plus the authentication helpers, protected route, library controls, and account export contract.
+The component suite currently covers header-search validation and keyboard selection, library save/watch/favourite/rating controls, episode-progress controls and rollups, authentication-form validation, protected-route behavior, route focus transfer, verification controls, password change, account export, and explicit destructive confirmation. Coverage enforcement includes the existing library, TV progress, and recommendation engines plus the authentication helpers, protected route, library controls, and account export contract.
 
 The browser suite covers these public journeys:
 
 - search results to a movie record;
 - header keyboard suggestion to a movie record;
 - television register to series, season, episode, and back;
+- episode checkpoint to season rollup, reload, continue-watching shelf, and next episode;
 - media-dialog open/close with focus restoration;
 - unknown and malformed deep-route handling.
 
 `e2e/fixtures.ts` intercepts every same-origin catalogue request used by these journeys. `.env.e2e` deliberately leaves Firebase and App Check unconfigured, so CI does not depend on real credentials, accounts, or live third-party data.
 
-The emulator layer uses the fixed `demo-cinescope` project ID and non-secret values from `.env.emulator`. It covers:
+The emulator layer uses the fixed `demo-cinescope` project ID and non-secret values from `.env.emulator`. Authentication runs on local port `9599` to avoid Windows excluded-port ranges that commonly include Firebase's conventional `9099`. It covers:
 
 - owner create, query, update, read, and delete access;
 - unauthenticated and cross-user denial;
 - malformed record rejection;
+- legacy record compatibility and bounded TV-progress validation;
 - guest-save migration after account registration;
 - protected-route return after sign-in;
 - authenticated save, watch, favourite, and rating synchronization;
 - cloud restoration after the member-local cache is cleared and the page reloads;
 - offline local edits followed by cloud reconciliation on reconnect;
 - synchronized cloud deletion;
+- authenticated TV-progress synchronization and continue-watching restoration;
 - current-password reauthentication and password change;
 - rejection of the previous password;
 - callable deletion of the Firebase Auth user and nested Firestore archive;

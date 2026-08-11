@@ -5,6 +5,7 @@ import {
 } from 'vitest'
 
 import {
+  getContinueWatchingRecords,
   getLibraryPendingDeletionStorageKey,
   getLibraryRecordKey,
   getLibraryStorageKey,
@@ -29,6 +30,7 @@ const baseRecord: LibraryRecord = {
   releaseYear: '2016',
   savedAt: '2026-08-08T10:00:00.000Z',
   title: 'Arrival',
+  tvProgress: null,
   updatedAt: '2026-08-08T10:00:00.000Z',
   userRating: null,
 }
@@ -85,6 +87,35 @@ describe('parseLibraryRecord', () => {
       title: 'Arrival',
       userRating: 8,
     })
+  })
+
+  it('keeps legacy records compatible and parses valid TV progress', () => {
+    const { tvProgress: _legacyProgress, ...legacyRecord } =
+      baseRecord
+    const parsedLegacyRecord = parseLibraryRecord(
+      legacyRecord,
+    )
+    const parsedTvRecord = parseLibraryRecord({
+      ...baseRecord,
+      id: 1396,
+      mediaType: 'tv',
+      title: 'Fixture Series',
+      tvProgress: {
+        resumeEpisode: {
+          episodeNumber: 2,
+          name: 'Second episode',
+          seasonNumber: 1,
+          stillPath: null,
+        },
+        updatedAt: '2026-08-11T09:00:00.000Z',
+        watchedEpisodeKeys: ['1:1'],
+      },
+    })
+
+    expect(parsedLegacyRecord?.tvProgress).toBeNull()
+    expect(
+      parsedTvRecord?.tvProgress?.resumeEpisode?.episodeNumber,
+    ).toBe(2)
   })
 
   it.each([
@@ -177,6 +208,43 @@ describe('library ordering and reconciliation', () => {
         [newer, tiedSecond],
       ),
     ).toEqual([newer, tiedFirst])
+  })
+
+  it('returns unfinished TV records in recent progress order', () => {
+    const olderSeries = createRecord({
+      id: 10,
+      mediaType: 'tv',
+      title: 'Older series',
+      tvProgress: {
+        resumeEpisode: null,
+        updatedAt: '2026-08-11T08:00:00.000Z',
+        watchedEpisodeKeys: ['1:1'],
+      },
+    })
+    const recentSeries = createRecord({
+      id: 11,
+      mediaType: 'tv',
+      title: 'Recent series',
+      tvProgress: {
+        resumeEpisode: null,
+        updatedAt: '2026-08-11T10:00:00.000Z',
+        watchedEpisodeKeys: ['1:1', '1:2'],
+      },
+    })
+    const completedSeries = createRecord({
+      ...recentSeries,
+      id: 12,
+      isWatched: true,
+    })
+
+    expect(
+      getContinueWatchingRecords([
+        olderSeries,
+        baseRecord,
+        completedSeries,
+        recentSeries,
+      ]).map((record) => record.id),
+    ).toEqual([11, 10])
   })
 })
 

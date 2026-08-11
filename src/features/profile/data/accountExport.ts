@@ -4,7 +4,7 @@ import type {
   LibrarySyncStatus,
 } from '../../library/data/library'
 
-export const ACCOUNT_EXPORT_SCHEMA_VERSION = 1
+export const ACCOUNT_EXPORT_SCHEMA_VERSION = 2
 
 export type CineScopeAccountExport = {
   account: AuthUser

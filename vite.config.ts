@@ -18,6 +18,7 @@ export default defineConfig({
     coverage: {
       include: [
         'src/features/library/data/library.ts',
+        'src/features/library/data/tvProgress.ts',
         'src/features/discovery/data/archiveRecommendations.ts',
         'src/features/auth/data/auth.ts',
         'src/lib/tmdb/client.ts',

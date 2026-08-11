@@ -101,8 +101,8 @@
 
 .tv-season-hero__facts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  max-width: 52rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-width: 60rem;
   margin: 2.5rem 0 0;
   border-block: 1px solid var(--color-line);
 }
@@ -226,6 +226,7 @@
 }
 
 .tv-episode-card {
+  position: relative;
   min-width: 0;
   scroll-margin-top: 6rem;
   background: var(--color-ink-950);
@@ -303,6 +304,14 @@
 .tv-episode-card__copy {
   min-width: 0;
   padding: clamp(1.5rem, 4vw, 4rem);
+  padding-bottom: clamp(6.5rem, 9vw, 8rem);
+}
+
+.tv-episode-card__progress {
+  position: absolute;
+  right: clamp(1.5rem, 4vw, 4rem);
+  bottom: clamp(1.5rem, 3vw, 3rem);
+  z-index: 2;
 }
 
 .tv-episode-card__heading {
@@ -598,7 +607,12 @@
   }
 
   .tv-episode-card__copy {
-    padding: 1.25rem;
+    padding: 1.25rem 1.25rem 6rem;
+  }
+
+  .tv-episode-card__progress {
+    right: 1.25rem;
+    bottom: 1.25rem;
   }
 
   .tv-episode-card__heading {

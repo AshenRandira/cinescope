@@ -29,6 +29,7 @@ const baseLibraryRecord: LibraryRecord = {
   releaseYear: '2020',
   savedAt: '2026-08-08T10:00:00.000Z',
   title: 'Library record',
+  tvProgress: null,
   updatedAt: '2026-08-08T10:00:00.000Z',
   userRating: null,
 }

@@ -90,12 +90,22 @@ const episodeSummary = {
   vote_count: 42,
 }
 
+const secondEpisodeSummary = {
+  ...episodeSummary,
+  air_date: '2024-01-17',
+  episode_number: 2,
+  id: 1402,
+  name: 'The Second Transmission',
+  overview: 'The next frame in the deterministic season fixture.',
+  production_code: 'FIX-102',
+}
+
 const seasonSummary = {
   air_date: '2024-01-10',
-  episode_count: 1,
+  episode_count: 2,
   id: 1400,
   name: 'Season 1',
-  overview: 'A deterministic single-episode season.',
+  overview: 'A deterministic two-episode season.',
   poster_path: null,
   season_number: 1,
   vote_average: 8,
@@ -110,11 +120,11 @@ const tvDetails = {
   homepage: '',
   in_production: false,
   languages: ['en'],
-  last_air_date: '2024-01-10',
-  last_episode_to_air: episodeSummary,
+  last_air_date: '2024-01-17',
+  last_episode_to_air: secondEpisodeSummary,
   networks: [],
   next_episode_to_air: null,
-  number_of_episodes: 1,
+  number_of_episodes: 2,
   number_of_seasons: 1,
   production_companies: [],
   production_countries: [{ iso_3166_1: 'US', name: 'United States' }],
@@ -136,7 +146,7 @@ const seasonDetails = {
   _id: 'fixture-season',
   air_date: seasonSummary.air_date,
   credits: { cast: [], crew: [], id: 1400 },
-  episodes: [episodeSummary],
+  episodes: [episodeSummary, secondEpisodeSummary],
   id: seasonSummary.id,
   name: seasonSummary.name,
   overview: seasonSummary.overview,
@@ -150,6 +160,13 @@ const episodeDetails = {
   credits: { cast: [], crew: [], guest_stars: [], id: 1401 },
   images: { id: 1401, stills: [] },
   videos: { id: 1401, results: [] },
+}
+
+const secondEpisodeDetails = {
+  ...secondEpisodeSummary,
+  credits: { cast: [], crew: [], guest_stars: [], id: 1402 },
+  images: { id: 1402, stills: [] },
+  videos: { id: 1402, results: [] },
 }
 
 const searchResponse = {
@@ -180,11 +197,23 @@ export async function installPublicApiFixtures(
     await page.addInitScript(() => {
       const browserGlobal = globalThis as typeof globalThis & {
         localStorage: { clear: () => void }
-        sessionStorage: { clear: () => void }
+        sessionStorage: {
+          clear: () => void
+          getItem: (key: string) => string | null
+          setItem: (key: string, value: string) => void
+        }
+      }
+      const resetKey = 'cinescope.e2e-storage-reset'
+
+      if (
+        browserGlobal.sessionStorage.getItem(resetKey)
+      ) {
+        return
       }
 
       browserGlobal.localStorage.clear()
       browserGlobal.sessionStorage.clear()
+      browserGlobal.sessionStorage.setItem(resetKey, 'true')
     })
   }
 
@@ -238,6 +267,9 @@ export async function installPublicApiFixtures(
         return
       case '/tv/1399/season/1/episode/1':
         await fulfillJson(route, episodeDetails)
+        return
+      case '/tv/1399/season/1/episode/2':
+        await fulfillJson(route, secondEpisodeDetails)
         return
       default:
         await route.fulfill({

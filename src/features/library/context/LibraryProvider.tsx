@@ -29,6 +29,7 @@ import {
   type LibraryRecordPatch,
   type LibrarySyncStatus,
 } from '../data/library'
+import { areTvProgressEqual } from '../data/tvProgress'
 
 import {
   LibraryContext,
@@ -239,6 +240,10 @@ function areLibraryRecordsEqual(
     first.releaseYear === second.releaseYear &&
     first.savedAt === second.savedAt &&
     first.title === second.title &&
+    areTvProgressEqual(
+      first.tvProgress,
+      second.tvProgress,
+    ) &&
     first.updatedAt === second.updatedAt &&
     first.userRating === second.userRating
   )
@@ -270,10 +275,16 @@ function LibraryStore({
 
   const commitRecords = useCallback(
     (nextRecords: LibraryRecord[]) => {
+      if (isAccountDataClearedRef.current) {
+        window.localStorage.removeItem(storageKey)
+      } else {
+        saveLibraryRecords(storageKey, nextRecords)
+      }
+
       recordsRef.current = nextRecords
       setRecords(nextRecords)
     },
-    [],
+    [storageKey],
   )
 
   const markCloudError = useCallback(
@@ -311,15 +322,6 @@ function LibraryStore({
     },
     [markCloudError],
   )
-
-  useEffect(() => {
-    if (isAccountDataClearedRef.current) {
-      window.localStorage.removeItem(storageKey)
-      return
-    }
-
-    saveLibraryRecords(storageKey, records)
-  }, [records, storageKey])
 
   useEffect(() => {
     function handleStorage(event: StorageEvent) {
@@ -551,6 +553,10 @@ function LibraryStore({
           existingRecord?.isWatched ??
           false,
         savedAt: existingRecord?.savedAt ?? timestamp,
+        tvProgress:
+          'tvProgress' in patch
+            ? patch.tvProgress ?? null
+            : existingRecord?.tvProgress ?? null,
         updatedAt: timestamp,
         userRating:
           'userRating' in patch

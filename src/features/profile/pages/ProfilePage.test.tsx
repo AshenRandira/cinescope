@@ -196,7 +196,7 @@ describe('profile security controls', () => {
     expect(downloadAccountExport).toHaveBeenCalledWith(
       expect.objectContaining({
         account: authUser,
-        schemaVersion: 1,
+        schemaVersion: 2,
       }),
     )
   })

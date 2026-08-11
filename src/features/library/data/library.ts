@@ -1,3 +1,8 @@
+import {
+  parseTvProgress,
+  type TvProgress,
+} from './tvProgress'
+
 export type LibraryMediaType = 'movie' | 'tv'
 
 export type LibraryCandidate = {
@@ -14,6 +19,7 @@ export type LibraryRecord = LibraryCandidate & {
   isFavorite: boolean
   isWatched: boolean
   savedAt: string
+  tvProgress: TvProgress | null
   updatedAt: string
   userRating: number | null
 }
@@ -21,7 +27,10 @@ export type LibraryRecord = LibraryCandidate & {
 export type LibraryRecordPatch = Partial<
   Pick<
     LibraryRecord,
-    'isFavorite' | 'isWatched' | 'userRating'
+    | 'isFavorite'
+    | 'isWatched'
+    | 'tvProgress'
+    | 'userRating'
   >
 >
 
@@ -136,9 +145,31 @@ export function parseLibraryRecord(
     ),
     savedAt: value.savedAt,
     title: value.title.trim(),
+    tvProgress:
+      value.mediaType === 'tv'
+        ? parseTvProgress(value.tvProgress)
+        : null,
     updatedAt: value.updatedAt,
     userRating,
   }
+}
+
+export function getContinueWatchingRecords(
+  records: LibraryRecord[],
+): LibraryRecord[] {
+  return records
+    .filter(
+      (record) =>
+        record.mediaType === 'tv' &&
+        !record.isWatched &&
+        record.tvProgress !== null &&
+        record.tvProgress.watchedEpisodeKeys.length > 0,
+    )
+    .sort((first, second) =>
+      second.tvProgress!.updatedAt.localeCompare(
+        first.tvProgress!.updatedAt,
+      ),
+    )
 }
 
 export function parseLibraryRecords(

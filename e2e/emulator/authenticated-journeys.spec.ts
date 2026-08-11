@@ -7,7 +7,7 @@ import {
 import { installPublicApiFixtures } from '../fixtures.js'
 
 const PROJECT_ID = 'demo-cinescope'
-const AUTH_EMULATOR_URL = 'http://127.0.0.1:9099'
+const AUTH_EMULATOR_URL = 'http://127.0.0.1:9599'
 const FIRESTORE_EMULATOR_URL = 'http://127.0.0.1:8080'
 const FIREBASE_API_KEY = 'demo-api-key'
 const TEST_PASSWORD = 'EmulatorPass123!'
@@ -17,14 +17,16 @@ type AuthSession = {
   localId: string
 }
 
-type FirestoreFields = Record<
-  string,
-  {
-    booleanValue?: boolean
-    integerValue?: string
-    stringValue?: string
-  }
->
+type FirestoreField = {
+  arrayValue?: { values?: FirestoreField[] }
+  booleanValue?: boolean
+  integerValue?: string
+  mapValue?: { fields?: FirestoreFields }
+  nullValue?: null
+  stringValue?: string
+}
+
+type FirestoreFields = Record<string, FirestoreField>
 
 async function resetFirebaseEmulators(
   request: APIRequestContext,
@@ -77,19 +79,23 @@ async function submitAuthRequest(
   return (await response.json()) as AuthSession
 }
 
-function getLibraryDocumentUrl(userId: string): string {
-  return `${FIRESTORE_EMULATOR_URL}/v1/projects/${PROJECT_ID}/databases/(default)/documents/users/${userId}/library/${encodeURIComponent('movie:550')}`
+function getLibraryDocumentUrl(
+  userId: string,
+  recordKey = 'movie:550',
+): string {
+  return `${FIRESTORE_EMULATOR_URL}/v1/projects/${PROJECT_ID}/databases/(default)/documents/users/${userId}/library/${encodeURIComponent(recordKey)}`
 }
 
 async function readLibraryDocument(
   request: APIRequestContext,
   session: AuthSession,
+  recordKey = 'movie:550',
 ): Promise<{
   fields: FirestoreFields | null
   status: number
 }> {
   const response = await request.get(
-    getLibraryDocumentUrl(session.localId),
+    getLibraryDocumentUrl(session.localId, recordKey),
     {
       headers: {
         Authorization: `Bearer ${session.idToken}`,
@@ -115,12 +121,17 @@ async function expectCloudRecord(
   request: APIRequestContext,
   session: AuthSession,
   predicate: (fields: FirestoreFields) => boolean,
+  recordKey = 'movie:550',
 ): Promise<void> {
   await expect
     .poll(
       async () => {
         const { fields, status } =
-          await readLibraryDocument(request, session)
+          await readLibraryDocument(
+            request,
+            session,
+            recordKey,
+          )
 
         return status === 200 && fields
           ? predicate(fields)
@@ -339,6 +350,72 @@ test('returns to a protected route and preserves signed-in library edits through
       { timeout: 10_000 },
     )
     .toBe(404)
+})
+
+test('syncs TV episode progress and restores the continue-watching checkpoint', async ({
+  page,
+  request,
+}) => {
+  const email = 'tv-progress@example.test'
+  const session = await submitAuthRequest(
+    request,
+    'signUp',
+    email,
+    'Progress Member',
+  )
+
+  await page.goto('/login', {
+    waitUntil: 'domcontentloaded',
+  })
+  await page.getByLabel('Email address').fill(email)
+  await page.getByLabel('Password').fill(TEST_PASSWORD)
+  await page
+    .getByRole('button', { name: 'Sign in to CineScope' })
+    .click()
+  await expect(page).toHaveURL(/\/profile$/)
+
+  await page.goto('/tv/1399/season/1', {
+    waitUntil: 'domcontentloaded',
+  })
+  await page
+    .getByRole('button', {
+      name: 'Record S01E01 watched',
+    })
+    .click()
+
+  await expectCloudRecord(
+    request,
+    session,
+    (fields) => {
+      const progress =
+        fields.tvProgress?.mapValue?.fields
+      const watchedEpisodeKeys =
+        progress?.watchedEpisodeKeys?.arrayValue?.values
+
+      return (
+        watchedEpisodeKeys?.[0]?.stringValue === '1:1' &&
+        progress?.resumeEpisode?.mapValue?.fields
+          ?.episodeNumber?.integerValue === '2'
+      )
+    },
+    'tv:1399',
+  )
+
+  await page.reload({ waitUntil: 'domcontentloaded' })
+  await expect(
+    page.getByText(
+      '1 of 2 episodes watched — 50% complete.',
+    ),
+  ).toBeVisible()
+
+  await page.goto('/library', {
+    waitUntil: 'domcontentloaded',
+  })
+  await expect(
+    page
+      .getByRole('link')
+      .filter({ hasText: 'The Second Transmission' }),
+  ).toBeVisible()
 })
 
 test('changes a password and permanently deletes account data behind fresh credentials', async ({

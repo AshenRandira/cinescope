@@ -36,6 +36,23 @@ const validRecord = {
   userRating: null,
 }
 
+const validTvProgressRecord = {
+  ...validRecord,
+  id: 1396,
+  mediaType: 'tv',
+  title: 'Fixture Series',
+  tvProgress: {
+    resumeEpisode: {
+      episodeNumber: 2,
+      name: 'The second transmission',
+      seasonNumber: 1,
+      stillPath: null,
+    },
+    updatedAt: '2026-08-11T08:00:00.000Z',
+    watchedEpisodeKeys: ['1:1'],
+  },
+}
+
 function getFirestoreEmulatorAddress(): {
   host: string
   port: number
@@ -125,6 +142,28 @@ describe('Firestore library security rules', () => {
     ).toBe(false)
   })
 
+  test('accepts bounded TV progress while preserving legacy records without it', async () => {
+    const ownerFirestore = testEnvironment
+      .authenticatedContext(OWNER_ID)
+      .firestore()
+
+    await assertSucceeds(
+      setDoc(
+        doc(
+          ownerFirestore,
+          `users/${OWNER_ID}/library/tv:1396`,
+        ),
+        validTvProgressRecord,
+      ),
+    )
+    await assertSucceeds(
+      setDoc(
+        doc(ownerFirestore, RECORD_PATH),
+        validRecord,
+      ),
+    )
+  })
+
   test('denies every unauthenticated library operation', async () => {
     const anonymousFirestore = testEnvironment
       .unauthenticatedContext()
@@ -187,6 +226,60 @@ describe('Firestore library security rules', () => {
 
     await assertFails(
       setDoc(doc(ownerFirestore, RECORD_PATH), record),
+    )
+  })
+
+  test.each([
+    [
+      'progress on a movie record',
+      { ...validTvProgressRecord, mediaType: 'movie' },
+    ],
+    [
+      'an empty watched-episode list',
+      {
+        ...validTvProgressRecord,
+        tvProgress: {
+          ...validTvProgressRecord.tvProgress,
+          watchedEpisodeKeys: [],
+        },
+      },
+    ],
+    [
+      'an unexpected progress field',
+      {
+        ...validTvProgressRecord,
+        tvProgress: {
+          ...validTvProgressRecord.tvProgress,
+          injected: true,
+        },
+      },
+    ],
+    [
+      'an oversized watched-episode list',
+      {
+        ...validTvProgressRecord,
+        tvProgress: {
+          ...validTvProgressRecord.tvProgress,
+          watchedEpisodeKeys: Array.from(
+            { length: 2_001 },
+            (_value, index) => `1:${index + 1}`,
+          ),
+        },
+      },
+    ],
+  ])('rejects %s', async (_description, record) => {
+    const ownerFirestore = testEnvironment
+      .authenticatedContext(OWNER_ID)
+      .firestore()
+
+    await assertFails(
+      setDoc(
+        doc(
+          ownerFirestore,
+          `users/${OWNER_ID}/library/tv:1396`,
+        ),
+        record,
+      ),
     )
   })
 })

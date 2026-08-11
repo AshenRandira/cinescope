@@ -8,14 +8,16 @@ import {
 import {
   getTmdbBackdropUrl,
   getTmdbImageSrcSet,
+  getTmdbImageUrl,
   getTmdbPosterUrl,
 } from '../../../lib/tmdb/image'
 
 import { LibraryControls } from '../components/LibraryControls'
-import type {
-  LibraryRecord,
+import {
+  getContinueWatchingRecords,
+  getLibrarySyncCopy,
+  type LibraryRecord,
 } from '../data/library'
-import { getLibrarySyncCopy } from '../data/library'
 import { useLibrary } from '../hooks/useLibrary'
 
 import './LibraryPage.css'
@@ -247,6 +249,114 @@ function LibraryCard({
   )
 }
 
+function ContinueWatchingShelf({
+  records,
+}: {
+  records: LibraryRecord[]
+}) {
+  const continueRecords =
+    getContinueWatchingRecords(records).slice(0, 4)
+
+  if (continueRecords.length === 0) return null
+
+  return (
+    <section
+      className="continue-watching"
+      aria-labelledby="continue-watching-heading"
+    >
+      <header className="continue-watching__heading">
+        <div>
+          <p className="archive-label">
+            Active transmissions
+          </p>
+          <h2
+            className="font-display"
+            id="continue-watching-heading"
+          >
+            Continue watching.
+          </h2>
+        </div>
+        <p>
+          Episode checkpoints stay local first and follow
+          your account when archive sync is active.
+        </p>
+      </header>
+
+      <div className="continue-watching__grid">
+        {continueRecords.map((record) => {
+          const progress = record.tvProgress!
+          const resumeEpisode = progress.resumeEpisode
+          const episodeStillUrl = getTmdbImageUrl(
+            resumeEpisode?.stillPath ?? null,
+            'w780',
+          )
+          const artworkUrl =
+            episodeStillUrl ??
+            getTmdbBackdropUrl(record.backdropPath, 'w780') ??
+            getTmdbPosterUrl(record.posterPath, 'w500')
+          const target = resumeEpisode
+            ? `/tv/${record.id}/season/${resumeEpisode.seasonNumber}/episode/${resumeEpisode.episodeNumber}`
+            : `/tv/${record.id}`
+          const episodeCode = resumeEpisode
+            ? `S${String(
+                resumeEpisode.seasonNumber,
+              ).padStart(2, '0')}E${String(
+                resumeEpisode.episodeNumber,
+              ).padStart(2, '0')}`
+            : 'Series checkpoint'
+
+          return (
+            <article
+              className="continue-watching__card"
+              key={record.id}
+            >
+              <Link to={target}>
+                <div className="continue-watching__artwork">
+                  {artworkUrl ? (
+                    <img
+                      alt=""
+                      decoding="async"
+                      loading="lazy"
+                      src={artworkUrl}
+                    />
+                  ) : (
+                    <span aria-hidden="true">
+                      {record.title
+                        .slice(0, 2)
+                        .toUpperCase()}
+                    </span>
+                  )}
+                  <span>{episodeCode}</span>
+                </div>
+                <div className="continue-watching__copy">
+                  <p>{record.title}</p>
+                  <h3 className="font-display">
+                    {resumeEpisode?.name ??
+                      'Return to the series record'}
+                  </h3>
+                  <small>
+                    {progress.watchedEpisodeKeys.length}{' '}
+                    {progress.watchedEpisodeKeys.length === 1
+                      ? 'episode'
+                      : 'episodes'}{' '}
+                    watched
+                  </small>
+                  <span>
+                    {resumeEpisode
+                      ? 'Open next episode'
+                      : 'Open series record'}{' '}
+                    <ArrowRight aria-hidden="true" />
+                  </span>
+                </div>
+              </Link>
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
 export function LibraryPage() {
   const [searchParams, setSearchParams] =
     useSearchParams()
@@ -327,6 +437,8 @@ export function LibraryPage() {
           </div>
         </div>
       </header>
+
+      <ContinueWatchingShelf records={records} />
 
       <section
         className="library-index"

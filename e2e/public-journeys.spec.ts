@@ -73,6 +73,62 @@ test('navigates from television to a season and episode, then back', async ({ pa
   await expect(page).toHaveURL(/\/tv\/1399\/season\/1$/)
 })
 
+test('records episode progress and resumes the next transmission from the library', async ({ page }) => {
+  await page.goto('/tv/1399/season/1', {
+    waitUntil: 'domcontentloaded',
+  })
+
+  await expect(
+    page.getByText(
+      '0 of 2 episodes watched — 0% complete.',
+    ),
+  ).toBeVisible()
+
+  await page
+    .getByRole('button', {
+      name: 'Record S01E01 watched',
+    })
+    .click()
+
+  await expect(
+    page.getByRole('button', {
+      name: 'Mark S01E01 unwatched',
+    }),
+  ).toHaveAttribute('aria-pressed', 'true')
+  await expect(
+    page.getByText(
+      '1 of 2 episodes watched — 50% complete.',
+    ),
+  ).toBeVisible()
+
+  await page.goto('/library', {
+    waitUntil: 'domcontentloaded',
+  })
+  await expect(
+    page.getByRole('heading', {
+      name: 'Continue watching.',
+    }),
+  ).toBeVisible()
+
+  await page.reload({ waitUntil: 'domcontentloaded' })
+  const resumeLink = page
+    .getByRole('link')
+    .filter({ hasText: 'The Second Transmission' })
+
+  await expect(resumeLink).toBeVisible()
+  await resumeLink.click()
+
+  await expect(page).toHaveURL(
+    /\/tv\/1399\/season\/1\/episode\/2$/,
+  )
+  await expect(
+    page.getByRole('heading', {
+      level: 1,
+      name: 'The Second Transmission',
+    }),
+  ).toBeVisible()
+})
+
 test('restores focus after closing the movie media dialog', async ({ page }) => {
   await page.goto('/movies/550', { waitUntil: 'domcontentloaded' })
   const playButton = page.getByRole('button', { name: 'Play Fixture Trailer' })

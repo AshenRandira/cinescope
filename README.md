@@ -48,9 +48,9 @@ npx firebase-tools use --add
 npx firebase-tools deploy --only firestore:rules
 ```
 
-Library records are stored at `users/{uid}/library/{movie:id|tv:id}`. Rules only allow an authenticated user to access their own records and reject unexpected fields or invalid library values.
+Library records are stored at `users/{uid}/library/{movie:id|tv:id}`. Rules only allow an authenticated user to access their own records and reject unexpected fields or invalid library values. TV records can also carry bounded episode checkpoints, which drive season rollups and the continue-watching shelf without introducing another database collection. See [the library data model](docs/library-data-model.md).
 
-The browser archive remains the immediate source of truth. On sign-in, guest records move into a user-scoped local archive, reconcile by their latest update time, and then sync to Firestore. If the network or Firestore configuration is unavailable, edits stay local and the interface exposes a retry action.
+The browser archive remains the immediate source of truth. Library and episode-progress changes write locally before navigation; on sign-in, guest records move into a user-scoped archive, reconcile by their latest update time, and then sync to Firestore. If the network or Firestore configuration is unavailable, edits stay local and the interface exposes a retry action.
 
 The protected profile also supports verification-email resend/status refresh, password changes after current-password reauthentication, a versioned JSON account export, and permanent account deletion. Deletion uses the Firebase-issued identity token with the `deleteAccount` callable, recursively removes the member's Firestore tree, deletes the Firebase Authentication user, and then clears the user-scoped browser archive. CineScope does not issue or store a parallel JWT. See [the account security boundary](docs/security/account-security.md).
 
@@ -85,7 +85,7 @@ The bundle check reads the generated `dist/index.html` and fails if the initial 
 
 The public Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. Firebase is disabled and every same-origin catalogue API response is intercepted, so the suite needs no Firebase or TMDB credential.
 
-The API test starts a fake local TMDB server and the Functions plus Hosting emulators, then verifies the `/api/tmdb/**` rewrite, allowlist, cache policy, method rejection, and secret-bearing upstream request. It never contacts TMDB. The authenticated emulator command builds in the committed `emulator` mode, starts local Authentication, Firestore, and Functions emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys including password change and destructive account cleanup. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
+The API test starts a fake local TMDB server and the Functions plus Hosting emulators, then verifies the `/api/tmdb/**` rewrite, allowlist, cache policy, method rejection, and secret-bearing upstream request. It never contacts TMDB. The authenticated emulator command builds in the committed `emulator` mode, starts local Authentication, Firestore, and Functions emulators under the fixed `demo-cinescope` project ID, validates Firestore Security Rules, and runs authenticated Chromium journeys including TV-progress synchronization, password change, and destructive account cleanup. See [docs/quality-assurance.md](docs/quality-assurance.md) for the full matrix and remaining human checks.
 
 ## Continuous integration
 

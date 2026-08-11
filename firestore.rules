@@ -10,6 +10,51 @@ service cloud.firestore {
       return value == null || value is string;
     }
 
+    function hasValidResumeEpisode(episode) {
+      return episode == null ||
+        (episode is map &&
+          episode.keys().hasAll([
+            'episodeNumber',
+            'name',
+            'seasonNumber',
+            'stillPath'
+          ]) &&
+          episode.keys().hasOnly([
+            'episodeNumber',
+            'name',
+            'seasonNumber',
+            'stillPath'
+          ]) &&
+          episode.episodeNumber is int &&
+          episode.episodeNumber > 0 &&
+          episode.seasonNumber is int &&
+          episode.seasonNumber >= 0 &&
+          episode.name is string &&
+          episode.name.size() > 0 &&
+          episode.name.size() <= 300 &&
+          hasValidOptionalText(episode.stillPath));
+    }
+
+    function hasValidTvProgress(progress) {
+      return progress == null ||
+        (progress is map &&
+          progress.keys().hasAll([
+            'resumeEpisode',
+            'updatedAt',
+            'watchedEpisodeKeys'
+          ]) &&
+          progress.keys().hasOnly([
+            'resumeEpisode',
+            'updatedAt',
+            'watchedEpisodeKeys'
+          ]) &&
+          progress.updatedAt is string &&
+          progress.watchedEpisodeKeys is list &&
+          progress.watchedEpisodeKeys.size() > 0 &&
+          progress.watchedEpisodeKeys.size() <= 2000 &&
+          hasValidResumeEpisode(progress.resumeEpisode));
+    }
+
     function hasValidLibraryRecord() {
       let data = request.resource.data;
 
@@ -38,6 +83,7 @@ service cloud.firestore {
           'releaseYear',
           'savedAt',
           'title',
+          'tvProgress',
           'updatedAt',
           'userRating'
         ]) &&
@@ -55,6 +101,10 @@ service cloud.firestore {
         hasValidOptionalText(data.overview) &&
         hasValidOptionalText(data.posterPath) &&
         hasValidOptionalText(data.releaseYear) &&
+        (!data.keys().hasAny(['tvProgress']) ||
+          (hasValidTvProgress(data.tvProgress) &&
+            (data.tvProgress == null ||
+              data.mediaType == 'tv'))) &&
         (data.userRating == null ||
           (data.userRating is int &&
             data.userRating >= 1 &&

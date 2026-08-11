@@ -15,6 +15,7 @@ import type {
   TmdbTvSeasonEpisode,
 } from '../../../types/tmdb'
 
+import { EpisodeProgressControl } from '../../library/components/EpisodeProgressControl'
 import { LibraryControls } from '../../library/components/LibraryControls'
 import { parseTvId } from '../../tv-details/data/tvDetail'
 import { parseSeasonNumber } from '../../tv-seasons/data/tvSeason'
@@ -302,6 +303,16 @@ export function TvEpisodePage() {
     episode.vote_count > 0
       ? `${episode.vote_average.toFixed(1)} / 10`
       : 'Not yet rated'
+  const seriesCandidate = {
+    backdropPath: series.backdrop_path,
+    id: series.id,
+    mediaType: 'tv' as const,
+    overview: series.overview,
+    posterPath: series.poster_path,
+    releaseYear:
+      series.first_air_date.slice(0, 4) || null,
+    title: series.name,
+  }
 
   return (
     <article className="tv-episode-page">
@@ -346,18 +357,31 @@ export function TvEpisodePage() {
 
               <div className="tv-episode-hero__controls">
                 <LibraryControls
-                  candidate={{
-                    backdropPath: series.backdrop_path,
-                    id: series.id,
-                    mediaType: 'tv',
-                    overview: series.overview,
-                    posterPath: series.poster_path,
-                    releaseYear:
-                      series.first_air_date.slice(0, 4) ||
-                      null,
-                    title: series.name,
-                  }}
+                  candidate={seriesCandidate}
                   variant="save"
+                />
+                <EpisodeProgressControl
+                  candidate={seriesCandidate}
+                  episode={{
+                    episodeNumber:
+                      episode.episode_number,
+                    name: episode.name,
+                    seasonNumber: season.season_number,
+                    stillPath: episode.still_path,
+                  }}
+                  nextEpisode={
+                    nextEpisode
+                      ? {
+                          episodeNumber:
+                            nextEpisode.episode_number,
+                          name: nextEpisode.name,
+                          seasonNumber:
+                            season.season_number,
+                          stillPath:
+                            nextEpisode.still_path,
+                        }
+                      : null
+                  }
                 />
               </div>
             </div>

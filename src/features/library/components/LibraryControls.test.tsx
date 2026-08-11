@@ -37,6 +37,7 @@ function LibraryHarness({ variant }: { variant?: 'full' | 'save' }) {
       isFavorite: currentRecord?.isFavorite ?? false,
       isWatched: currentRecord?.isWatched ?? false,
       savedAt: currentRecord?.savedAt ?? '2026-08-10T00:00:00.000Z',
+      tvProgress: currentRecord?.tvProgress ?? null,
       updatedAt: '2026-08-10T00:00:00.000Z',
       userRating: currentRecord?.userRating ?? null,
       ...patch,
