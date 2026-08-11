@@ -86,6 +86,7 @@ export function useDiscoverExperience(
       query.isSuccess && records.length === 0,
     isError: query.isError,
     isPending: query.isPending,
+    preferenceSummary: null,
     records,
     retry,
     seedTitles: [] as string[],

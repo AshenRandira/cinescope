@@ -556,12 +556,18 @@ export function DiscoverPage() {
             </p>
 
             {isArchiveSignal ? (
-              <p className="discover-console__anchors">
-                <strong>Active anchors</strong>
-                {discovery.seedTitles.length > 0
-                  ? discovery.seedTitles.join(' / ')
-                  : 'Add records to your library to begin.'}
-              </p>
+              <div className="discover-console__personalization">
+                <p className="discover-console__anchors">
+                  <strong>Active anchors</strong>
+                  {discovery.seedTitles.length > 0
+                    ? discovery.seedTitles.join(' / ')
+                    : 'Add records to your library to begin.'}
+                </p>
+                <p className="discover-console__anchors">
+                  <strong>Preference lens</strong>
+                  {discovery.preferenceSummary}
+                </p>
+              </div>
             ) : null}
           </div>
 

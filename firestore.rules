@@ -2,7 +2,7 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    function ownsLibrary(userId) {
+    function ownsUserData(userId) {
       return request.auth != null && request.auth.uid == userId;
     }
 
@@ -111,10 +111,83 @@ service cloud.firestore {
             data.userRating <= 10));
     }
 
+    function hasValidDiscoveryPreferences() {
+      let data = request.resource.data;
+
+      return data.keys().hasAll([
+          'favoriteGenres',
+          'preferredLanguage',
+          'preferredMedia',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'favoriteGenres',
+          'preferredLanguage',
+          'preferredMedia',
+          'updatedAt'
+        ]) &&
+        data.favoriteGenres is list &&
+        data.favoriteGenres.size() <= 5 &&
+        data.favoriteGenres.toSet().size() ==
+          data.favoriteGenres.size() &&
+        data.favoriteGenres.hasOnly([
+          'action',
+          'animation',
+          'comedy',
+          'crime',
+          'documentary',
+          'drama',
+          'family',
+          'fantasy',
+          'history',
+          'horror',
+          'music',
+          'mystery',
+          'romance',
+          'science-fiction',
+          'thriller',
+          'war',
+          'western'
+        ]) &&
+        data.preferredLanguage in [
+          'any',
+          'de',
+          'en',
+          'es',
+          'fr',
+          'hi',
+          'it',
+          'ja',
+          'ko',
+          'ml',
+          'pt',
+          'si',
+          'ta',
+          'te',
+          'zh'
+        ] &&
+        data.preferredMedia in [
+          'balanced',
+          'movie',
+          'tv'
+        ] &&
+        data.updatedAt is string &&
+        data.updatedAt.size() > 0 &&
+        data.updatedAt.size() <= 100;
+    }
+
     match /users/{userId}/library/{recordId} {
-      allow read, delete: if ownsLibrary(userId);
-      allow create, update: if ownsLibrary(userId) &&
+      allow read, delete: if ownsUserData(userId);
+      allow create, update: if ownsUserData(userId) &&
         hasValidLibraryRecord();
+    }
+
+    match /users/{userId}/preferences/{preferenceId} {
+      allow read, delete: if ownsUserData(userId) &&
+        preferenceId == 'discovery';
+      allow create, update: if ownsUserData(userId) &&
+        preferenceId == 'discovery' &&
+        hasValidDiscoveryPreferences();
     }
   }
 }

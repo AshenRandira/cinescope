@@ -8,11 +8,12 @@ Email verification uses Firebase's verification-email flow. Members can send or 
 
 ## Personal data export
 
-The profile can download a schema-versioned JSON snapshot. Version 2 contains:
+The profile can download a schema-versioned JSON snapshot. Version 3 contains:
 
 - Firebase profile metadata already visible to the member;
 - the current device's reconciled library records;
 - bounded TV episode progress and the current resume pointer when present;
+- the current favourite-genre, preferred-medium, and original-language discovery preferences;
 - the current library synchronization status;
 - an export timestamp and product/schema identifiers.
 
@@ -25,9 +26,9 @@ Deletion requires both the member's current password and the exact typed phrase 
 1. Firebase reauthenticates the active email/password user.
 2. The browser invokes the `deleteAccount` callable in `asia-east1` with the refreshed Firebase identity.
 3. The callable rejects unauthenticated requests and ID tokens whose `auth_time` is more than five minutes old.
-4. The Admin Firestore client recursively deletes the document tree rooted at `users/{uid}`, including the `library` subcollection.
+4. The Admin Firestore client recursively deletes the document tree rooted at `users/{uid}`, including the `library` and `preferences` subcollections.
 5. Only after data cleanup succeeds, the Admin Auth client deletes that same `uid`.
-6. The browser clears the user-scoped local archive and pending-deletion queue, signs out the local client, and returns to account access.
+6. The browser clears the user-scoped local archive, preference snapshot, and pending-deletion queue, signs out the local client, and returns to account access.
 
 Data cleanup runs before Auth deletion so a Firestore failure leaves the account available for a safe retry. If Auth deletion fails after cleanup, the normalized UI asks the still-existing member to retry; the operation is idempotent with respect to the already-empty Firestore tree. Logs contain only the user reference, authentication age, operation category, and outcome. They must never contain email addresses, passwords, tokens, library contents, or exported data.
 

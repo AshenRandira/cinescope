@@ -20,6 +20,8 @@ const PROJECT_ID = 'demo-cinescope'
 const OWNER_ID = 'owner-user'
 const OTHER_USER_ID = 'other-user'
 const RECORD_PATH = `users/${OWNER_ID}/library/movie:550`
+const PREFERENCES_PATH =
+  `users/${OWNER_ID}/preferences/discovery`
 
 const validRecord = {
   backdropPath: null,
@@ -53,6 +55,13 @@ const validTvProgressRecord = {
   },
 }
 
+const validPreferences = {
+  favoriteGenres: ['drama', 'mystery'],
+  preferredLanguage: 'si',
+  preferredMedia: 'movie',
+  updatedAt: '2026-08-11T10:00:00.000Z',
+}
+
 function getFirestoreEmulatorAddress(): {
   host: string
   port: number
@@ -73,7 +82,7 @@ function getFirestoreEmulatorAddress(): {
   return { host, port }
 }
 
-describe('Firestore library security rules', () => {
+describe('Firestore account data security rules', () => {
   let testEnvironment: RulesTestEnvironment
 
   beforeAll(async () => {
@@ -160,6 +169,114 @@ describe('Firestore library security rules', () => {
       setDoc(
         doc(ownerFirestore, RECORD_PATH),
         validRecord,
+      ),
+    )
+  })
+
+  test('allows an owner to manage one valid discovery preference document', async () => {
+    const ownerFirestore = testEnvironment
+      .authenticatedContext(OWNER_ID)
+      .firestore()
+    const preferenceDocument = doc(
+      ownerFirestore,
+      PREFERENCES_PATH,
+    )
+
+    await assertSucceeds(
+      setDoc(preferenceDocument, validPreferences),
+    )
+    await assertSucceeds(getDoc(preferenceDocument))
+    await assertSucceeds(
+      updateDoc(preferenceDocument, {
+        favoriteGenres: ['drama', 'comedy'],
+        preferredMedia: 'tv',
+        updatedAt: '2026-08-11T11:00:00.000Z',
+      }),
+    )
+    await assertSucceeds(deleteDoc(preferenceDocument))
+  })
+
+  test('denies anonymous, cross-user, and unexpected preference-document access', async () => {
+    const anonymousFirestore = testEnvironment
+      .unauthenticatedContext()
+      .firestore()
+    const otherFirestore = testEnvironment
+      .authenticatedContext(OTHER_USER_ID)
+      .firestore()
+    const ownerFirestore = testEnvironment
+      .authenticatedContext(OWNER_ID)
+      .firestore()
+
+    await assertFails(
+      setDoc(
+        doc(anonymousFirestore, PREFERENCES_PATH),
+        validPreferences,
+      ),
+    )
+    await assertFails(
+      getDoc(doc(otherFirestore, PREFERENCES_PATH)),
+    )
+    await assertFails(
+      setDoc(
+        doc(
+          ownerFirestore,
+          `users/${OWNER_ID}/preferences/unexpected`,
+        ),
+        validPreferences,
+      ),
+    )
+  })
+
+  test.each([
+    [
+      'more than five genres',
+      {
+        ...validPreferences,
+        favoriteGenres: [
+          'action',
+          'animation',
+          'comedy',
+          'crime',
+          'drama',
+          'mystery',
+        ],
+      },
+    ],
+    [
+      'duplicate genres',
+      {
+        ...validPreferences,
+        favoriteGenres: ['drama', 'drama'],
+      },
+    ],
+    [
+      'an unsupported genre',
+      {
+        ...validPreferences,
+        favoriteGenres: ['drama', 'reality'],
+      },
+    ],
+    [
+      'an unsupported language',
+      { ...validPreferences, preferredLanguage: 'xx' },
+    ],
+    [
+      'an unsupported media preference',
+      { ...validPreferences, preferredMedia: 'person' },
+    ],
+    [
+      'an unexpected field',
+      { ...validPreferences, injected: true },
+    ],
+  ])('rejects preferences with %s', async (_description, record) => {
+    const ownerFirestore = testEnvironment
+      .authenticatedContext(OWNER_ID)
+      .firestore()
+
+    await assertFails(
+      setDoc(
+        doc(ownerFirestore, PREFERENCES_PATH),
+        record,
       ),
     )
   })

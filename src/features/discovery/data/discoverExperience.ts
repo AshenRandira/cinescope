@@ -18,6 +18,7 @@ export type DiscoverMediaType = 'movie' | 'tv'
 export type DiscoverRecord = {
   backdropPath: string | null
   dateYear: string | null
+  genreIds: number[]
   id: number
   mediaType: DiscoverMediaType
   originalLanguage: string
@@ -260,6 +261,7 @@ export function adaptMovie(
   return {
     backdropPath: movie.backdrop_path,
     dateYear: getYear(movie.release_date),
+    genreIds: [...movie.genre_ids],
     id: movie.id,
     mediaType: 'movie',
     originalLanguage:
@@ -284,6 +286,7 @@ export function adaptTv(
   return {
     backdropPath: show.backdrop_path,
     dateYear: getYear(show.first_air_date),
+    genreIds: [...show.genre_ids],
     id: show.id,
     mediaType: 'tv',
     originalLanguage:

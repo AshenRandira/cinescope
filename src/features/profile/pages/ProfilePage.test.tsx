@@ -15,6 +15,9 @@ import type { AuthContextValue } from '../../auth/context/AuthContext'
 import { useAuth } from '../../auth/hooks/useAuth'
 import type { LibraryContextValue } from '../../library/context/LibraryContext'
 import { useLibrary } from '../../library/hooks/useLibrary'
+import type { PreferencesContextValue } from '../../preferences/context/PreferencesContext'
+import { createDefaultPreferences } from '../../preferences/data/preferences'
+import { usePreferences } from '../../preferences/hooks/usePreferences'
 import { downloadAccountExport } from '../data/accountExport'
 import { ProfilePage } from './ProfilePage'
 
@@ -24,6 +27,10 @@ vi.mock('../../auth/hooks/useAuth', () => ({
 
 vi.mock('../../library/hooks/useLibrary', () => ({
   useLibrary: vi.fn(),
+}))
+
+vi.mock('../../preferences/hooks/usePreferences', () => ({
+  usePreferences: vi.fn(),
 }))
 
 vi.mock('../data/accountExport', async (importOriginal) => {
@@ -84,6 +91,20 @@ function createLibraryValue(
   }
 }
 
+function createPreferencesValue(
+  overrides: Partial<PreferencesContextValue> = {},
+): PreferencesContextValue {
+  return {
+    clearAccountData: vi.fn(),
+    preferences: createDefaultPreferences(),
+    retrySync: vi.fn(),
+    savePreferences: vi.fn(async () => undefined),
+    syncError: null,
+    syncStatus: 'synced',
+    ...overrides,
+  }
+}
+
 function renderProfile() {
   return render(
     <MemoryRouter initialEntries={['/profile']}>
@@ -104,6 +125,9 @@ describe('profile security controls', () => {
     vi.mocked(useAuth).mockReturnValue(createAuthValue())
     vi.mocked(useLibrary).mockReturnValue(
       createLibraryValue(),
+    )
+    vi.mocked(usePreferences).mockReturnValue(
+      createPreferencesValue(),
     )
   })
 
@@ -196,9 +220,43 @@ describe('profile security controls', () => {
     expect(downloadAccountExport).toHaveBeenCalledWith(
       expect.objectContaining({
         account: authUser,
-        schemaVersion: 2,
+        schemaVersion: 3,
       }),
     )
+  })
+
+  it('saves discovery preferences that are consumed by archive recommendations', async () => {
+    const user = userEvent.setup()
+    const savePreferences = vi.fn(
+      async () => undefined,
+    )
+    vi.mocked(usePreferences).mockReturnValue(
+      createPreferencesValue({ savePreferences }),
+    )
+    renderProfile()
+
+    await user.click(screen.getByLabelText('Drama'))
+    await user.click(screen.getByLabelText('Series leaning'))
+    await user.selectOptions(
+      screen.getByLabelText('Preferred original language'),
+      'ko',
+    )
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Save discovery preferences',
+      }),
+    )
+
+    expect(savePreferences).toHaveBeenCalledWith({
+      favoriteGenres: ['drama'],
+      preferredLanguage: 'ko',
+      preferredMedia: 'tv',
+    })
+    expect(
+      screen.getByText(
+        'Your discovery preferences were saved.',
+      ),
+    ).toBeVisible()
   })
 
   it('requires the typed phrase, deletes remotely, clears local data, and signs out', async () => {
@@ -206,11 +264,17 @@ describe('profile security controls', () => {
     const deleteAccount = vi.fn(async () => undefined)
     const logout = vi.fn(async () => undefined)
     const clearAccountData = vi.fn()
+    const clearPreferenceData = vi.fn()
     vi.mocked(useAuth).mockReturnValue(
       createAuthValue({ deleteAccount, logout }),
     )
     vi.mocked(useLibrary).mockReturnValue(
       createLibraryValue({ clearAccountData }),
+    )
+    vi.mocked(usePreferences).mockReturnValue(
+      createPreferencesValue({
+        clearAccountData: clearPreferenceData,
+      }),
     )
     renderProfile()
 
@@ -241,6 +305,7 @@ describe('profile security controls', () => {
       'CurrentPass123!',
     )
     expect(clearAccountData).toHaveBeenCalledOnce()
+    expect(clearPreferenceData).toHaveBeenCalledOnce()
     expect(logout).toHaveBeenCalledOnce()
     expect(
       screen.getByText('Returned to account access'),

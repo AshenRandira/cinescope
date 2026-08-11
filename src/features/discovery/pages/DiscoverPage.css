@@ -177,6 +177,13 @@
   line-height: 1.65;
 }
 
+.discover-console__personalization {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 2rem;
+  max-width: 55rem;
+}
+
 .discover-console__anchors strong {
   display: block;
   margin-bottom: 0.35rem;
@@ -582,6 +589,10 @@
   }
 
   .discover-console__method {
+    grid-template-columns: 1fr;
+  }
+
+  .discover-console__personalization {
     grid-template-columns: 1fr;
   }
 

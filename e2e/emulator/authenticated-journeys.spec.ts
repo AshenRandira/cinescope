@@ -86,6 +86,60 @@ function getLibraryDocumentUrl(
   return `${FIRESTORE_EMULATOR_URL}/v1/projects/${PROJECT_ID}/databases/(default)/documents/users/${userId}/library/${encodeURIComponent(recordKey)}`
 }
 
+function getPreferenceDocumentUrl(userId: string): string {
+  return `${FIRESTORE_EMULATOR_URL}/v1/projects/${PROJECT_ID}/databases/(default)/documents/users/${userId}/preferences/discovery`
+}
+
+async function readPreferenceDocument(
+  request: APIRequestContext,
+  session: AuthSession,
+): Promise<{
+  fields: FirestoreFields | null
+  status: number
+}> {
+  const response = await request.get(
+    getPreferenceDocumentUrl(session.localId),
+    {
+      headers: {
+        Authorization: `Bearer ${session.idToken}`,
+      },
+    },
+  )
+
+  if (!response.ok()) {
+    return { fields: null, status: response.status() }
+  }
+
+  const body = (await response.json()) as {
+    fields?: FirestoreFields
+  }
+
+  return {
+    fields: body.fields ?? null,
+    status: response.status(),
+  }
+}
+
+async function expectCloudPreferences(
+  request: APIRequestContext,
+  session: AuthSession,
+  predicate: (fields: FirestoreFields) => boolean,
+): Promise<void> {
+  await expect
+    .poll(
+      async () => {
+        const { fields, status } =
+          await readPreferenceDocument(request, session)
+
+        return status === 200 && fields
+          ? predicate(fields)
+          : false
+      },
+      { timeout: 10_000 },
+    )
+    .toBe(true)
+}
+
 async function readLibraryDocument(
   request: APIRequestContext,
   session: AuthSession,
@@ -418,6 +472,80 @@ test('syncs TV episode progress and restores the continue-watching checkpoint', 
   ).toBeVisible()
 })
 
+test('synchronizes discovery preferences and restores their recommendation lens', async ({
+  page,
+  request,
+}) => {
+  const email = 'preferences@example.test'
+  const session = await submitAuthRequest(
+    request,
+    'signUp',
+    email,
+    'Preference Member',
+  )
+
+  await page.goto('/login', {
+    waitUntil: 'domcontentloaded',
+  })
+  await page.getByLabel('Email address').fill(email)
+  await page.getByLabel('Password').fill(TEST_PASSWORD)
+  await page
+    .getByRole('button', { name: 'Sign in to CineScope' })
+    .click()
+  await expect(page).toHaveURL(/\/profile$/)
+
+  await page.getByLabel('Drama').click()
+  await page.getByLabel('Mystery').click()
+  await page.getByLabel('Series leaning').click()
+  await page
+    .getByLabel('Preferred original language')
+    .selectOption('ko')
+  await page
+    .getByRole('button', {
+      name: 'Save discovery preferences',
+    })
+    .click()
+
+  await expectCloudPreferences(
+    request,
+    session,
+    (fields) => {
+      const genres =
+        fields.favoriteGenres?.arrayValue?.values ?? []
+
+      return (
+        genres.map(({ stringValue }) => stringValue).join(',') ===
+          'drama,mystery' &&
+        fields.preferredLanguage?.stringValue === 'ko' &&
+        fields.preferredMedia?.stringValue === 'tv'
+      )
+    },
+  )
+
+  await page.evaluate((userId) => {
+    globalThis.localStorage.removeItem(
+      `cinescope.preferences.v1.user.${encodeURIComponent(userId)}`,
+    )
+  }, session.localId)
+  await page.reload({ waitUntil: 'domcontentloaded' })
+
+  await expect(page.getByLabel('Drama')).toBeChecked()
+  await expect(page.getByLabel('Mystery')).toBeChecked()
+  await expect(page.getByLabel('Series leaning')).toBeChecked()
+  await expect(
+    page.getByLabel('Preferred original language'),
+  ).toHaveValue('ko')
+
+  await page.goto('/discover?signal=archive', {
+    waitUntil: 'domcontentloaded',
+  })
+  await expect(
+    page.getByText(
+      'Series leaning / Korean / Drama, Mystery',
+    ),
+  ).toBeVisible()
+})
+
 test('changes a password and permanently deletes account data behind fresh credentials', async ({
   page,
   request,
@@ -456,6 +584,20 @@ test('changes a password and permanently deletes account data behind fresh crede
   await page.goto('/profile', {
     waitUntil: 'domcontentloaded',
   })
+  await page.getByLabel('Drama').click()
+  await page
+    .getByRole('button', {
+      name: 'Save discovery preferences',
+    })
+    .click()
+  await expectCloudPreferences(
+    request,
+    session,
+    (fields) =>
+      fields.favoriteGenres?.arrayValue?.values?.[0]
+        ?.stringValue === 'drama',
+  )
+
   const passwordCard = page
     .getByRole('article')
     .filter({
@@ -543,12 +685,26 @@ test('changes a password and permanently deletes account data behind fresh crede
       { timeout: 10_000 },
     )
     .toBe(404)
+  await expect
+    .poll(
+      async () =>
+        (await readPreferenceDocument(request, session))
+          .status,
+      { timeout: 10_000 },
+    )
+    .toBe(404)
 
   const memberStorage = await page.evaluate((userId) => {
-    return globalThis.localStorage.getItem(
-      `cinescope.library.v1.user.${encodeURIComponent(userId)}`,
-    )
+    return {
+      library: globalThis.localStorage.getItem(
+        `cinescope.library.v1.user.${encodeURIComponent(userId)}`,
+      ),
+      preferences: globalThis.localStorage.getItem(
+        `cinescope.preferences.v1.user.${encodeURIComponent(userId)}`,
+      ),
+    }
   }, session.localId)
 
-  expect(memberStorage).toBeNull()
+  expect(memberStorage.library).toBeNull()
+  expect(memberStorage.preferences).toBeNull()
 })

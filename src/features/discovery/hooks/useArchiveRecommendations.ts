@@ -13,6 +13,10 @@ import type {
 
 import { useLibrary } from '../../library/hooks/useLibrary'
 import {
+  getPreferenceSummary,
+} from '../../preferences/data/preferences'
+import { usePreferences } from '../../preferences/hooks/usePreferences'
+import {
   buildArchiveRecommendations,
   getArchiveRecommendationPages,
   selectArchiveRecommendationSeeds,
@@ -24,12 +28,14 @@ export function useArchiveRecommendations(
   page: number,
 ) {
   const { records: libraryRecords } = useLibrary()
+  const { preferences } = usePreferences()
   const seeds = useMemo(
     () =>
       selectArchiveRecommendationSeeds(
         libraryRecords,
+        preferences,
       ),
-    [libraryRecords],
+    [libraryRecords, preferences],
   )
   const queries = useQueries({
     queries: seeds.map((seed) => ({
@@ -71,6 +77,7 @@ export function useArchiveRecommendations(
   const records = buildArchiveRecommendations(
     responses,
     libraryRecords,
+    preferences,
   )
   const isPending =
     enabled &&
@@ -104,6 +111,8 @@ export function useArchiveRecommendations(
         (!isPending && !isError && records.length === 0)),
     isError,
     isPending,
+    preferenceSummary:
+      getPreferenceSummary(preferences),
     records,
     retry,
     seedTitles: seeds.map((seed) => seed.title),

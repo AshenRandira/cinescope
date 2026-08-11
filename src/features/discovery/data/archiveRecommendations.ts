@@ -9,6 +9,11 @@ import {
   type LibraryRecord,
 } from '../../library/data/library'
 import {
+  createDefaultPreferences,
+  getPreferenceGenreIds,
+  type UserPreferences,
+} from '../../preferences/data/preferences'
+import {
   adaptMovie,
   adaptTv,
   getAvailableDiscoverPages,
@@ -37,10 +42,17 @@ type RankedArchiveRecommendation = {
   weight: number
 }
 
-function getSeedStrength(record: LibraryRecord): number {
+function getSeedStrength(
+  record: LibraryRecord,
+  preferences: UserPreferences,
+): number {
   const ratingStrength = record.userRating
     ? record.userRating * 10
     : 0
+  const mediaStrength =
+    preferences.preferredMedia === record.mediaType
+      ? 35
+      : 0
 
   return (
     (record.isFavorite ? 200 : 0) +
@@ -48,12 +60,14 @@ function getSeedStrength(record: LibraryRecord): number {
       ? 100
       : 0) +
     (record.isWatched ? 50 : 0) +
+    mediaStrength +
     ratingStrength
   )
 }
 
 export function selectArchiveRecommendationSeeds(
   records: LibraryRecord[],
+  preferences = createDefaultPreferences(),
 ): ArchiveRecommendationSeed[] {
   const positiveSignals = records.filter(
     (record) =>
@@ -71,8 +85,8 @@ export function selectArchiveRecommendationSeeds(
   return [...candidates]
     .sort((first, second) => {
       const strengthDifference =
-        getSeedStrength(second) -
-        getSeedStrength(first)
+        getSeedStrength(second, preferences) -
+        getSeedStrength(first, preferences)
 
       if (strengthDifference !== 0) {
         return strengthDifference
@@ -93,23 +107,45 @@ export function selectArchiveRecommendationSeeds(
 function getCandidateWeight(
   record: DiscoverRecord,
   resultIndex: number,
+  preferences: UserPreferences,
 ): number {
   const score = record.score ?? 0
   const audienceWeight = Math.min(
     Math.log10(record.voteCount + 1),
     5,
   )
+  const preferredGenreIds = getPreferenceGenreIds(
+    preferences,
+    record.mediaType,
+  )
+  const genreMatches = record.genreIds.filter((genreId) =>
+    preferredGenreIds.has(genreId),
+  ).length
+  const mediaWeight =
+    preferences.preferredMedia === record.mediaType
+      ? 24
+      : 0
+  const languageWeight =
+    preferences.preferredLanguage !== 'any' &&
+    preferences.preferredLanguage ===
+      record.originalLanguage
+      ? 16
+      : 0
 
   return (
     Math.max(0, 20 - resultIndex) * 3 +
     score * 2 +
-    audienceWeight
+    audienceWeight +
+    mediaWeight +
+    languageWeight +
+    Math.min(genreMatches, 3) * 12
   )
 }
 
 export function buildArchiveRecommendations(
   responses: ArchiveRecommendationResponse[],
   libraryRecords: LibraryRecord[],
+  preferences = createDefaultPreferences(),
 ): DiscoverRecord[] {
   const libraryKeys = new Set(
     libraryRecords.map((record) =>
@@ -156,6 +192,7 @@ export function buildArchiveRecommendations(
         existingRecord.weight += getCandidateWeight(
           record,
           resultIndex,
+          preferences,
         )
         return
       }
@@ -167,6 +204,7 @@ export function buildArchiveRecommendations(
         weight: getCandidateWeight(
           record,
           resultIndex,
+          preferences,
         ),
       })
       firstSeenOrder += 1

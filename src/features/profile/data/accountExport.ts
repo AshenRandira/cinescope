@@ -3,8 +3,9 @@ import type {
   LibraryRecord,
   LibrarySyncStatus,
 } from '../../library/data/library'
+import type { UserPreferences } from '../../preferences/data/preferences'
 
-export const ACCOUNT_EXPORT_SCHEMA_VERSION = 2
+export const ACCOUNT_EXPORT_SCHEMA_VERSION = 3
 
 export type CineScopeAccountExport = {
   account: AuthUser
@@ -13,17 +14,20 @@ export type CineScopeAccountExport = {
     syncStatus: LibrarySyncStatus
   }
   exportedAt: string
+  preferences: UserPreferences
   product: 'CineScope'
   schemaVersion: typeof ACCOUNT_EXPORT_SCHEMA_VERSION
 }
 
 export function buildAccountExport({
   exportedAt = new Date().toISOString(),
+  preferences,
   records,
   syncStatus,
   user,
 }: {
   exportedAt?: string
+  preferences: UserPreferences
   records: LibraryRecord[]
   syncStatus: LibrarySyncStatus
   user: AuthUser
@@ -37,6 +41,10 @@ export function buildAccountExport({
       syncStatus,
     },
     exportedAt,
+    preferences: {
+      ...preferences,
+      favoriteGenres: [...preferences.favoriteGenres],
+    },
     product: 'CineScope',
     schemaVersion: ACCOUNT_EXPORT_SCHEMA_VERSION,
   }

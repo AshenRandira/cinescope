@@ -15,6 +15,8 @@ import {
 import { useAuth } from '../../auth/hooks/useAuth'
 import { getLibrarySyncCopy } from '../../library/data/library'
 import { useLibrary } from '../../library/hooks/useLibrary'
+import { PreferencesEditor } from '../../preferences/components/PreferencesEditor'
+import { usePreferences } from '../../preferences/hooks/usePreferences'
 import {
   buildAccountExport,
   downloadAccountExport,
@@ -96,12 +98,16 @@ export function ProfilePage() {
     user,
   } = useAuth()
   const {
-    clearAccountData,
+    clearAccountData: clearLibraryData,
     records,
     retrySync,
     syncError,
     syncStatus,
   } = useLibrary()
+  const {
+    clearAccountData: clearPreferenceData,
+    preferences,
+  } = usePreferences()
   const syncCopy = getLibrarySyncCopy(
     syncStatus,
     syncError,
@@ -305,6 +311,7 @@ export function ProfilePage() {
     try {
       downloadAccountExport(
         buildAccountExport({
+          preferences,
           records,
           syncStatus,
           user: accountUser,
@@ -348,7 +355,8 @@ export function ProfilePage() {
 
     try {
       await deleteAccount(deletePassword)
-      clearAccountData()
+      clearLibraryData()
+      clearPreferenceData()
       storeAccountDeletionNotice()
       await logout().catch(() => undefined)
       navigate('/login', { replace: true })
@@ -474,6 +482,8 @@ export function ProfilePage() {
         </Link>
       </section>
 
+      <PreferencesEditor />
+
       <section
         className="profile-account"
         aria-labelledby="profile-account-heading"
@@ -481,7 +491,7 @@ export function ProfilePage() {
         <header className="profile-section-heading">
           <div>
             <p className="archive-label">
-              03 / Account register
+              04 / Account register
             </p>
             <h2
               className="font-display"
@@ -567,7 +577,7 @@ export function ProfilePage() {
         <header className="profile-section-heading">
           <div>
             <p className="archive-label">
-              04 / Security and privacy
+              05 / Security and privacy
             </p>
             <h2
               className="font-display"

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { AuthUser } from '../../auth/context/AuthContext'
 import type { LibraryRecord } from '../../library/data/library'
+import { createDefaultPreferences } from '../../preferences/data/preferences'
 import {
   ACCOUNT_EXPORT_SCHEMA_VERSION,
   buildAccountExport,
@@ -41,6 +42,13 @@ describe('account export', () => {
   it('creates a versioned, deterministic snapshot without credentials', () => {
     const accountExport = buildAccountExport({
       exportedAt: '2026-08-11T01:02:03.000Z',
+      preferences: {
+        ...createDefaultPreferences(),
+        favoriteGenres: ['drama', 'mystery'],
+        preferredLanguage: 'en',
+        preferredMedia: 'movie',
+        updatedAt: '2026-08-10T12:00:00.000Z',
+      },
       records: [
         createRecord(1, '2026-08-01T00:00:00.000Z'),
         createRecord(2, '2026-08-02T00:00:00.000Z'),
@@ -57,6 +65,11 @@ describe('account export', () => {
         (record) => record.id,
       ),
     ).toEqual([2, 1])
+    expect(accountExport.preferences).toMatchObject({
+      favoriteGenres: ['drama', 'mystery'],
+      preferredLanguage: 'en',
+      preferredMedia: 'movie',
+    })
     expect(JSON.stringify(accountExport)).not.toMatch(
       /password|token/i,
     )

@@ -11,6 +11,10 @@ import type {
 
 import type { LibraryRecord } from '../../library/data/library'
 import {
+  createDefaultPreferences,
+  type UserPreferences,
+} from '../../preferences/data/preferences'
+import {
   buildArchiveRecommendations,
   getArchiveRecommendationPages,
   selectArchiveRecommendationSeeds,
@@ -185,6 +189,28 @@ describe('selectArchiveRecommendationSeeds', () => {
       ],
     )
   })
+
+  it('uses the preferred media balance as a bounded seed tiebreaker', () => {
+    const records = [
+      createLibraryRecord({
+        id: 20,
+        isFavorite: true,
+      }),
+      createLibraryRecord({
+        id: 21,
+        isFavorite: true,
+        mediaType: 'tv',
+        title: 'Preferred series seed',
+      }),
+    ]
+
+    expect(
+      selectArchiveRecommendationSeeds(records, {
+        ...createDefaultPreferences(),
+        preferredMedia: 'tv',
+      }).map(({ id }) => id),
+    ).toEqual([21, 20])
+  })
 })
 
 describe('buildArchiveRecommendations', () => {
@@ -266,6 +292,41 @@ describe('buildArchiveRecommendations', () => {
       mediaType: 'movie',
       score: 10,
     })
+  })
+
+  it('re-ranks mixed results with inspectable media, language, and genre preferences', () => {
+    const preferences: UserPreferences = {
+      ...createDefaultPreferences(),
+      favoriteGenres: ['drama'],
+      preferredLanguage: 'si',
+      preferredMedia: 'tv',
+    }
+    const recommendations = buildArchiveRecommendations(
+      [
+        createResponse(createSeed(1), [
+          createMovie(50, {
+            genre_ids: [28],
+            original_language: 'en',
+          }),
+          createMovie(51, {
+            genre_ids: [18],
+            original_language: 'si',
+          }),
+        ]),
+        createResponse(createSeed(2, 'tv'), [
+          createTvShow(52, {
+            genre_ids: [18],
+            original_language: 'si',
+          }),
+        ]),
+      ],
+      [],
+      preferences,
+    )
+
+    expect(
+      recommendations.map(({ id }) => id),
+    ).toEqual([52, 51, 50])
   })
 
   it('preserves first-seen order when recommendation weights tie', () => {
