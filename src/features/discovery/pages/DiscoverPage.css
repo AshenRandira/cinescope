@@ -179,7 +179,7 @@
 
 .discover-console__personalization {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem 2rem;
   max-width: 55rem;
 }
@@ -193,6 +193,87 @@
   font-weight: 650;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.discover-console__anchors p {
+  margin: 0;
+}
+
+.discover-console__anchors button {
+  min-height: 2.75rem;
+  margin-top: 0.4rem;
+  padding: 0.35rem 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-projector-strong);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.discover-console__anchors button:hover,
+.discover-console__anchors button:focus-visible {
+  color: var(--color-paper-100);
+}
+
+.discover-console__moods {
+  max-width: 55rem;
+  margin: 2rem 0 0;
+  padding: 1.25rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.discover-console__moods legend {
+  color: var(--color-projector-strong);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.discover-console__moods > p {
+  max-width: 46rem;
+  margin: 0.6rem 0 0;
+  color: var(--color-app-muted);
+  font-size: var(--font-size-caption);
+  line-height: 1.65;
+}
+
+.discover-console__moods > div {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 1rem;
+  padding: 1px;
+  background: var(--color-line);
+}
+
+.discover-console__moods button {
+  min-height: 3.25rem;
+  padding: 0.75rem;
+  border: 0;
+  color: var(--color-paper-300);
+  background: var(--color-ink-950);
+  font-size: var(--font-size-caption);
+  text-align: left;
+  cursor: pointer;
+}
+
+.discover-console__moods button:hover,
+.discover-console__moods button:focus-visible {
+  color: var(--color-paper-100);
+  background: var(--color-projector-soft);
+}
+
+.discover-console__moods button[aria-pressed="true"] {
+  color: var(--color-ink-950);
+  background: var(--color-projector);
 }
 
 .discover-console__method > button {
@@ -234,6 +315,60 @@
 
 .discover-projection__content {
   margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.discover-feedback-notice {
+  display: flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-projector-soft);
+  color: var(--color-paper-300);
+  background: var(--color-projector-soft);
+  font-size: var(--font-size-small);
+}
+
+.discover-feedback-notice p {
+  margin: 0;
+}
+
+.discover-feedback-notice strong {
+  color: var(--color-paper-100);
+}
+
+.discover-feedback-notice button,
+.discover-record-actions button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-paper-400);
+  background: transparent;
+  font-family: var(--font-annotation);
+  font-size: var(--font-size-label);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.discover-feedback-notice button:hover,
+.discover-feedback-notice button:focus-visible,
+.discover-record-actions button:hover,
+.discover-record-actions button:focus-visible {
+  color: var(--color-paper-100);
+}
+
+.discover-feedback-notice svg,
+.discover-record-actions svg {
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 .discover-projection__summary {
@@ -384,6 +519,36 @@
   color: var(--color-paper-200);
 }
 
+.discover-recommendation-reason {
+  margin-top: 1.5rem;
+  padding: 0.9rem 0 0.9rem 1rem;
+  border-left: 1px solid var(--color-projector);
+}
+
+.discover-recommendation-reason p {
+  margin: 0;
+  color: var(--color-paper-300);
+  font-size: var(--font-size-caption);
+  line-height: 1.6;
+}
+
+.discover-recommendation-reason p + p {
+  margin-top: 0.3rem;
+}
+
+.discover-recommendation-reason .archive-label {
+  margin-bottom: 0.55rem;
+  color: var(--color-projector-strong);
+}
+
+.discover-record-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
 .discover-record-link,
 .discover-card__copy > a {
   display: inline-flex;
@@ -399,6 +564,10 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-projector-strong);
+}
+
+.discover-record-actions .discover-record-link {
+  margin-top: 0;
 }
 
 .discover-record-link:hover,
@@ -517,7 +686,7 @@
   color: var(--color-paper-400);
 }
 
-.discover-card__copy > a {
+.discover-card__copy > .discover-record-actions {
   margin-top: auto;
   padding-top: 1.25rem;
 }
@@ -596,6 +765,14 @@
     grid-template-columns: 1fr;
   }
 
+  .discover-console__moods > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .discover-console__moods button:last-child {
+    grid-column: 1 / -1;
+  }
+
   .discover-lead__artwork {
     min-height: 23rem;
   }
@@ -630,6 +807,22 @@
 
   .discover-card__rating {
     display: none;
+  }
+
+  .discover-card__copy > .discover-record-actions {
+    margin-top: 0.75rem;
+    padding-top: 0;
+  }
+
+  .discover-record-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .discover-recommendation-reason {
+    margin-top: 0.85rem;
+    padding-block: 0.6rem;
   }
 }
 

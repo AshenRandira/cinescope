@@ -16,6 +16,8 @@ import {
   getPreferenceSummary,
 } from '../../preferences/data/preferences'
 import { usePreferences } from '../../preferences/hooks/usePreferences'
+import type { RecommendationMoodId } from '../../recommendations/data/recommendationMoods'
+import { useRecommendationFeedback } from '../../recommendations/hooks/useRecommendationFeedback'
 import {
   buildArchiveRecommendations,
   getArchiveRecommendationPages,
@@ -26,9 +28,11 @@ import {
 export function useArchiveRecommendations(
   enabled: boolean,
   page: number,
+  mood: RecommendationMoodId,
 ) {
   const { records: libraryRecords } = useLibrary()
   const { preferences } = usePreferences()
+  const { feedback } = useRecommendationFeedback()
   const seeds = useMemo(
     () =>
       selectArchiveRecommendationSeeds(
@@ -78,6 +82,11 @@ export function useArchiveRecommendations(
     responses,
     libraryRecords,
     preferences,
+    {
+      mood,
+      notInterestedRecordKeys:
+        feedback.notInterestedRecordKeys,
+    },
   )
   const isPending =
     enabled &&

@@ -96,10 +96,12 @@ function createTvShow(
 function createSeed(
   id: number,
   mediaType: 'movie' | 'tv' = 'movie',
+  signal: ArchiveRecommendationSeed['signal'] = 'recent',
 ): ArchiveRecommendationSeed {
   return {
     id,
     mediaType,
+    signal,
     title: `Seed ${id}`,
   }
 }
@@ -179,11 +181,13 @@ describe('selectArchiveRecommendationSeeds', () => {
         {
           id: 9,
           mediaType: 'tv',
+          signal: 'recent',
           title: 'Recent series',
         },
         {
           id: 8,
           mediaType: 'movie',
+          signal: 'recent',
           title: 'Library record',
         },
       ],
@@ -210,6 +214,34 @@ describe('selectArchiveRecommendationSeeds', () => {
         preferredMedia: 'tv',
       }).map(({ id }) => id),
     ).toEqual([21, 20])
+  })
+
+  it('uses active TV progress as a positive seed signal', () => {
+    const records = [
+      createLibraryRecord({
+        id: 30,
+        mediaType: 'tv',
+        title: 'Series in progress',
+        tvProgress: {
+          resumeEpisode: null,
+          updatedAt: '2026-08-11T09:00:00.000Z',
+          watchedEpisodeKeys: ['1:1'],
+        },
+      }),
+      createLibraryRecord({
+        id: 31,
+        updatedAt: '2026-08-11T10:00:00.000Z',
+      }),
+    ]
+
+    expect(selectArchiveRecommendationSeeds(records)).toEqual([
+      {
+        id: 30,
+        mediaType: 'tv',
+        signal: 'progress',
+        title: 'Series in progress',
+      },
+    ])
   })
 })
 
@@ -327,6 +359,86 @@ describe('buildArchiveRecommendations', () => {
     expect(
       recommendations.map(({ id }) => id),
     ).toEqual([52, 51, 50])
+  })
+
+  it('re-ranks an existing reel for mood without changing its records', () => {
+    const response = createResponse(createSeed(1), [
+      createMovie(60, { genre_ids: [18] }),
+      createMovie(61, { genre_ids: [35] }),
+    ])
+    const openReel = buildArchiveRecommendations(
+      [response],
+      [],
+    )
+    const comfortReel = buildArchiveRecommendations(
+      [response],
+      [],
+      createDefaultPreferences(),
+      { mood: 'comfort' },
+    )
+
+    expect(openReel.map(({ id }) => id)).toEqual([60, 61])
+    expect(comfortReel.map(({ id }) => id)).toEqual([
+      61, 60,
+    ])
+    expect(
+      comfortReel.find(({ id }) => id === 61)
+        ?.recommendationReasons,
+    ).toContain('Fits this comforting mood.')
+  })
+
+  it('removes not-interested records before ranking', () => {
+    const recommendations = buildArchiveRecommendations(
+      [
+        createResponse(createSeed(1), [
+          createMovie(70),
+          createMovie(71),
+        ]),
+      ],
+      [],
+      createDefaultPreferences(),
+      { notInterestedRecordKeys: ['movie:70'] },
+    )
+
+    expect(recommendations.map(({ id }) => id)).toEqual([71])
+  })
+
+  it('explains archive consensus and preference signals deterministically', () => {
+    const preferences: UserPreferences = {
+      ...createDefaultPreferences(),
+      favoriteGenres: ['drama'],
+    }
+    const firstSeed = createSeed(80, 'movie', 'favorite')
+    const secondSeed = createSeed(81, 'movie', 'high-rating')
+    const recommendations = buildArchiveRecommendations(
+      [
+        createResponse(firstSeed, [createMovie(90)]),
+        createResponse(secondSeed, [createMovie(90)]),
+      ],
+      [],
+      preferences,
+    )
+
+    expect(recommendations[0]?.recommendationReasons).toEqual([
+      'Connected to 2 archive anchors, including Seed 80.',
+      'Matches your drama preference.',
+    ])
+  })
+
+  it('explains recommendations seeded by active TV progress', () => {
+    const recommendations = buildArchiveRecommendations(
+      [
+        createResponse(
+          createSeed(100, 'tv', 'progress'),
+          [createTvShow(101)],
+        ),
+      ],
+      [],
+    )
+
+    expect(recommendations[0]?.recommendationReasons[0]).toBe(
+      'Because you are continuing Seed 100.',
+    )
   })
 
   it('preserves first-seen order when recommendation weights tie', () => {

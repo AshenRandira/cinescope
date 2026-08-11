@@ -90,6 +90,12 @@ function getPreferenceDocumentUrl(userId: string): string {
   return `${FIRESTORE_EMULATOR_URL}/v1/projects/${PROJECT_ID}/databases/(default)/documents/users/${userId}/preferences/discovery`
 }
 
+function getRecommendationFeedbackDocumentUrl(
+  userId: string,
+): string {
+  return `${FIRESTORE_EMULATOR_URL}/v1/projects/${PROJECT_ID}/databases/(default)/documents/users/${userId}/preferences/recommendations`
+}
+
 async function readPreferenceDocument(
   request: APIRequestContext,
   session: AuthSession,
@@ -118,6 +124,59 @@ async function readPreferenceDocument(
     fields: body.fields ?? null,
     status: response.status(),
   }
+}
+
+async function readRecommendationFeedbackDocument(
+  request: APIRequestContext,
+  session: AuthSession,
+): Promise<{
+  fields: FirestoreFields | null
+  status: number
+}> {
+  const response = await request.get(
+    getRecommendationFeedbackDocumentUrl(session.localId),
+    {
+      headers: {
+        Authorization: `Bearer ${session.idToken}`,
+      },
+    },
+  )
+
+  if (!response.ok()) {
+    return { fields: null, status: response.status() }
+  }
+
+  const body = (await response.json()) as {
+    fields?: FirestoreFields
+  }
+
+  return {
+    fields: body.fields ?? null,
+    status: response.status(),
+  }
+}
+
+async function expectCloudRecommendationFeedback(
+  request: APIRequestContext,
+  session: AuthSession,
+  predicate: (fields: FirestoreFields) => boolean,
+): Promise<void> {
+  await expect
+    .poll(
+      async () => {
+        const { fields, status } =
+          await readRecommendationFeedbackDocument(
+            request,
+            session,
+          )
+
+        return status === 200 && fields
+          ? predicate(fields)
+          : false
+      },
+      { timeout: 10_000 },
+    )
+    .toBe(true)
 }
 
 async function expectCloudPreferences(
@@ -546,6 +605,96 @@ test('synchronizes discovery preferences and restores their recommendation lens'
   ).toBeVisible()
 })
 
+test('re-ranks archive recommendations by mood and remembers not-interested feedback', async ({
+  page,
+  request,
+}) => {
+  const email = 'recommendations@example.test'
+  const session = await submitAuthRequest(
+    request,
+    'signUp',
+    email,
+    'Recommendation Member',
+  )
+
+  await page.goto('/login', {
+    waitUntil: 'domcontentloaded',
+  })
+  await page.getByLabel('Email address').fill(email)
+  await page.getByLabel('Password').fill(TEST_PASSWORD)
+  await page
+    .getByRole('button', { name: 'Sign in to CineScope' })
+    .click()
+  await expect(page).toHaveURL(/\/profile$/)
+
+  await page.goto('/movies/550', {
+    waitUntil: 'domcontentloaded',
+  })
+  await page
+    .getByRole('button', { name: 'Save to library' })
+    .click()
+  await page
+    .getByRole('button', { name: 'Mark favourite' })
+    .click()
+  await expectCloudRecord(
+    request,
+    session,
+    (fields) => fields.isFavorite?.booleanValue === true,
+  )
+
+  await page.goto(
+    '/discover?signal=archive&mood=reflective',
+    { waitUntil: 'domcontentloaded' },
+  )
+  await expect(
+    page.getByRole('button', { name: 'Reflective' }),
+  ).toHaveAttribute('aria-pressed', 'true')
+  await expect(
+    page.getByRole('heading', { name: 'Reflective Echo' }),
+  ).toBeVisible()
+  await expect(
+    page.getByText(
+      'Because Fixture Film is one of your favourites.',
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByText('Fits this reflective mood.'),
+  ).toBeVisible()
+
+  await page
+    .getByRole('button', { name: 'Not interested' })
+    .click()
+  await expect(
+    page.getByText(
+      'Reflective Echo will stay out of future archive cuts.',
+    ),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Reflective Echo' }),
+  ).toHaveCount(0)
+  await expectCloudRecommendationFeedback(
+    request,
+    session,
+    (fields) =>
+      fields.notInterestedRecordKeys?.arrayValue?.values?.[0]
+        ?.stringValue === 'movie:551',
+  )
+
+  await page.evaluate((userId) => {
+    globalThis.localStorage.removeItem(
+      `cinescope.recommendation-feedback.v1.user.${encodeURIComponent(userId)}`,
+    )
+  }, session.localId)
+  await page.reload({ waitUntil: 'domcontentloaded' })
+
+  await expect(
+    page.getByText('Synchronized with your account'),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Reflective Echo' }),
+  ).toHaveCount(0)
+})
+
 test('changes a password and permanently deletes account data behind fresh credentials', async ({
   page,
   request,
@@ -579,6 +728,20 @@ test('changes a password and permanently deletes account data behind fresh crede
     request,
     session,
     (fields) => fields.title?.stringValue === 'Fixture Film',
+  )
+
+  await page.goto('/discover?signal=archive', {
+    waitUntil: 'domcontentloaded',
+  })
+  await page
+    .getByRole('button', { name: 'Not interested' })
+    .click()
+  await expectCloudRecommendationFeedback(
+    request,
+    session,
+    (fields) =>
+      fields.notInterestedRecordKeys?.arrayValue?.values?.[0]
+        ?.stringValue === 'movie:551',
   )
 
   await page.goto('/profile', {
@@ -688,6 +851,18 @@ test('changes a password and permanently deletes account data behind fresh crede
   await expect
     .poll(
       async () =>
+        (
+          await readRecommendationFeedbackDocument(
+            request,
+            session,
+          )
+        ).status,
+      { timeout: 10_000 },
+    )
+    .toBe(404)
+  await expect
+    .poll(
+      async () =>
         (await readPreferenceDocument(request, session))
           .status,
       { timeout: 10_000 },
@@ -702,9 +877,13 @@ test('changes a password and permanently deletes account data behind fresh crede
       preferences: globalThis.localStorage.getItem(
         `cinescope.preferences.v1.user.${encodeURIComponent(userId)}`,
       ),
+      recommendationFeedback: globalThis.localStorage.getItem(
+        `cinescope.recommendation-feedback.v1.user.${encodeURIComponent(userId)}`,
+      ),
     }
   }, session.localId)
 
   expect(memberStorage.library).toBeNull()
   expect(memberStorage.preferences).toBeNull()
+  expect(memberStorage.recommendationFeedback).toBeNull()
 })

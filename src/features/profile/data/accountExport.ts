@@ -4,8 +4,9 @@ import type {
   LibrarySyncStatus,
 } from '../../library/data/library'
 import type { UserPreferences } from '../../preferences/data/preferences'
+import type { RecommendationFeedback } from '../../recommendations/data/recommendationFeedback'
 
-export const ACCOUNT_EXPORT_SCHEMA_VERSION = 3
+export const ACCOUNT_EXPORT_SCHEMA_VERSION = 4
 
 export type CineScopeAccountExport = {
   account: AuthUser
@@ -16,18 +17,21 @@ export type CineScopeAccountExport = {
   exportedAt: string
   preferences: UserPreferences
   product: 'CineScope'
+  recommendationFeedback: RecommendationFeedback
   schemaVersion: typeof ACCOUNT_EXPORT_SCHEMA_VERSION
 }
 
 export function buildAccountExport({
   exportedAt = new Date().toISOString(),
   preferences,
+  recommendationFeedback,
   records,
   syncStatus,
   user,
 }: {
   exportedAt?: string
   preferences: UserPreferences
+  recommendationFeedback: RecommendationFeedback
   records: LibraryRecord[]
   syncStatus: LibrarySyncStatus
   user: AuthUser
@@ -46,6 +50,12 @@ export function buildAccountExport({
       favoriteGenres: [...preferences.favoriteGenres],
     },
     product: 'CineScope',
+    recommendationFeedback: {
+      ...recommendationFeedback,
+      notInterestedRecordKeys: [
+        ...recommendationFeedback.notInterestedRecordKeys,
+      ],
+    },
     schemaVersion: ACCOUNT_EXPORT_SCHEMA_VERSION,
   }
 }

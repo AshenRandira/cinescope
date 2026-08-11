@@ -20,6 +20,8 @@ export default defineConfig({
         'src/features/library/data/library.ts',
         'src/features/library/data/tvProgress.ts',
         'src/features/preferences/data/preferences.ts',
+        'src/features/recommendations/data/recommendationFeedback.ts',
+        'src/features/recommendations/data/recommendationMoods.ts',
         'src/features/discovery/data/archiveRecommendations.ts',
         'src/features/auth/data/auth.ts',
         'src/lib/tmdb/client.ts',

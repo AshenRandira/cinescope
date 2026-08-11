@@ -11,6 +11,7 @@ import { queryClient } from './app/queryClient'
 import { AuthProvider } from './features/auth/context/AuthProvider'
 import { LibraryProvider } from './features/library/context/LibraryProvider'
 import { PreferencesProvider } from './features/preferences/context/PreferencesProvider'
+import { RecommendationFeedbackProvider } from './features/recommendations/context/RecommendationFeedbackProvider'
 import './styles/global.css'
 
 const rootElement = document.getElementById('root')
@@ -24,9 +25,11 @@ createRoot(rootElement).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <PreferencesProvider>
-          <LibraryProvider>
-            <App />
-          </LibraryProvider>
+          <RecommendationFeedbackProvider>
+            <LibraryProvider>
+              <App />
+            </LibraryProvider>
+          </RecommendationFeedbackProvider>
         </PreferencesProvider>
       </AuthProvider>
     </QueryClientProvider>

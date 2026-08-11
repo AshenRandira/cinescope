@@ -17,6 +17,7 @@ import { getLibrarySyncCopy } from '../../library/data/library'
 import { useLibrary } from '../../library/hooks/useLibrary'
 import { PreferencesEditor } from '../../preferences/components/PreferencesEditor'
 import { usePreferences } from '../../preferences/hooks/usePreferences'
+import { useRecommendationFeedback } from '../../recommendations/hooks/useRecommendationFeedback'
 import {
   buildAccountExport,
   downloadAccountExport,
@@ -108,6 +109,10 @@ export function ProfilePage() {
     clearAccountData: clearPreferenceData,
     preferences,
   } = usePreferences()
+  const {
+    clearAccountData: clearRecommendationFeedback,
+    feedback: recommendationFeedback,
+  } = useRecommendationFeedback()
   const syncCopy = getLibrarySyncCopy(
     syncStatus,
     syncError,
@@ -312,6 +317,7 @@ export function ProfilePage() {
       downloadAccountExport(
         buildAccountExport({
           preferences,
+          recommendationFeedback,
           records,
           syncStatus,
           user: accountUser,
@@ -357,6 +363,7 @@ export function ProfilePage() {
       await deleteAccount(deletePassword)
       clearLibraryData()
       clearPreferenceData()
+      clearRecommendationFeedback()
       storeAccountDeletionNotice()
       await logout().catch(() => undefined)
       navigate('/login', { replace: true })

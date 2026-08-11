@@ -18,6 +18,9 @@ import { useLibrary } from '../../library/hooks/useLibrary'
 import type { PreferencesContextValue } from '../../preferences/context/PreferencesContext'
 import { createDefaultPreferences } from '../../preferences/data/preferences'
 import { usePreferences } from '../../preferences/hooks/usePreferences'
+import type { RecommendationFeedbackContextValue } from '../../recommendations/context/RecommendationFeedbackContext'
+import { createDefaultRecommendationFeedback } from '../../recommendations/data/recommendationFeedback'
+import { useRecommendationFeedback } from '../../recommendations/hooks/useRecommendationFeedback'
 import { downloadAccountExport } from '../data/accountExport'
 import { ProfilePage } from './ProfilePage'
 
@@ -31,6 +34,10 @@ vi.mock('../../library/hooks/useLibrary', () => ({
 
 vi.mock('../../preferences/hooks/usePreferences', () => ({
   usePreferences: vi.fn(),
+}))
+
+vi.mock('../../recommendations/hooks/useRecommendationFeedback', () => ({
+  useRecommendationFeedback: vi.fn(),
 }))
 
 vi.mock('../data/accountExport', async (importOriginal) => {
@@ -105,6 +112,21 @@ function createPreferencesValue(
   }
 }
 
+function createRecommendationFeedbackValue(
+  overrides: Partial<RecommendationFeedbackContextValue> = {},
+): RecommendationFeedbackContextValue {
+  return {
+    clearAccountData: vi.fn(),
+    dismissRecommendation: vi.fn(),
+    feedback: createDefaultRecommendationFeedback(),
+    restoreRecommendation: vi.fn(),
+    retrySync: vi.fn(),
+    syncError: null,
+    syncStatus: 'synced',
+    ...overrides,
+  }
+}
+
 function renderProfile() {
   return render(
     <MemoryRouter initialEntries={['/profile']}>
@@ -128,6 +150,9 @@ describe('profile security controls', () => {
     )
     vi.mocked(usePreferences).mockReturnValue(
       createPreferencesValue(),
+    )
+    vi.mocked(useRecommendationFeedback).mockReturnValue(
+      createRecommendationFeedbackValue(),
     )
   })
 
@@ -220,7 +245,11 @@ describe('profile security controls', () => {
     expect(downloadAccountExport).toHaveBeenCalledWith(
       expect.objectContaining({
         account: authUser,
-        schemaVersion: 3,
+        recommendationFeedback: {
+          notInterestedRecordKeys: [],
+          updatedAt: null,
+        },
+        schemaVersion: 4,
       }),
     )
   })
@@ -265,6 +294,7 @@ describe('profile security controls', () => {
     const logout = vi.fn(async () => undefined)
     const clearAccountData = vi.fn()
     const clearPreferenceData = vi.fn()
+    const clearRecommendationFeedback = vi.fn()
     vi.mocked(useAuth).mockReturnValue(
       createAuthValue({ deleteAccount, logout }),
     )
@@ -274,6 +304,11 @@ describe('profile security controls', () => {
     vi.mocked(usePreferences).mockReturnValue(
       createPreferencesValue({
         clearAccountData: clearPreferenceData,
+      }),
+    )
+    vi.mocked(useRecommendationFeedback).mockReturnValue(
+      createRecommendationFeedbackValue({
+        clearAccountData: clearRecommendationFeedback,
       }),
     )
     renderProfile()
@@ -306,6 +341,7 @@ describe('profile security controls', () => {
     )
     expect(clearAccountData).toHaveBeenCalledOnce()
     expect(clearPreferenceData).toHaveBeenCalledOnce()
+    expect(clearRecommendationFeedback).toHaveBeenCalledOnce()
     expect(logout).toHaveBeenCalledOnce()
     expect(
       screen.getByText('Returned to account access'),

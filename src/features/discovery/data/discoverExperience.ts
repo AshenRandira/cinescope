@@ -24,6 +24,7 @@ export type DiscoverRecord = {
   originalLanguage: string
   overview: string | null
   posterPath: string | null
+  recommendationReasons: string[]
   score: number | null
   title: string
   voteCount: number
@@ -163,7 +164,7 @@ export const discoverSignalDefinitions: ReadonlyArray<DiscoverSignalDefinition> 
       label: 'From your archive',
       mediaType: 'mixed',
       method:
-        'Up to four favourites and ratings of 7 or higher become visible anchors. If no positive rating signal exists, CineScope falls back to recent unrated saves, then combines their TMDB recommendation paths and removes titles already in your archive.',
+        'Up to four favourites, ratings of 7 or higher, and active television checkpoints become visible anchors. If no positive signal exists, CineScope falls back to recent unrated saves, combines their TMDB recommendation paths, and removes titles already in your archive or feedback memory.',
       query: {},
       title: 'Follow the traces left by your archive.',
       value: 'archive',
@@ -268,6 +269,7 @@ export function adaptMovie(
       movie.original_language.trim() || 'und',
     overview: movie.overview.trim() || null,
     posterPath: movie.poster_path,
+    recommendationReasons: [],
     score:
       movie.vote_count > 0
         ? movie.vote_average
@@ -293,6 +295,7 @@ export function adaptTv(
       show.original_language.trim() || 'und',
     overview: show.overview.trim() || null,
     posterPath: show.poster_path,
+    recommendationReasons: [],
     score:
       show.vote_count > 0
         ? show.vote_average

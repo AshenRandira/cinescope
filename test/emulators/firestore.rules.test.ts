@@ -22,6 +22,8 @@ const OTHER_USER_ID = 'other-user'
 const RECORD_PATH = `users/${OWNER_ID}/library/movie:550`
 const PREFERENCES_PATH =
   `users/${OWNER_ID}/preferences/discovery`
+const RECOMMENDATION_FEEDBACK_PATH =
+  `users/${OWNER_ID}/preferences/recommendations`
 
 const validRecord = {
   backdropPath: null,
@@ -60,6 +62,11 @@ const validPreferences = {
   preferredLanguage: 'si',
   preferredMedia: 'movie',
   updatedAt: '2026-08-11T10:00:00.000Z',
+}
+
+const validRecommendationFeedback = {
+  notInterestedRecordKeys: ['movie:550', 'tv:1399'],
+  updatedAt: '2026-08-11T12:00:00.000Z',
 }
 
 function getFirestoreEmulatorAddress(): {
@@ -196,6 +203,31 @@ describe('Firestore account data security rules', () => {
     await assertSucceeds(deleteDoc(preferenceDocument))
   })
 
+  test('allows an owner to manage one bounded recommendation feedback document', async () => {
+    const ownerFirestore = testEnvironment
+      .authenticatedContext(OWNER_ID)
+      .firestore()
+    const feedbackDocument = doc(
+      ownerFirestore,
+      RECOMMENDATION_FEEDBACK_PATH,
+    )
+
+    await assertSucceeds(
+      setDoc(
+        feedbackDocument,
+        validRecommendationFeedback,
+      ),
+    )
+    await assertSucceeds(getDoc(feedbackDocument))
+    await assertSucceeds(
+      updateDoc(feedbackDocument, {
+        notInterestedRecordKeys: ['movie:551'],
+        updatedAt: '2026-08-11T13:00:00.000Z',
+      }),
+    )
+    await assertSucceeds(deleteDoc(feedbackDocument))
+  })
+
   test('denies anonymous, cross-user, and unexpected preference-document access', async () => {
     const anonymousFirestore = testEnvironment
       .unauthenticatedContext()
@@ -215,6 +247,23 @@ describe('Firestore account data security rules', () => {
     )
     await assertFails(
       getDoc(doc(otherFirestore, PREFERENCES_PATH)),
+    )
+    await assertFails(
+      setDoc(
+        doc(
+          anonymousFirestore,
+          RECOMMENDATION_FEEDBACK_PATH,
+        ),
+        validRecommendationFeedback,
+      ),
+    )
+    await assertFails(
+      getDoc(
+        doc(
+          otherFirestore,
+          RECOMMENDATION_FEEDBACK_PATH,
+        ),
+      ),
     )
     await assertFails(
       setDoc(
@@ -280,6 +329,57 @@ describe('Firestore account data security rules', () => {
       ),
     )
   })
+
+  test.each([
+    [
+      'more than one hundred record keys',
+      {
+        ...validRecommendationFeedback,
+        notInterestedRecordKeys: Array.from(
+          { length: 101 },
+          (_value, index) => `movie:${index + 1}`,
+        ),
+      },
+    ],
+    [
+      'duplicate record keys',
+      {
+        ...validRecommendationFeedback,
+        notInterestedRecordKeys: ['movie:550', 'movie:550'],
+      },
+    ],
+    [
+      'an empty timestamp',
+      {
+        ...validRecommendationFeedback,
+        updatedAt: '',
+      },
+    ],
+    [
+      'an unexpected field',
+      {
+        ...validRecommendationFeedback,
+        injected: true,
+      },
+    ],
+  ])(
+    'rejects recommendation feedback with %s',
+    async (_description, feedback) => {
+      const ownerFirestore = testEnvironment
+        .authenticatedContext(OWNER_ID)
+        .firestore()
+
+      await assertFails(
+        setDoc(
+          doc(
+            ownerFirestore,
+            RECOMMENDATION_FEEDBACK_PATH,
+          ),
+          feedback,
+        ),
+      )
+    },
+  )
 
   test('denies every unauthenticated library operation', async () => {
     const anonymousFirestore = testEnvironment

@@ -12,6 +12,8 @@ import type {
   TmdbTvShow,
 } from '../../../types/tmdb'
 
+import type { RecommendationMoodId } from '../../recommendations/data/recommendationMoods'
+
 import {
   buildDiscoverQuery,
   getAvailableDiscoverPages,
@@ -30,12 +32,13 @@ type DiscoverApiRecord =
 export function useDiscoverExperience(
   signal: DiscoverSignalId,
   page: number,
+  mood: RecommendationMoodId,
 ) {
   const definition =
     getDiscoverSignalDefinition(signal)
   const isArchiveSignal = signal === 'archive'
   const archiveRecommendations =
-    useArchiveRecommendations(isArchiveSignal, page)
+    useArchiveRecommendations(isArchiveSignal, page, mood)
 
   const query = useQuery({
     enabled: !isArchiveSignal,

@@ -49,6 +49,10 @@ describe('account export', () => {
         preferredMedia: 'movie',
         updatedAt: '2026-08-10T12:00:00.000Z',
       },
+      recommendationFeedback: {
+        notInterestedRecordKeys: ['movie:550', 'tv:1399'],
+        updatedAt: '2026-08-11T00:30:00.000Z',
+      },
       records: [
         createRecord(1, '2026-08-01T00:00:00.000Z'),
         createRecord(2, '2026-08-02T00:00:00.000Z'),
@@ -69,6 +73,10 @@ describe('account export', () => {
       favoriteGenres: ['drama', 'mystery'],
       preferredLanguage: 'en',
       preferredMedia: 'movie',
+    })
+    expect(accountExport.recommendationFeedback).toEqual({
+      notInterestedRecordKeys: ['movie:550', 'tv:1399'],
+      updatedAt: '2026-08-11T00:30:00.000Z',
     })
     expect(JSON.stringify(accountExport)).not.toMatch(
       /password|token/i,

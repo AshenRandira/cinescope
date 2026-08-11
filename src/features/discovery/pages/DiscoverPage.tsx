@@ -1,8 +1,10 @@
 import {
   ArrowRight,
+  EyeOff,
   RotateCw,
+  Undo2,
 } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Link,
   useNavigate,
@@ -30,11 +32,22 @@ import {
   type DiscoverSignalId,
 } from '../data/discoverExperience'
 
+import {
+  defaultRecommendationMood,
+  getRecommendationMoodDefinition,
+  parseRecommendationMood,
+  recommendationMoodDefinitions,
+  type RecommendationMoodId,
+} from '../../recommendations/data/recommendationMoods'
+import { useRecommendationFeedback } from '../../recommendations/hooks/useRecommendationFeedback'
+
 import { useDiscoverExperience } from '../hooks/useDiscoverExperience'
 
 import './DiscoverPage.css'
 
 type DiscoverRecordProps = {
+  isArchiveSignal: boolean
+  onDismiss: (record: DiscoverRecord) => void
   record: DiscoverRecord
 }
 
@@ -68,7 +81,49 @@ function getScoreLabel(
     : `${score.toFixed(1)} / 10`
 }
 
+function getFeedbackStatusLabel(
+  status:
+    | 'connecting'
+    | 'error'
+    | 'local'
+    | 'synced'
+    | 'syncing',
+): string {
+  switch (status) {
+    case 'connecting':
+    case 'syncing':
+      return 'Saving feedback signal'
+    case 'error':
+      return 'Saved locally / sync paused'
+    case 'local':
+      return 'Saved in this browser'
+    case 'synced':
+      return 'Synchronized with your account'
+  }
+}
+
+function RecommendationExplanation({
+  record,
+}: {
+  record: DiscoverRecord
+}) {
+  if (record.recommendationReasons.length === 0) {
+    return null
+  }
+
+  return (
+    <aside className="discover-recommendation-reason">
+      <p className="archive-label">Why this record</p>
+      {record.recommendationReasons.map((reason) => (
+        <p key={reason}>{reason}</p>
+      ))}
+    </aside>
+  )
+}
+
 function DiscoverLead({
+  isArchiveSignal,
+  onDismiss,
   record,
 }: DiscoverRecordProps) {
   const backdropUrl = getTmdbBackdropUrl(
@@ -175,13 +230,30 @@ function DiscoverLead({
           </div>
         </dl>
 
-        <Link
-          className="discover-record-link"
-          to={getRecordTarget(record)}
-        >
-          {getRecordAction(record)}
-          <ArrowRight aria-hidden="true" />
-        </Link>
+        {isArchiveSignal ? (
+          <RecommendationExplanation record={record} />
+        ) : null}
+
+        <div className="discover-record-actions">
+          <Link
+            className="discover-record-link"
+            to={getRecordTarget(record)}
+          >
+            {getRecordAction(record)}
+            <ArrowRight aria-hidden="true" />
+          </Link>
+
+          {isArchiveSignal ? (
+            <button
+              aria-label={`Not interested in ${record.title}`}
+              onClick={() => onDismiss(record)}
+              type="button"
+            >
+              <EyeOff aria-hidden="true" />
+              Not interested
+            </button>
+          ) : null}
+        </div>
       </div>
     </article>
   )
@@ -189,6 +261,8 @@ function DiscoverLead({
 
 function DiscoverCard({
   index,
+  isArchiveSignal,
+  onDismiss,
   record,
 }: DiscoverCardProps) {
   const posterUrl = getTmdbPosterUrl(
@@ -283,10 +357,30 @@ function DiscoverCard({
           </span>
         </div>
 
-        <Link to={getRecordTarget(record)}>
-          {getRecordAction(record)}
-          <ArrowRight aria-hidden="true" />
-        </Link>
+        {isArchiveSignal ? (
+          <RecommendationExplanation record={record} />
+        ) : null}
+
+        <div className="discover-record-actions">
+          <Link
+            className="discover-record-link"
+            to={getRecordTarget(record)}
+          >
+            {getRecordAction(record)}
+            <ArrowRight aria-hidden="true" />
+          </Link>
+
+          {isArchiveSignal ? (
+            <button
+              aria-label={`Not interested in ${record.title}`}
+              onClick={() => onDismiss(record)}
+              type="button"
+            >
+              <EyeOff aria-hidden="true" />
+              Not interested
+            </button>
+          ) : null}
+        </div>
       </div>
     </article>
   )
@@ -294,6 +388,8 @@ function DiscoverCard({
 
 export function DiscoverPage() {
   const navigate = useNavigate()
+  const [lastDismissedRecord, setLastDismissedRecord] =
+    useState<DiscoverRecord | null>(null)
   const [searchParams, setSearchParams] =
     useSearchParams()
   const signal = parseDiscoverSignal(
@@ -302,9 +398,22 @@ export function DiscoverPage() {
   const page = parseDiscoverPage(
     searchParams.get('page'),
   )
+  const mood = parseRecommendationMood(
+    searchParams.get('mood'),
+  )
+  const moodDefinition =
+    getRecommendationMoodDefinition(mood)
+  const {
+    dismissRecommendation,
+    retrySync: retryFeedbackSync,
+    restoreRecommendation,
+    syncError: feedbackSyncError,
+    syncStatus: feedbackSyncStatus,
+  } = useRecommendationFeedback()
   const discovery = useDiscoverExperience(
     signal,
     page,
+    mood,
   )
   const isArchiveSignal = signal === 'archive'
 
@@ -315,6 +424,7 @@ export function DiscoverPage() {
   function handleSignalChange(
     nextSignal: DiscoverSignalId,
   ): void {
+    setLastDismissedRecord(null)
     setSearchParams(
       serializeDiscoverState(nextSignal, 1),
     )
@@ -326,9 +436,50 @@ export function DiscoverPage() {
         ? 1
         : page + 1
 
-    setSearchParams(
-      serializeDiscoverState(signal, nextPage),
+    const nextSearchParams = serializeDiscoverState(
+      signal,
+      nextPage,
     )
+
+    if (
+      isArchiveSignal &&
+      mood !== defaultRecommendationMood
+    ) {
+      nextSearchParams.set('mood', mood)
+    }
+
+    setSearchParams(nextSearchParams)
+  }
+
+  function handleMoodChange(
+    nextMood: RecommendationMoodId,
+  ): void {
+    const nextSearchParams = serializeDiscoverState(
+      'archive',
+      1,
+    )
+
+    if (nextMood !== defaultRecommendationMood) {
+      nextSearchParams.set('mood', nextMood)
+    }
+
+    setLastDismissedRecord(null)
+    setSearchParams(nextSearchParams)
+  }
+
+  function handleDismiss(record: DiscoverRecord): void {
+    dismissRecommendation(record.mediaType, record.id)
+    setLastDismissedRecord(record)
+  }
+
+  function handleUndoDismissal(): void {
+    if (!lastDismissedRecord) return
+
+    restoreRecommendation(
+      lastDismissedRecord.mediaType,
+      lastDismissedRecord.id,
+    )
+    setLastDismissedRecord(null)
   }
 
   let projectionContent
@@ -416,7 +567,11 @@ export function DiscoverPage() {
           </p>
         </div>
 
-        <DiscoverLead record={leadRecord} />
+        <DiscoverLead
+          isArchiveSignal={isArchiveSignal}
+          onDismiss={handleDismiss}
+          record={leadRecord}
+        />
 
         {remainingRecords.length > 0 ? (
           <section
@@ -449,7 +604,9 @@ export function DiscoverPage() {
                 (record, index) => (
                   <DiscoverCard
                     index={index}
+                    isArchiveSignal={isArchiveSignal}
                     key={`${record.mediaType}:${record.id}`}
+                    onDismiss={handleDismiss}
                     record={record}
                   />
                 ),
@@ -567,7 +724,51 @@ export function DiscoverPage() {
                   <strong>Preference lens</strong>
                   {discovery.preferenceSummary}
                 </p>
+                <div className="discover-console__anchors">
+                  <strong>Feedback memory</strong>
+                  <p>
+                    {feedbackSyncError ??
+                      getFeedbackStatusLabel(
+                        feedbackSyncStatus,
+                      )}
+                  </p>
+                  {feedbackSyncError ? (
+                    <button
+                      onClick={retryFeedbackSync}
+                      type="button"
+                    >
+                      Retry feedback sync
+                    </button>
+                  ) : null}
+                </div>
               </div>
+            ) : null}
+
+            {isArchiveSignal ? (
+              <fieldset className="discover-console__moods">
+                <legend>Mood for this session</legend>
+                <p>{moodDefinition.description}</p>
+                <div>
+                  {recommendationMoodDefinitions.map(
+                    (definition) => (
+                      <button
+                        aria-pressed={
+                          mood === definition.value
+                        }
+                        key={definition.value}
+                        onClick={() =>
+                          handleMoodChange(
+                            definition.value,
+                          )
+                        }
+                        type="button"
+                      >
+                        {definition.label}
+                      </button>
+                    ),
+                  )}
+                </div>
+              </fieldset>
             ) : null}
           </div>
 
@@ -609,6 +810,24 @@ export function DiscoverPage() {
         </header>
 
         <div className="discover-projection__content">
+          {lastDismissedRecord ? (
+            <div
+              className="discover-feedback-notice"
+              role="status"
+            >
+              <p>
+                <strong>{lastDismissedRecord.title}</strong>{' '}
+                will stay out of future archive cuts.
+              </p>
+              <button
+                onClick={handleUndoDismissal}
+                type="button"
+              >
+                <Undo2 aria-hidden="true" />
+                Undo
+              </button>
+            </div>
+          ) : null}
           {projectionContent}
         </div>
       </section>

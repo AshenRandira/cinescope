@@ -55,6 +55,26 @@ const movieDetails = {
   videos: { id: 550, results: [fixtureVideo] },
 }
 
+const recommendationMovieSummary = {
+  ...movieSummary,
+  backdrop_path: '/reflective-echo-backdrop.jpg',
+  genre_ids: [18, 99],
+  id: 551,
+  original_language: 'ko',
+  original_title: 'Reflective Echo',
+  poster_path: '/reflective-echo-poster.jpg',
+  title: 'Reflective Echo',
+  vote_average: 8.1,
+  vote_count: 175,
+}
+
+const movieRecommendationResponse = {
+  page: 1,
+  results: [recommendationMovieSummary],
+  total_pages: 1,
+  total_results: 1,
+}
+
 const tvSummary = {
   adult: false,
   backdrop_path: null,
@@ -249,6 +269,9 @@ export async function installPublicApiFixtures(
         return
       case '/movie/550/watch/providers':
         await fulfillJson(route, { id: 550, results: {} })
+        return
+      case '/movie/550/recommendations':
+        await fulfillJson(route, movieRecommendationResponse)
         return
       case '/genre/tv/list':
         await fulfillJson(route, { genres: [{ id: 18, name: 'Drama' }] })

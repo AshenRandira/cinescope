@@ -31,7 +31,7 @@ Episode changes write to local storage synchronously before account synchronizat
 - legacy records without `tvProgress` remain accepted and are normalized when read;
 - malformed progress is discarded by the client parser without discarding the surrounding library record;
 - Firestore Rules allow progress only on an owner-controlled TV record, validate the bounded map shape, and continue rejecting unexpected fields;
-- account export schema version 3 includes the current TV progress snapshot alongside the member's discovery preferences;
+- account export schema version 4 includes the current TV progress snapshot alongside the member's discovery preferences and recommendation feedback;
 - account deletion recursively removes the same library documents, so no additional deletion path is required.
 
 No Firestore index, new collection, secret, or external service is required. The updated Rules must be deployed with the application revision before authenticated production use.
