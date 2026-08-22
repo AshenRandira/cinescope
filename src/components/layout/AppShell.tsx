@@ -1,13 +1,19 @@
 import { useEffect, useRef } from 'react'
-import { Outlet, useLocation } from 'react-router'
+import {
+  Outlet,
+  useLocation,
+  useNavigation,
+} from 'react-router'
 
 import { DesktopHeader } from './DesktopHeader'
 import { MobileBottomNavigation } from './MobileBottomNavigation'
 
 export function AppShell() {
   const { pathname } = useLocation()
+  const navigation = useNavigation()
   const mainRef = useRef<HTMLElement>(null)
   const previousPathnameRef = useRef(pathname)
+  const isNavigating = navigation.state !== 'idle'
 
   useEffect(() => {
     if (previousPathnameRef.current === pathname) {
@@ -20,6 +26,20 @@ export function AppShell() {
 
   return (
     <div className="projection-surface min-h-screen">
+      <div
+        aria-hidden="true"
+        className="route-progress"
+        data-active={isNavigating}
+      />
+
+      <p
+        aria-atomic="true"
+        className="sr-only"
+        role="status"
+      >
+        {isNavigating ? 'Loading the next archive view.' : ''}
+      </p>
+
       <a
         className="fixed left-4 top-4 z-[var(--z-skip-link)] -translate-y-24 border border-black bg-[var(--color-paper-100)] px-4 py-3 font-semibold text-[var(--color-ink-950)] transition-transform focus:translate-y-0"
         href="#main-content"

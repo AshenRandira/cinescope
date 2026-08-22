@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 
+import { RouteErrorBoundary } from '../components/feedback/RouteErrorBoundary'
 import { AppShell } from '../components/layout/AppShell'
 import { HomePage } from '../features/discovery/pages/HomePage'
 import { NotFoundPage } from '../pages/NotFoundPage'
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppShell />,
+    ErrorBoundary: RouteErrorBoundary,
     children: [
       {
         index: true,

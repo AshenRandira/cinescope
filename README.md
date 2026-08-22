@@ -79,9 +79,9 @@ npm.cmd run test:emulators
 git diff --check origin/develop...HEAD
 ```
 
-The lint command includes JSX accessibility rules and treats warnings as failures. Before a release, also verify the skip link, route focus, tabs, search suggestions, and dialogs with keyboard-only navigation in a browser.
+The lint command includes JSX accessibility rules and treats warnings as failures. Before a release, also verify the skip link, route focus, route-loading announcement, tabs, search suggestions, dialogs, and unexpected-error recovery with keyboard-only navigation in a browser.
 
-The bundle check reads the generated `dist/index.html` and fails if the initial JavaScript and CSS payload exceeds the recorded raw or gzip budgets. Run it after the production build.
+The bundle check reads the generated application shell and Vite manifest. It enforces separate raw and gzip limits for the initial module graph, every lazy route increment, and deferred dependencies such as Firebase. Run it after the production build. The measured baseline and manual accessibility matrix are recorded in [the performance and accessibility guide](docs/performance-accessibility.md).
 
 The public Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. Firebase is disabled and every same-origin catalogue API response is intercepted, so the suite needs no Firebase or TMDB credential.
 

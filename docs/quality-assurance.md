@@ -11,7 +11,7 @@ CineScope uses six deterministic validation layers:
 5. Firebase Hosting Emulator exercises the built application shell, SPA rewrites, browser security headers, and cache policy without deploying.
 6. Functions unit tests and local Functions emulator journeys exercise the TMDB route allowlist, server-only authentication, account-deletion identity and recent-login checks, recursive data cleanup ordering, normalized failures, cache controls, and method rejection.
 
-The component suite currently covers header-search validation, keyboard selection, natural-language request routing and its explicit title-search override, library save/watch/favourite/rating controls, episode-progress controls and rollups, preference and recommendation-feedback parsing, profile editing, authentication-form validation, protected-route behavior, route focus transfer, verification controls, password change, account export, and explicit destructive confirmation. Pure tests also cover intent parsing, URL state, Discover query construction, unsupported media mappings, mixed result projection, and match explanations. Coverage enforcement includes the library, TV progress, preference, recommendation mood/feedback, and archive-ranking engines plus the authentication helpers, protected route, library controls, and account export contract.
+The component suite currently covers header-search validation, keyboard selection, natural-language request routing and its explicit title-search override, library save/watch/favourite/rating controls, episode-progress controls and rollups, preference and recommendation-feedback parsing, profile editing, authentication-form validation, protected-route behavior, route focus transfer, accessible route-loading feedback, unexpected-route-error recovery, verification controls, password change, account export, and explicit destructive confirmation. Pure tests also cover intent parsing, URL state, Discover query construction, unsupported media mappings, mixed result projection, and match explanations. Coverage enforcement includes the library, TV progress, preference, recommendation mood/feedback, and archive-ranking engines plus the authentication helpers, protected route, library controls, and account export contract.
 
 The browser suite covers these public journeys:
 
@@ -21,6 +21,9 @@ The browser suite covers these public journeys:
 - television register to series, season, episode, and back;
 - episode checkpoint to season rollup, reload, continue-watching shelf, and next episode;
 - media-dialog open/close with focus restoration;
+- keyboard skip-link focus transfer and reduced-motion behavior;
+- safe recovery from an aborted lazy-route chunk;
+- 320 CSS-pixel overflow and mobile-navigation touch-target checks;
 - unknown and malformed deep-route handling.
 
 `e2e/fixtures.ts` intercepts every same-origin catalogue request used by these journeys. `.env.e2e` deliberately leaves Firebase and App Check unconfigured, so CI does not depend on real credentials, accounts, or live third-party data.
@@ -52,6 +55,8 @@ The suite clears Authentication and Firestore before each browser journey, runs 
 The Hosting layer builds in `preview` mode under the fixed `demo-cinescope` project ID. It asserts that `/` and `/movies/550` return the same application shell, document responses carry the reviewed CSP without direct TMDB connectivity, and Vite's hashed JavaScript carries the one-year immutable policy.
 
 The API layer supplies an in-process fixture token to the Functions emulator and a fake upstream HTTP server. It proves the token is attached only to the upstream server request, verifies the Hosting rewrite and canonical cache behavior, and rejects unsupported routes, parameters, and methods. The client-security scan also fails if browser sources, environment templates, workflows, or built assets contain the former Vite token variable or the direct TMDB API origin.
+
+The production build emits `dist/.vite/manifest.json`. The bundle gate uses that graph to enforce the initial JavaScript/CSS budget, the incremental static assets needed by each lazy application route, and each deferred third-party dependency entry. This prevents a large route or SDK from hiding behind an acceptable application-shell measurement. Current measurements and thresholds are documented in [performance and accessibility](performance-accessibility.md).
 
 ## Commands
 
@@ -98,6 +103,8 @@ Automation does not replace the following human checks:
 - browser zoom at 200% and 400%;
 - narrow mobile layouts and physical touch targets;
 - reduced-motion preference behavior;
+- visible and announced feedback during a throttled lazy-route transition;
+- root error-boundary layout, reload action, and safe diagnostic copy;
 - Chrome, Firefox, and Safari smoke testing;
 - two-device Firestore synchronization and account switching;
 - preference reconciliation across two active devices;

@@ -334,6 +334,46 @@ img {
   box-shadow: var(--shadow-focus);
 }
 
+.route-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--z-toast);
+  height: 0.1875rem;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-instant) var(--ease-standard);
+}
+
+.route-progress::after {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 46%;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-projector),
+    var(--color-projector-strong)
+  );
+  box-shadow: 0 0 1rem var(--color-projector-soft);
+  transform: translateX(-110%);
+}
+
+.route-progress[data-active="true"] {
+  opacity: 1;
+}
+
+.route-progress[data-active="true"]::after {
+  animation: route-progress 1.15s var(--ease-standard) infinite;
+}
+
+@keyframes route-progress {
+  to {
+    transform: translateX(320%);
+  }
+}
+
 /*
  * Authored shared primitives
  */
@@ -421,6 +461,12 @@ img {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .route-progress[data-active="true"]::after {
+    width: 100%;
+    animation: none;
+    transform: none;
   }
 }
 
