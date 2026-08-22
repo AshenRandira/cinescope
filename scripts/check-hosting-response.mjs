@@ -27,6 +27,8 @@ function expectHeader(headers, key, expectedValue) {
 
 const root = await fetchPath('/')
 const deepRoute = await fetchPath('/movies/550')
+const privacyRoute = await fetchPath('/privacy')
+const manifest = await fetchPath('/site.webmanifest')
 
 assert.ok(
   root.body.includes('<div id="root"></div>'),
@@ -37,6 +39,16 @@ assert.equal(
   root.body,
   'A direct React Router deep link must be rewritten to the application shell.',
 )
+assert.equal(
+  privacyRoute.body,
+  root.body,
+  'A direct policy-route link must be rewritten to the application shell.',
+)
+assert.equal(
+  JSON.parse(manifest.body).name,
+  'CineScope — The Living Archive',
+  'Hosting must serve the reviewed web app manifest.',
+)
 
 expectHeader(
   root.headers,
@@ -45,6 +57,11 @@ expectHeader(
 )
 expectHeader(
   deepRoute.headers,
+  'cache-control',
+  'no-cache, no-store, max-age=0, must-revalidate',
+)
+expectHeader(
+  privacyRoute.headers,
   'cache-control',
   'no-cache, no-store, max-age=0, must-revalidate',
 )
@@ -90,4 +107,6 @@ expectHeader(
 console.log('Firebase Hosting emulator responses')
 console.log('- application shell: HTTP 200 with reviewed security headers')
 console.log('- /movies/550: SPA rewrite returns the application shell')
+console.log('- /privacy: policy deep link returns the application shell')
+console.log('- web app manifest: available')
 console.log('- hashed JavaScript: one-year immutable cache policy')

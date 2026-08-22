@@ -1,0 +1,108 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+>
+  <defs>
+    <radialGradient id="warm" cx="78%" cy="12%" r="72%">
+      <stop offset="0" stop-color="#6d3c25" stop-opacity="0.74" />
+      <stop offset="0.56" stop-color="#17120d" stop-opacity="0.3" />
+      <stop offset="1" stop-color="#070806" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="cool" cx="8%" cy="92%" r="70%">
+      <stop offset="0" stop-color="#173d3c" stop-opacity="0.58" />
+      <stop offset="1" stop-color="#070806" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="rule" x1="0" x2="1">
+      <stop offset="0" stop-color="#efb761" />
+      <stop offset="1" stop-color="#efb761" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#070806" />
+  <rect width="1200" height="630" fill="url(#warm)" />
+  <rect width="1200" height="630" fill="url(#cool)" />
+  <rect
+    x="42"
+    y="42"
+    width="1116"
+    height="546"
+    fill="none"
+    stroke="#f5f1e9"
+    stroke-opacity="0.13"
+  />
+
+  <g transform="translate(92 86)">
+    <rect
+      width="72"
+      height="72"
+      fill="#0d100d"
+      stroke="#f5f1e9"
+      stroke-opacity="0.28"
+    />
+    <path
+      d="M36 13 59 36 36 59 13 36Z"
+      fill="none"
+      stroke="#efb761"
+      stroke-width="3"
+    />
+    <path d="M21 36h30" stroke="#efb761" stroke-width="2" />
+    <circle cx="36" cy="36" r="3.5" fill="#efb761" />
+  </g>
+
+  <text
+    x="92"
+    y="242"
+    fill="#f5f1e9"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="112"
+    letter-spacing="-5"
+  >
+    CineScope
+  </text>
+  <text
+    x="99"
+    y="292"
+    fill="#efb761"
+    font-family="Arial, sans-serif"
+    font-size="18"
+    font-weight="700"
+    letter-spacing="7"
+  >
+    THE LIVING ARCHIVE
+  </text>
+
+  <rect x="92" y="340" width="630" height="2" fill="url(#rule)" />
+  <text
+    x="92"
+    y="420"
+    fill="#e8e2d8"
+    font-family="Arial, sans-serif"
+    font-size="35"
+    font-weight="500"
+  >
+    Discover your next story.
+  </text>
+  <text
+    x="92"
+    y="478"
+    fill="#aaa39a"
+    font-family="Arial, sans-serif"
+    font-size="24"
+  >
+    Films. Television. Contributors. Your private archive.
+  </text>
+
+  <text
+    x="1108"
+    y="548"
+    fill="#8f8981"
+    font-family="Consolas, monospace"
+    font-size="15"
+    letter-spacing="3"
+    text-anchor="end"
+  >
+    CINESCOPE / V1
+  </text>
+</svg>

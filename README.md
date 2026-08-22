@@ -70,6 +70,7 @@ npm.cmd run lint
 npm.cmd run build
 npm.cmd run build:functions
 npm.cmd run check:bundle
+npm.cmd run check:release
 npm.cmd run check:client-security
 npm.cmd run check:hosting
 npm.cmd run test:hosting
@@ -81,7 +82,7 @@ git diff --check origin/develop...HEAD
 
 The lint command includes JSX accessibility rules and treats warnings as failures. Before a release, also verify the skip link, route focus, route-loading announcement, tabs, search suggestions, dialogs, and unexpected-error recovery with keyboard-only navigation in a browser.
 
-The bundle check reads the generated application shell and Vite manifest. It enforces separate raw and gzip limits for the initial module graph, every lazy route increment, and deferred dependencies such as Firebase. Run it after the production build. The measured baseline and manual accessibility matrix are recorded in [the performance and accessibility guide](docs/performance-accessibility.md).
+The bundle check reads the generated application shell and Vite manifest. It enforces separate raw and gzip limits for the initial module graph, every lazy route increment, and deferred dependencies such as Firebase. Run it after the production build. The release check validates public metadata, the web manifest and social preview, policy and TMDB-credit routes, protected external links, and the required V1 documents. The measured baseline and manual accessibility matrix are recorded in [the performance and accessibility guide](docs/performance-accessibility.md).
 
 The public Playwright command builds the application in the committed `e2e` mode, starts a local production preview, and runs deterministic Chromium journeys. Firebase is disabled and every same-origin catalogue API response is intercepted, so the suite needs no Firebase or TMDB credential.
 
@@ -89,7 +90,7 @@ The API test starts a fake local TMDB server and the Functions plus Hosting emul
 
 ## Continuous integration
 
-The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24, Java 21, both committed npm lockfiles, and validates the frontend, Functions contracts, browser security scan, Hosting-to-Functions API, public Chromium journeys, Firestore rules, and authenticated emulator journeys without Firebase or TMDB secrets. Failed browser runs retain traces and screenshots for seven days.
+The `Quality gates` GitHub Actions workflow runs on every branch push, pull requests targeting `develop` or `main`, and manual dispatch. It uses Node.js 24, Java 21, both committed npm lockfiles, and validates the frontend, Functions contracts, V1 release foundation, browser security scan, Hosting-to-Functions API, public Chromium journeys, Firestore rules, and authenticated emulator journeys without Firebase or TMDB secrets. Failed browser runs retain traces and screenshots for seven days.
 
 ## Hosting and deployment
 
@@ -98,3 +99,14 @@ Firebase Hosting publishes `dist`, sends `/api/tmdb/**` to the `tmdbApi` Functio
 The `Firebase Hosting deployment` workflow is manual and protected. It uses GitHub OIDC and Google Workload Identity Federation for short-lived credentials, creates seven-day preview channels, and permits a live production release only from `main`. No Firebase project ID, `.firebaserc`, service-account key, or active deployment is committed by this foundation.
 
 Before enabling that workflow, follow [the Firebase Hosting operations guide](docs/deployment/firebase-hosting.md). Monitoring ownership and response expectations are in [the incident-response runbook](docs/operations/monitoring-and-incident-response.md).
+
+## Project and release references
+
+- [Architecture](docs/architecture.md)
+- [Environment variables and secrets](docs/environment-variables.md)
+- [Quality assurance](docs/quality-assurance.md)
+- [V1 readiness checklist](docs/release/v1-readiness.md)
+- [Draft V1 release notes](docs/release/v1-release-notes.md)
+- [Changelog](CHANGELOG.md)
+
+The application also keeps Credits, Privacy, Terms, and Accessibility information reachable from every route footer. These documents are release-candidate foundations; the V1 readiness checklist records the remaining operator, legal, configuration, accessibility, and hosted-environment decisions.

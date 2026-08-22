@@ -2,7 +2,7 @@
 
 ## Automated layers
 
-CineScope uses six deterministic validation layers:
+CineScope uses seven deterministic validation layers:
 
 1. Vitest exercises pure data behavior.
 2. React Testing Library and jsdom exercise stable component, form, and routing behavior.
@@ -10,6 +10,7 @@ CineScope uses six deterministic validation layers:
 4. Firebase Emulator Suite exercises authenticated integration journeys and deployed Firestore Security Rules without touching a real project.
 5. Firebase Hosting Emulator exercises the built application shell, SPA rewrites, browser security headers, and cache policy without deploying.
 6. Functions unit tests and local Functions emulator journeys exercise the TMDB route allowlist, server-only authentication, account-deletion identity and recent-login checks, recursive data cleanup ordering, normalized failures, cache controls, and method rejection.
+7. Release-foundation checks validate metadata, the web manifest, social preview dimensions, global TMDB attribution, policy routes, external-link protection, and required V1 documents.
 
 The component suite currently covers header-search validation, keyboard selection, natural-language request routing and its explicit title-search override, library save/watch/favourite/rating controls, episode-progress controls and rollups, preference and recommendation-feedback parsing, profile editing, authentication-form validation, protected-route behavior, route focus transfer, accessible route-loading feedback, unexpected-route-error recovery, verification controls, password change, account export, and explicit destructive confirmation. Pure tests also cover intent parsing, URL state, Discover query construction, unsupported media mappings, mixed result projection, and match explanations. Coverage enforcement includes the library, TV progress, preference, recommendation mood/feedback, and archive-ranking engines plus the authentication helpers, protected route, library controls, and account export contract.
 
@@ -25,6 +26,7 @@ The browser suite covers these public journeys:
 - safe recovery from an aborted lazy-route chunk;
 - 320 CSS-pixel overflow and mobile-navigation touch-target checks;
 - unknown and malformed deep-route handling.
+- public privacy and credits routes, index metadata, TMDB attribution, the web manifest, and the social preview asset.
 
 `e2e/fixtures.ts` intercepts every same-origin catalogue request used by these journeys. `.env.e2e` deliberately leaves Firebase and App Check unconfigured, so CI does not depend on real credentials, accounts, or live third-party data.
 
@@ -75,6 +77,7 @@ npm.cmd run lint
 npm.cmd run build
 npm.cmd run build:functions
 npm.cmd run check:bundle
+npm.cmd run check:release
 npm.cmd run check:client-security
 npm.cmd run check:hosting
 npm.cmd run test:hosting

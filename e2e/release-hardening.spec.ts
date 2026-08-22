@@ -67,6 +67,58 @@ test('shows safe recovery actions when a lazy route cannot load', async ({
   await expect(page).toHaveURL(/\/$/)
 })
 
+test('publishes readable privacy information and index metadata', async ({
+  page,
+}) => {
+  await page.goto('/privacy', { waitUntil: 'domcontentloaded' })
+
+  await expect(
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Your archive remains yours.',
+    }),
+  ).toBeVisible()
+  await expect(page).toHaveTitle('Privacy — CineScope')
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+    'content',
+    'index, follow, max-image-preview:large',
+  )
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    'href',
+    /\/privacy$/,
+  )
+})
+
+test('keeps TMDB attribution and release assets globally verifiable', async ({
+  page,
+  request,
+}) => {
+  await page.goto('/credits', { waitUntil: 'domcontentloaded' })
+
+  await expect(
+    page.getByText(
+      'This product uses the TMDB API but is not endorsed or certified by TMDB.',
+    ).first(),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('img', { name: 'The Movie Database (TMDB)' }),
+  ).toBeVisible()
+
+  const manifestResponse = await request.get('/site.webmanifest')
+  expect(manifestResponse.ok()).toBe(true)
+  expect((await manifestResponse.json()).name).toBe(
+    'CineScope — The Living Archive',
+  )
+
+  const previewResponse = await request.get(
+    '/branding/social-preview.png',
+  )
+  expect(previewResponse.ok()).toBe(true)
+  expect(previewResponse.headers()['content-type']).toContain(
+    'image/png',
+  )
+})
+
 test.describe('narrow mobile layout', () => {
   test.use({
     hasTouch: true,

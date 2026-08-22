@@ -76,6 +76,9 @@ jobs:
       - name: Enforce initial bundle budget
         run: npm run check:bundle
 
+      - name: Validate V1 release foundation
+        run: npm run check:release
+
       - name: Validate Firebase Hosting policy
         run: npm run check:hosting
 

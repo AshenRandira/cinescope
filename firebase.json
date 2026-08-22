@@ -78,7 +78,7 @@
         ]
       },
       {
-        "regex": "^[/\\\\](?:discover|movies|tv|people|search|library|profile|login|register)(?:[/\\\\].*)?$",
+        "regex": "^[/\\\\](?:discover|movies|tv|people|search|library|profile|login|register|credits|privacy|terms|accessibility)(?:[/\\\\].*)?$",
         "headers": [
           {
             "key": "Cache-Control",

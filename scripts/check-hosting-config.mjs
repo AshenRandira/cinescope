@@ -104,7 +104,7 @@ assert.equal(
 assert.equal(
   headerRules
     .get(
-      '^[/\\\\](?:discover|movies|tv|people|search|library|profile|login|register)(?:[/\\\\].*)?$',
+      '^[/\\\\](?:discover|movies|tv|people|search|library|profile|login|register|credits|privacy|terms|accessibility)(?:[/\\\\].*)?$',
     )
     ?.get('Cache-Control'),
   noStoreCacheControl,

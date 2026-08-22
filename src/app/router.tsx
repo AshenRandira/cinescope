@@ -200,6 +200,46 @@ export const router = createBrowserRouter([
           }
         },
       },
+      {
+        path: 'credits',
+        lazy: async () => {
+          const { CreditsPage } = await import(
+            '../pages/InformationPages'
+          )
+
+          return { Component: CreditsPage }
+        },
+      },
+      {
+        path: 'privacy',
+        lazy: async () => {
+          const { PrivacyPage } = await import(
+            '../pages/InformationPages'
+          )
+
+          return { Component: PrivacyPage }
+        },
+      },
+      {
+        path: 'terms',
+        lazy: async () => {
+          const { TermsPage } = await import(
+            '../pages/InformationPages'
+          )
+
+          return { Component: TermsPage }
+        },
+      },
+      {
+        path: 'accessibility',
+        lazy: async () => {
+          const { AccessibilityPage } = await import(
+            '../pages/InformationPages'
+          )
+
+          return { Component: AccessibilityPage }
+        },
+      },
       ...developmentRoutes,
       {
         path: '*',

@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
 import {
+  Link,
   Outlet,
   useLocation,
   useNavigation,
 } from 'react-router'
 
+import { DocumentMetadata } from '../metadata/DocumentMetadata'
 import { DesktopHeader } from './DesktopHeader'
 import { MobileBottomNavigation } from './MobileBottomNavigation'
 
@@ -26,6 +28,8 @@ export function AppShell() {
 
   return (
     <div className="projection-surface min-h-screen">
+      <DocumentMetadata />
+
       <div
         aria-hidden="true"
         className="route-progress"
@@ -58,15 +62,53 @@ export function AppShell() {
         <Outlet />
       </main>
 
-      <footer className="hidden border-t border-[var(--color-line-soft)] md:block">
-        <div className="mx-auto flex min-h-20 max-w-[var(--layout-max)] items-center justify-between gap-8 px-[var(--layout-gutter)] text-[var(--color-paper-600)]">
-          <p className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.16em]">
-            CineScope / The Living Archive
-          </p>
+      <footer className="border-t border-[var(--color-line-soft)] pb-[calc(var(--layout-mobile-nav-height)+env(safe-area-inset-bottom)+1.5rem)] md:pb-0">
+        <div className="mx-auto grid min-h-32 max-w-[var(--layout-max)] gap-6 px-[var(--layout-gutter)] py-8 text-[var(--color-paper-500)] md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <p className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.16em] text-[var(--color-paper-300)]">
+              CineScope / The Living Archive
+            </p>
+            <p className="mt-2 max-w-2xl text-[var(--font-size-caption)] leading-6">
+              This product uses the TMDB API but is not endorsed or
+              certified by TMDB.
+            </p>
+          </div>
 
-          <p className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.14em]">
-            {'\u00A9'} {new Date().getFullYear()}
-          </p>
+          <div className="flex flex-col gap-4 md:items-end">
+            <nav
+              aria-label="Credits and policies"
+              className="flex flex-wrap gap-x-5 gap-y-1"
+            >
+              <Link
+                className="inline-flex min-h-11 items-center hover:text-[var(--color-projector)]"
+                to="/credits"
+              >
+                Credits
+              </Link>
+              <Link
+                className="inline-flex min-h-11 items-center hover:text-[var(--color-projector)]"
+                to="/privacy"
+              >
+                Privacy
+              </Link>
+              <Link
+                className="inline-flex min-h-11 items-center hover:text-[var(--color-projector)]"
+                to="/terms"
+              >
+                Terms
+              </Link>
+              <Link
+                className="inline-flex min-h-11 items-center hover:text-[var(--color-projector)]"
+                to="/accessibility"
+              >
+                Accessibility
+              </Link>
+            </nav>
+
+            <p className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.14em]">
+              {'\u00A9'} {new Date().getFullYear()}
+            </p>
+          </div>
         </div>
       </footer>
 

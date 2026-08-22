@@ -15,6 +15,7 @@
     "check:bundle": "node scripts/check-build-budget.mjs",
     "check:client-security": "node scripts/check-client-security.mjs",
     "check:hosting": "node scripts/check-hosting-config.mjs",
+    "check:release": "node scripts/check-release-readiness.mjs",
     "lint": "oxlint --jsx-a11y-plugin -A jsx-a11y/prefer-tag-over-role --deny-warnings src functions/src e2e test scripts playwright.config.ts playwright.emulator.config.ts vite.config.ts vitest.emulator.config.ts vitest.functions.config.ts",
     "preview": "vite preview",
     "test": "vitest run",
