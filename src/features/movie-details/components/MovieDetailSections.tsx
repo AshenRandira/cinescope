@@ -248,9 +248,7 @@ import {
             </div>
 
             <p className="movie-detail-section-heading__copy text-pretty">
-              Release, language, territory and production
-              information preserved as part of this TMDB
-              feature record.
+              Release, language, country, and production details from TMDB.
             </p>
           </header>
 
@@ -341,7 +339,7 @@ import {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                04 / Credits register
+                04 / Cast and crew
               </p>
 
               <h2
@@ -353,9 +351,7 @@ import {
             </div>
 
             <p className="movie-detail-section-heading__copy text-pretty">
-              Principal cast appears in credited order,
-              accompanied by selected creative departments
-              from the available production credits.
+              Main cast in credited order, followed by key crew roles.
             </p>
           </header>
 
@@ -438,7 +434,7 @@ import {
                         key={member.credit_id}
                       >
                         <Link
-                          aria-label={`Open contributor record for ${member.name}`}
+                          aria-label={`View contributor profile for ${member.name}`}
                           className="movie-detail-cast-card__link"
                           to={`/people/${member.id}`}
                         >

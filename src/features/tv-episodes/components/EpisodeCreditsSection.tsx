@@ -105,17 +105,15 @@ export function EpisodeCreditsSection({
           </h2>
         </div>
         <p className="text-pretty">
-          Principal and guest performers, followed by
-          selected production roles from the episode
-          credits.
+          Main and guest cast, followed by key crew roles.
         </p>
       </header>
 
       <div className="tv-episode-credits__layout">
         <aside className="tv-episode-crew">
-          <p>Production register</p>
+          <p>Crew</p>
           <h3 className="font-display">
-            Behind the transmission
+            Behind the episode
           </h3>
           <dl>
             <div>
@@ -140,7 +138,7 @@ export function EpisodeCreditsSection({
         <div className="tv-episode-performers">
           <div className="tv-episode-performers__heading">
             <h3 className="font-display">
-              Cast and guest register
+              Cast and guests
             </h3>
             <span>{performers.length} shown</span>
           </div>
@@ -161,7 +159,7 @@ export function EpisodeCreditsSection({
                 return (
                   <li key={performer.credit_id}>
                     <Link
-                      aria-label={`Open contributor record for ${performer.name}`}
+                      aria-label={`View contributor profile for ${performer.name}`}
                       className="tv-episode-performer__link"
                       to={`/people/${performer.id}`}
                     >

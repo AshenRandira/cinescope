@@ -121,7 +121,7 @@ function getFeedbackSyncErrorMessage(
       : ''
 
   if (code.includes('permission-denied')) {
-    return 'Recommendation feedback sync is paused until the updated Firestore rules are deployed. Your choices remain saved in this browser.'
+    return 'Saved on this device. Feedback sync needs updated Firestore rules.'
   }
 
   if (
@@ -129,10 +129,10 @@ function getFeedbackSyncErrorMessage(
     (typeof navigator !== 'undefined' &&
       !navigator.onLine)
   ) {
-    return 'Recommendation feedback sync is temporarily offline. Your choices remain saved in this browser.'
+    return 'Saved on this device. Feedback sync is temporarily offline.'
   }
 
-  return 'Recommendation feedback sync could not finish. Your choices remain saved in this browser.'
+  return 'Saved on this device. Feedback sync could not finish.'
 }
 
 function RecommendationFeedbackStore({

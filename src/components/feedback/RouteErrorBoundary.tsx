@@ -18,8 +18,8 @@ function getRouteErrorCopy(error: unknown): RouteErrorCopy {
   if (isRouteErrorResponse(error) && error.status === 404) {
     return {
       description:
-        'The requested record may have moved, or the address may no longer be available.',
-      eyebrow: '404 / Record missing',
+        'The requested page may have moved, or the address may no longer be available.',
+      eyebrow: '404 / Page missing',
       title: 'This page left the archive.',
     }
   }
@@ -27,8 +27,8 @@ function getRouteErrorCopy(error: unknown): RouteErrorCopy {
   return {
     description:
       'CineScope could not finish loading this view. Your saved library remains safe in this browser.',
-    eyebrow: 'Projection interrupted',
-    title: 'The projection stopped unexpectedly.',
+    eyebrow: 'Page error',
+    title: 'This page stopped loading.',
   }
 }
 
@@ -37,7 +37,7 @@ export function RouteErrorBoundary() {
   const copy = getRouteErrorCopy(error)
 
   useEffect(() => {
-    document.title = 'Projection interrupted — CineScope'
+    document.title = 'Page error — CineScope'
   }, [])
 
   return (
@@ -89,7 +89,7 @@ export function RouteErrorBoundary() {
                 to="/"
               >
                 <Home aria-hidden="true" className="size-4" />
-                Return to the archive
+                Return home
               </Link>
             </div>
           </section>

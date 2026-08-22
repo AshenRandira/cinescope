@@ -112,20 +112,19 @@ export function TvVideoSection({
       <header className="tv-video-section__heading">
         <div>
           <p className="archive-label">
-            02 / Recorded transmissions
+            02 / Videos
           </p>
 
           <h2
             className="tv-video-section__title font-display text-balance"
             id="tv-video-heading"
           >
-            Watch the signal move.
+            Watch trailers and clips.
           </h2>
         </div>
 
         <p className="text-pretty">
-          Official trailers, teasers, and production
-          footage indexed in this series record by TMDB.
+          Official trailers, teasers, and production videos listed by TMDB.
         </p>
       </header>
 
@@ -201,7 +200,7 @@ export function TvVideoSection({
 
       {additionalVideos.length > 0 ? (
         <div className="tv-video-additional">
-          <p>Additional transmissions</p>
+          <p>More videos</p>
           <ul>
             {additionalVideos.map((video, index) => (
               <li key={video.id}>

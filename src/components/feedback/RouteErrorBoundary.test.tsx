@@ -33,14 +33,14 @@ describe('RouteErrorBoundary', () => {
 
     expect(
       await screen.findByRole('heading', {
-        name: 'The projection stopped unexpectedly.',
+        name: 'This page stopped loading.',
       }),
     ).toBeVisible()
     expect(
       screen.getByRole('button', { name: 'Reload this view' }),
     ).toBeVisible()
     expect(
-      screen.getByRole('link', { name: 'Return to the archive' }),
+      screen.getByRole('link', { name: 'Return home' }),
     ).toHaveAttribute('href', '/')
     expect(
       screen.queryByText('Private diagnostic detail'),

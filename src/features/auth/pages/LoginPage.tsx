@@ -103,13 +103,13 @@ export function LoginPage() {
 
   return (
     <AuthPageFrame
-      description="Return to the names, films, and television records you have gathered inside the living archive."
+      description="Sign in to access your saved movies, series, and preferences."
       eyebrow="Account access"
       index="01"
       title={
         mode === 'login'
           ? 'Resume your archive.'
-          : 'Recover the signal.'
+          : 'Recover your account.'
       }
     >
       {status === 'unconfigured' ? (
@@ -124,7 +124,7 @@ export function LoginPage() {
             </p>
             <h2 className="font-display">
               {mode === 'login'
-                ? 'Enter the projection room.'
+                ? 'Sign in to continue.'
                 : 'Request a reset link.'}
             </h2>
           </div>
@@ -194,7 +194,7 @@ export function LoginPage() {
               type="submit"
             >
               {isSubmitting
-                ? 'Transmitting…'
+                ? 'Signing in…'
                 : mode === 'login'
                   ? 'Sign in to CineScope'
                   : 'Send reset instructions'}

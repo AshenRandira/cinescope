@@ -173,14 +173,13 @@ export function TvEpisodePage() {
           Invalid episode record.
         </h1>
         <p className="movie-detail-state__message">
-          The requested route does not contain valid
-          TMDB series, season, and episode identifiers.
+          This episode link is not valid.
         </p>
         <Link
           className="movie-detail-state__link"
           to="/tv"
         >
-          Return to the television register
+          Return to TV Shows
           <span aria-hidden="true"> →</span>
         </Link>
       </EpisodeRouteState>
@@ -191,8 +190,8 @@ export function TvEpisodePage() {
     return (
       <EpisodeRouteState>
         <LoadingState
-          title="Threading the episode record"
-          message="Retrieving episode details, credits, stills, videos, and season context."
+          title="Loading episode details"
+          message="Loading the episode, cast, images, and videos."
         />
       </EpisodeRouteState>
     )
@@ -208,15 +207,13 @@ export function TvEpisodePage() {
           This episode could not be found.
         </h1>
         <p className="movie-detail-state__message">
-          TMDB does not currently contain episode{' '}
-          {episodeNumber} in season {seasonNumber} for
-          series identifier {tvId}.
+          TMDB has no episode {episodeNumber} in season {seasonNumber}.
         </p>
         <Link
           className="movie-detail-state__link"
           to={`/tv/${tvId}/season/${seasonNumber}`}
         >
-          Return to the season record
+          Return to the season
           <span aria-hidden="true"> →</span>
         </Link>
       </EpisodeRouteState>
@@ -227,13 +224,13 @@ export function TvEpisodePage() {
     return (
       <EpisodeRouteState>
         <ErrorState
-          title="The episode record could not be tuned"
+          title="Episode details could not load"
           message={
             episodeRecord.errorMessage ??
             'The episode record is temporarily unavailable.'
           }
           onRetry={episodeRecord.retry}
-          retryLabel="Retry episode record"
+          retryLabel="Try again"
         />
       </EpisodeRouteState>
     )
@@ -256,7 +253,7 @@ export function TvEpisodePage() {
           className="movie-detail-state__link"
           to={`/tv/${tvId}/season/${seasonNumber}`}
         >
-          Return to the season record
+          Return to the season
           <span aria-hidden="true"> →</span>
         </Link>
       </EpisodeRouteState>
@@ -336,7 +333,7 @@ export function TvEpisodePage() {
             to={`/tv/${series.id}/season/${season.season_number}`}
           >
             <span aria-hidden="true">←</span>
-            {season.name} episode register
+            {season.name} episodes
           </Link>
 
           <div className="tv-episode-hero__layout">
@@ -401,7 +398,7 @@ export function TvEpisodePage() {
 
           <dl className="tv-episode-hero__facts">
             <div>
-              <dt>First transmission</dt>
+              <dt>Air date</dt>
               <dd>{formatDate(episode.air_date)}</dd>
             </div>
             <div>
@@ -468,7 +465,7 @@ export function TvEpisodePage() {
               </dd>
             </div>
             <div>
-              <dt>Guest register</dt>
+              <dt>Guest cast</dt>
               <dd>
                 {episode.credits.guest_stars.length.toLocaleString()}{' '}
                 credited
@@ -492,7 +489,7 @@ export function TvEpisodePage() {
           <Link
             to={`/tv/${series.id}/season/${season.season_number}`}
           >
-            Full episode register →
+            All episodes →
           </Link>
         </div>
 

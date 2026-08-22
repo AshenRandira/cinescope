@@ -160,7 +160,7 @@ function OpeningProjection({
 
       <div className="movie-opening-projection__copy">
         <p className="archive-label">
-          Opening projection
+          Featured result
         </p>
 
         <h3
@@ -211,7 +211,7 @@ function OpeningProjection({
           className="movie-opening-projection__record-link"
           to={`/movies/${record.id}`}
         >
-          Open full record
+          View movie details
           <span aria-hidden="true">&rarr;</span>
         </Link>
       </div>
@@ -324,7 +324,7 @@ function ContactSheetRecord({
           <div className="movie-contact-card__dossier">
             <div className="movie-contact-card__dossier-header">
               <p className="archive-label">
-                Projection dossier
+                Movie summary
               </p>
 
               <span aria-hidden="true">
@@ -363,8 +363,8 @@ function ContactSheetRecord({
               onClick={() => onToggle(record.id)}
             >
               {isSelected
-                ? 'Close dossier'
-                : 'Inspect dossier'}
+                ? 'Hide summary'
+                : 'Show summary'}
               <span aria-hidden="true">&rarr;</span>
             </button>
           </div>
@@ -403,7 +403,7 @@ function ContactSheetRecord({
               className="movie-contact-card__record-link"
               to={`/movies/${record.id}`}
             >
-              Open full record
+              View movie details
               <span aria-hidden="true">&rarr;</span>
             </Link>
 
@@ -415,8 +415,8 @@ function ContactSheetRecord({
               onClick={() => onToggle(record.id)}
             >
               {isSelected
-                ? 'Close dossier'
-                : 'Inspect dossier'}
+                ? 'Hide summary'
+                : 'Show summary'}
             </button>
           </div>
         </div>
@@ -427,7 +427,7 @@ function ContactSheetRecord({
           className="movie-contact-card__inspection"
           id={inspectionId}
           role="region"
-          aria-label={`Expanded record for ${record.title}`}
+          aria-label={`Expanded details for ${record.title}`}
         >
           <div>
             <p className="archive-label">
@@ -557,20 +557,20 @@ export function MoviesPage() {
   if (movies.isPending) {
     registerContent = (
       <LoadingState
-        title="Opening the film register"
-        message="CineScope is retrieving released films from TMDB and preparing the first catalogue frames."
+        title="Loading movies"
+        message="Getting released movies from TMDB."
       />
     )
   } else if (movies.isInitialError) {
     registerContent = (
       <ErrorState
-        title="The film register could not be opened"
+        title="Movies could not load"
         message={
           movies.errorMessage ??
-          'TMDB did not return the records required for this projection.'
+          'TMDB did not return the requested movies.'
         }
         onRetry={movies.retry}
-        retryLabel="Reopen the register"
+        retryLabel="Try again"
       />
     )
   } else if (movies.isEmpty) {
@@ -578,7 +578,7 @@ export function MoviesPage() {
       <div className="movie-register__empty-state">
         <EmptyState
           title="No film records were returned"
-          message="TMDB responded successfully, but no released films matched the current discovery method."
+          message="No released movies match these filters."
         />
 
         {!isDefault ? (
@@ -586,7 +586,7 @@ export function MoviesPage() {
             type="button"
             onClick={resetFilters}
           >
-            Reset discovery parameters
+            Reset filters
           </button>
         ) : null}
       </div>
@@ -605,7 +605,7 @@ export function MoviesPage() {
             <strong>
               {movies.records.length.toLocaleString()}
             </strong>{' '}
-            records currently projected
+            movies loaded
           </p>
 
           <p>
@@ -627,21 +627,19 @@ export function MoviesPage() {
             <header className="movie-contact-sheet__heading">
               <div>
                 <p className="archive-label">
-                  Film contact sheet
+                  More movies
                 </p>
 
                 <h3
                   className="movie-contact-sheet__title font-display"
                   id="movie-contact-sheet-title"
                 >
-                  Scan the remaining frames.
+                  Explore the results.
                 </h3>
               </div>
 
               <p>
-                Titles and essential identifiers remain
-                visible. Hover, focus or inspect a record
-                for additional catalogue information.
+                Select a movie to see more details.
               </p>
             </header>
 
@@ -687,7 +685,7 @@ export function MoviesPage() {
       <div className="movie-register__empty-state">
         <EmptyState
           title="No film records were returned"
-          message="TMDB responded successfully, but the catalogue contained no usable movie records."
+          message="TMDB returned no movies that CineScope can display."
         />
 
         {!isDefault ? (
@@ -695,7 +693,7 @@ export function MoviesPage() {
             type="button"
             onClick={resetFilters}
           >
-            Reset discovery parameters
+            Reset filters
           </button>
         ) : null}
       </div>
@@ -707,7 +705,7 @@ export function MoviesPage() {
       <header className="movie-register__opening">
         <div>
           <p className="archive-label">
-            05 / Movie Register
+            05 / Movie catalogue
           </p>
 
           <h1 className="movie-register__title font-display text-balance">
@@ -718,15 +716,14 @@ export function MoviesPage() {
 
         <div className="movie-register__opening-copy">
           <p className="text-pretty">
-            A living catalogue arranged through
-            release history, genre, duration and
-            recorded audience response.
+            Browse movies by genre, release period,
+            runtime, rating, and popularity.
           </p>
 
           <p className="movie-register__disclosure">
             {isDefault
-              ? 'This opening selection uses TMDB popularity among released films. It is not personalized and does not represent a CineScope quality ranking.'
-              : 'This register reflects the active catalogue parameters below. It is not personalized and does not represent a CineScope quality ranking.'}
+              ? 'Sorted by current TMDB popularity. This list is not personalized.'
+              : 'Results use your selected filters. This list is not personalized.'}
           </p>
         </div>
       </header>
@@ -771,7 +768,7 @@ export function MoviesPage() {
             >
               {isDefault
                 ? 'Current attention'
-                : 'Selected register'}
+                : 'Selected view'}
             </h2>
           </div>
 

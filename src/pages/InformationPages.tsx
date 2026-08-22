@@ -70,49 +70,44 @@ export function PrivacyPage() {
   return (
     <InformationPage
       eyebrow="01 / Privacy and data"
-      introduction="CineScope is designed around a private, local-first archive. This notice explains the data the application uses, where it is stored, and the controls available to you."
+      introduction="See what CineScope stores, where it is kept, and how you can control it."
       title="Your archive remains yours."
     >
       <InformationSection title="What CineScope stores">
         <p>
-          Guest library records, ratings, watch progress, discovery
-          preferences, and recommendation feedback are stored in your
-          browser. CineScope does not add advertising or analytics
-          trackers.
+          Without an account, your library, ratings, watch progress,
+          preferences, and feedback stay in this browser. CineScope has
+          no advertising or analytics trackers.
         </p>
         <p>
-          If you create an account, Firebase Authentication stores your
-          email address, display name, account identifiers, and sign-in
-          metadata. Your library, preferences, and bounded recommendation
-          feedback can then synchronize to your user-scoped Firestore
-          records.
+          With an account, Firebase stores your email, display name,
+          account ID, and sign-in details. Your library and preferences
+          can then sync to your private Firestore records.
         </p>
       </InformationSection>
 
       <InformationSection title="Catalogue requests">
         <p>
-          Search terms and selected catalogue filters pass through the
-          CineScope Firebase Function to The Movie Database (TMDB). The
-          Function records route category, response status, latency,
-          cache result, and a request reference for operations. It does
-          not intentionally log raw search text, passwords, email
-          addresses, library contents, Firebase tokens, or TMDB tokens.
+          Searches and filters pass through a CineScope Firebase Function
+          to TMDB.
+        </p>
+        <p>
+          Operational logs record request type, status, timing, cache result,
+          and a request ID. They do not intentionally record your search text,
+          password, email, library, or access tokens.
         </p>
       </InformationSection>
 
       <InformationSection title="Retention and deletion">
         <p>
-          Browser data remains until you clear it, remove individual
-          records, or successfully delete your CineScope account. Cloud
-          account data remains until you delete the account. Account
-          deletion removes the Firebase Authentication user and the
-          associated CineScope Firestore tree, then clears the
-          user-scoped browser archive.
+          Device data remains until you remove it, clear browser storage,
+          or delete your account. Cloud data remains until account deletion.
+          Deleting the account removes its Firebase and CineScope data,
+          then clears this device.
         </p>
         <p>
-          Infrastructure providers may retain operational logs or
-          backups under their own documented retention processes. Never
-          post account data, passwords, or tokens in a public issue.
+          Service providers may retain logs or backups under their own
+          policies. Never post account data, passwords, or tokens publicly.
         </p>
       </InformationSection>
 
@@ -137,8 +132,7 @@ export function PrivacyPage() {
             project issue tracker
             <ExternalLink aria-hidden="true" />
           </a>
-          . A private privacy-contact channel must be published before a
-          public production release.
+          . A private privacy contact will be published before release.
         </p>
       </InformationSection>
     </InformationPage>
@@ -153,44 +147,37 @@ export function TermsPage() {
   return (
     <InformationPage
       eyebrow="02 / Conditions of use"
-      introduction="These release-candidate terms describe the intended V1 service boundary. They require operator review before CineScope is released publicly."
+      introduction="These draft terms explain the planned V1 service. They require approval before public release."
       title="Use the archive with care."
     >
       <InformationSection title="The service">
         <p>
-          CineScope provides movie and television discovery, personal
-          tracking, and account synchronization. Features may change,
-          pause, or be withdrawn while the project remains in preview.
+          CineScope provides movie and TV discovery, personal tracking,
+          and account sync. Features may change while the app is in preview.
         </p>
       </InformationSection>
 
       <InformationSection title="Accounts and acceptable use">
         <p>
-          You are responsible for your account access and for the
-          information you choose to save. Do not attempt to bypass
-          authorization rules, interfere with the service, automate
-          abusive catalogue traffic, extract credentials, or use the
-          application in violation of applicable law or third-party
-          rights.
+          You are responsible for your account and saved information.
+          Do not bypass security, disrupt the service, create abusive
+          traffic, extract credentials, or violate laws or third-party rights.
         </p>
       </InformationSection>
 
       <InformationSection title="Third-party material">
         <p>
-          Catalogue data and artwork come from TMDB. Videos, provider
-          availability, external profiles, and destination links are
-          supplied by third parties and may change without notice.
-          CineScope does not guarantee their accuracy, availability, or
-          suitability.
+          TMDB and other services provide catalogue data, artwork, videos,
+          streaming availability, profiles, and links. This information may
+          change. CineScope cannot guarantee its accuracy or availability.
         </p>
       </InformationSection>
 
       <InformationSection title="No professional advice or warranty">
         <p>
-          CineScope is an entertainment discovery tool. It is provided
-          on an as-available basis for the release candidate, without a
-          promise that every record, recommendation, synchronization, or
-          external link will always be complete or uninterrupted.
+          CineScope is an entertainment discovery tool provided as available.
+          Records, recommendations, sync, and external links may be incomplete
+          or temporarily unavailable.
         </p>
       </InformationSection>
 
@@ -213,7 +200,7 @@ export function AccessibilityPage() {
   return (
     <InformationPage
       eyebrow="03 / Accessibility"
-      introduction="CineScope targets WCAG 2.2 Level AA where practical for V1 and treats readability, keyboard access, focus, motion, and responsive reflow as product requirements."
+      introduction="CineScope aims for WCAG 2.2 Level AA, with readable text, keyboard access, clear focus, reduced motion, and responsive layouts."
       title="Every record should remain reachable."
     >
       <InformationSection title="Current support">
@@ -229,20 +216,17 @@ export function AccessibilityPage() {
 
       <InformationSection title="Conformance status">
         <p>
-          The release candidate is partially conformant with the WCAG
-          2.2 Level AA target. Automated accessibility lint, component
-          tests, Chromium journeys, 320 CSS-pixel reflow checks, and
-          touch-target checks pass. Formal assistive-technology and
-          cross-browser review is still required before V1 approval.
+          The release candidate is partially conformant with WCAG 2.2 AA.
+          Automated accessibility, browser, reflow, and touch-target checks
+          pass. Assistive-technology and cross-browser review is still needed.
         </p>
       </InformationSection>
 
       <InformationSection title="Known limitations">
         <p>
-          NVDA, VoiceOver, Safari, Firefox, 200% and 400% zoom, and
-          physical-device testing remain manual release checks. Some
-          third-party video players and destination sites are outside
-          CineScope's accessibility control.
+          Manual checks still include NVDA, VoiceOver, Safari, Firefox,
+          high zoom, and physical devices. CineScope cannot control the
+          accessibility of third-party players or websites.
         </p>
       </InformationSection>
 
@@ -257,9 +241,8 @@ export function AccessibilityPage() {
             project issue tracker
             <ExternalLink aria-hidden="true" />
           </a>{' '}
-          and include the route, browser, assistive technology, and the
-          expected result. Do not include account credentials or private
-          archive data.
+          and include the page, browser, assistive technology, and expected
+          result. Never include credentials or private library data.
         </p>
       </InformationSection>
     </InformationPage>
@@ -274,7 +257,7 @@ export function CreditsPage() {
   return (
     <InformationPage
       eyebrow="04 / Credits and attribution"
-      introduction="CineScope combines its Living Archive interface with catalogue records and media supplied by carefully bounded third-party services."
+      introduction="See which third-party services provide CineScope's catalogue, media, fonts, and icons."
       title="Built with the archive in view."
     >
       <InformationSection title="The Movie Database">
@@ -297,28 +280,24 @@ export function CreditsPage() {
           by TMDB.
         </p>
         <p>
-          TMDB supplies movie, television, contributor, rating, release,
-          availability, and artwork information. CineScope's own mark
-          remains the primary product identity.
+          TMDB supplies movie, TV, contributor, rating, release,
+          availability, and artwork information.
         </p>
       </InformationSection>
 
       <InformationSection title="Media and interface">
         <p>
-          Trailer destinations use YouTube links returned by TMDB.
-          Provider availability and external social or contributor links
-          are informational and open on their respective services.
-          CineScope uses Manrope, Instrument Serif, and Lucide interface
-          icons through their installed packages.
+          Trailers open on YouTube. Streaming, social, and contributor links
+          open on their respective services. The interface uses Manrope,
+          Instrument Serif, and Lucide icons.
         </p>
       </InformationSection>
 
       <InformationSection title="Source accuracy">
         <p>
-          Release dates, rankings, provider availability, biographies,
-          credits, and popularity signals can change and may vary by
-          territory. Follow the destination service for its current
-          terms, privacy notice, and accessibility support.
+          Dates, rankings, availability, biographies, credits, and popularity
+          can change or vary by region. Check each service for current details,
+          terms, privacy, and accessibility information.
         </p>
       </InformationSection>
     </InformationPage>

@@ -31,7 +31,7 @@ export function HomePage() {
     openingScene = (
       <div className="mx-auto max-w-[var(--layout-max)] py-16">
         <LoadingState
-          message="Preparing the opening projection from the CineScope archive."
+          message="Loading featured movies from TMDB."
           title="Opening CineScope"
         />
       </div>
@@ -42,7 +42,7 @@ export function HomePage() {
         <ErrorState
           message={getTmdbErrorMessage(featured.error)}
           onRetry={featured.refetch}
-          title="The opening projection could not be loaded"
+          title="Featured movies could not load"
         />
       </div>
     )
@@ -50,7 +50,7 @@ export function HomePage() {
     openingScene = (
       <div className="mx-auto max-w-[var(--layout-max)] py-16">
         <EmptyState
-          actionLabel="Request another projection"
+          actionLabel="Try again"
           message="TMDB responded successfully, but no suitable featured artwork was available."
           onAction={featured.refetch}
           title="No featured stories available"

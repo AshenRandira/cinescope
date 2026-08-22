@@ -17,14 +17,12 @@ export function AuthConfigurationNotice() {
         className="font-display"
         id="auth-configuration-heading"
       >
-        Connect the Firebase projection.
+        Connect Firebase.
       </h2>
       <p>
-        Authentication is intentionally paused because this
-        environment does not contain a complete Firebase web
-        configuration. Add the following values to{' '}
-        <code>.env.local</code>, enable Email/Password in the
-        Firebase console, and restart Vite.
+        Sign-in is unavailable because Firebase is not fully configured.
+        Add these values to <code>.env.local</code>, enable Email/Password
+        in Firebase, then restart Vite.
       </p>
 
       <ul>

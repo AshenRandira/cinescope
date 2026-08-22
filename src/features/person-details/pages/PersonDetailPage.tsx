@@ -147,8 +147,7 @@ export function PersonDetailPage() {
           Invalid contributor record.
         </h1>
         <p className="movie-detail-state__message">
-          The requested route does not contain a valid
-          TMDB person identifier.
+          This contributor link is not valid.
         </p>
         <Link
           className="movie-detail-state__link"
@@ -165,8 +164,8 @@ export function PersonDetailPage() {
     return (
       <PersonDetailRouteState>
         <LoadingState
-          title="Preparing the contributor record"
-          message="Retrieving biography, portraits, and combined screen credits."
+          title="Loading contributor details"
+          message="Loading biography, photos, and credits."
         />
       </PersonDetailRouteState>
     )
@@ -180,8 +179,7 @@ export function PersonDetailPage() {
           This contributor could not be found.
         </h1>
         <p className="movie-detail-state__message">
-          TMDB does not currently contain a person record
-          for identifier {personId}.
+          TMDB has no contributor with the ID {personId}.
         </p>
         <Link
           className="movie-detail-state__link"
@@ -198,13 +196,13 @@ export function PersonDetailPage() {
     return (
       <PersonDetailRouteState>
         <ErrorState
-          title="The contributor record could not be projected"
+          title="Contributor details could not load"
           message={
             personQuery.errorMessage ??
             'The contributor record is temporarily unavailable.'
           }
           onRetry={personQuery.retry}
-          retryLabel="Retry contributor record"
+          retryLabel="Try again"
         />
       </PersonDetailRouteState>
     )
@@ -414,8 +412,7 @@ export function PersonDetailPage() {
             </h2>
           </div>
           <p className="text-pretty">
-            Recorded background and catalogue identity
-            supplied by TMDB.
+            Biography and profile details from TMDB.
           </p>
         </header>
 
@@ -439,7 +436,7 @@ export function PersonDetailPage() {
           </div>
 
           <aside className="person-biography__register">
-            <p>Identity register</p>
+            <p>Profile details</p>
             <dl>
               <div>
                 <dt>Department</dt>
@@ -487,8 +484,7 @@ export function PersonDetailPage() {
               </h2>
             </div>
             <p className="text-pretty">
-              A small contact sheet from the available
-              TMDB profile archive.
+              Additional profile photos from TMDB.
             </p>
           </header>
 

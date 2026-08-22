@@ -90,7 +90,7 @@ export function PreferencesEditor() {
     } catch {
       setMessage({
         kind: 'error',
-        text: 'Your choices are saved in this browser, but cloud synchronization is paused. Retry when Firebase is available.',
+        text: 'Saved on this device. Cloud sync is unavailable; try again later.',
       })
     } finally {
       setIsSaving(false)
@@ -111,7 +111,7 @@ export function PreferencesEditor() {
             className="font-display"
             id="profile-preferences-heading"
           >
-            Shape the signals you return to.
+            Personalize recommendations.
           </h2>
         </div>
         <aside
@@ -123,14 +123,14 @@ export function PreferencesEditor() {
               ? 'Preference sync paused'
               : syncStatus === 'connecting' ||
                   syncStatus === 'syncing'
-                ? 'Tuning preference sync'
+                ? 'Saving preferences'
                 : syncStatus === 'local'
-                  ? 'Local preference signal'
-                  : 'Preferences synchronized'}
+                  ? 'Saved on this device'
+                  : 'Saved to your account'}
           </p>
           <p>
             {syncError ??
-              'These choices gently re-rank recommendations from your archive without hiding the wider catalogue.'}
+              'These choices prioritize matching recommendations without hiding other titles.'}
           </p>
           {syncStatus === 'error' ? (
             <button onClick={retrySync} type="button">
@@ -180,7 +180,7 @@ export function PreferencesEditor() {
 
         <div className="profile-preferences__registers">
           <fieldset>
-            <legend>Preferred record balance</legend>
+            <legend>Preferred media</legend>
             <div className="profile-preferences__radio-grid">
               {(
                 [
@@ -214,8 +214,7 @@ export function PreferencesEditor() {
           <label className="profile-preferences__language">
             <span>Preferred original language</span>
             <small>
-              Matching titles receive a recommendation boost;
-              other languages remain discoverable.
+              Matching titles appear sooner. Other languages remain available.
             </small>
             <select
               aria-label="Preferred original language"

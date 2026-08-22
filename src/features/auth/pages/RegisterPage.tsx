@@ -95,7 +95,7 @@ export function RegisterPage() {
 
   return (
     <AuthPageFrame
-      description="Create a persistent Firebase identity for the account layer while keeping the current library private to this browser."
+      description="Create an account to sync your private library and preferences."
       eyebrow="New membership"
       index="02"
       title="Begin your own archive."
@@ -105,9 +105,9 @@ export function RegisterPage() {
       ) : (
         <>
           <div className="auth-form__heading">
-            <p>New member record</p>
+            <p>New account</p>
             <h2 className="font-display">
-              Establish your identity.
+              Create your account.
             </h2>
           </div>
 
@@ -126,7 +126,7 @@ export function RegisterPage() {
                 onChange={(event) =>
                   setDisplayName(event.target.value)
                 }
-                placeholder="How CineScope should address you"
+                placeholder="Your name"
                 required
                 value={displayName}
               />
@@ -187,8 +187,7 @@ export function RegisterPage() {
 
             <p className="auth-form__guidance">
               Use at least {AUTH_PASSWORD_MIN_LENGTH}{' '}
-              characters. Your Firebase project may enforce
-              additional password rules.
+              characters. Additional password rules may apply.
             </p>
 
             {errorMessage ? (

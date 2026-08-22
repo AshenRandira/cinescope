@@ -40,28 +40,28 @@ export const tvDiscoveryViewOptions: ReadonlyArray<TvDiscoveryViewOption> =
   [
     {
       description:
-        'Series currently drawing attention across the TMDB catalogue.',
+        'Series currently popular on TMDB.',
       eyebrow: 'Current attention',
       label: 'Popular',
       value: 'popular',
     },
     {
       description:
-        'Highly rated series with enough recorded votes to reduce fragile rankings.',
+        'Highly rated series with enough votes for a reliable ranking.',
       eyebrow: 'Audience record',
       label: 'Top rated',
       value: 'top-rated',
     },
     {
       description:
-        'Series with broadcasts scheduled within the current seven-day window.',
+        'Series with episodes scheduled in the next seven days.',
       eyebrow: 'Weekly signal',
       label: 'On the air',
       value: 'on-air',
     },
     {
       description:
-        'Series with episodes listed for broadcast today in the TMDB catalogue.',
+        'Series with episodes scheduled for today.',
       eyebrow: 'Daily signal',
       label: 'Airing today',
       value: 'airing-today',

@@ -188,26 +188,26 @@ export function SearchResultCard({
           <footer className="search-record__footer">
             {record.mediaType === 'movie' ? (
               <Link
-                aria-label={`Open movie record for ${record.title}`}
+                aria-label={`View movie details for ${record.title}`}
                 to={`/movies/${record.id}`}
               >
-                Open film record
+                View movie details
                 <ArrowRight aria-hidden="true" />
               </Link>
             ) : record.mediaType === 'tv' ? (
               <Link
-                aria-label={`Open series record for ${record.title}`}
+                aria-label={`View series details for ${record.title}`}
                 to={`/tv/${record.id}`}
               >
-                Open series record
+                View series details
                 <ArrowRight aria-hidden="true" />
               </Link>
             ) : (
               <Link
-                aria-label={`Open contributor record for ${record.title}`}
+                aria-label={`View contributor profile for ${record.title}`}
                 to={`/people/${record.id}`}
               >
-                Open contributor record
+                View contributor profile
                 <ArrowRight aria-hidden="true" />
               </Link>
             )}

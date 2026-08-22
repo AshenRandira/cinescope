@@ -60,28 +60,28 @@ export const discoverSignalDefinitions: ReadonlyArray<DiscoverSignalDefinition> 
   [
     {
       description:
-        'Films and series crossing the strongest weekly attention signals at this moment.',
+        'Movies and series trending on TMDB this week.',
       endpoint: '/trending/all/week',
       index: '01',
-      label: 'Current collision',
+      label: 'Trending now',
       mediaType: 'mixed',
       method:
-        'Weekly TMDB trending records, excluding people and adult-flagged entries. Attention is not treated as quality.',
+        'Shows weekly TMDB trends. People and adult titles are excluded.',
       query: {
         language: 'en-US',
       },
-      title: 'See what is colliding with the present.',
+      title: 'See what people are watching now.',
       value: 'current',
     },
     {
       description:
-        'Measured films carrying dramatic, mysterious, or speculative atmosphere.',
+        'Atmospheric drama, mystery, and science fiction.',
       endpoint: '/discover/movie',
       index: '02',
       label: 'Quiet and strange',
       mediaType: 'movie',
       method:
-        'Drama, mystery, and science-fiction signals with meaningful audience activity; action and war genres are excluded where possible.',
+        'Uses well-rated drama, mystery, and science fiction. Action and war titles are filtered out where possible.',
       query: {
         include_adult: false,
         include_video: false,
@@ -97,13 +97,13 @@ export const discoverSignalDefinitions: ReadonlyArray<DiscoverSignalDefinition> 
     },
     {
       description:
-        'Thrillers, mysteries, and crime stories moving under sustained pressure.',
+        'Popular thrillers, mysteries, and crime stories.',
       endpoint: '/discover/movie',
       index: '03',
       label: 'Under pressure',
       mediaType: 'movie',
       method:
-        'Thriller, crime, and mystery records ordered by current TMDB popularity with score and vote-count thresholds.',
+        'Orders thriller, crime, and mystery titles by TMDB popularity, with minimum rating and vote requirements.',
       query: {
         include_adult: false,
         include_video: false,
@@ -118,13 +118,13 @@ export const discoverSignalDefinitions: ReadonlyArray<DiscoverSignalDefinition> 
     },
     {
       description:
-        'Complete feature worlds that fit inside a two-hour viewing window.',
+        'Movies between 75 minutes and two hours.',
       endpoint: '/discover/movie',
       index: '04',
       label: 'Brief encounter',
       mediaType: 'movie',
       method:
-        'Released features running from 75 to 120 minutes with established rating and vote activity.',
+        'Shows released movies from 75 to 120 minutes with reliable audience ratings.',
       query: {
         include_adult: false,
         include_video: false,
@@ -140,13 +140,13 @@ export const discoverSignalDefinitions: ReadonlyArray<DiscoverSignalDefinition> 
     },
     {
       description:
-        'Episodic records with a durable audience response beyond the immediate broadcast cycle.',
+        'Highly rated series with a substantial audience.',
       endpoint: '/discover/tv',
       index: '05',
-      label: 'Long signal',
+      label: 'Acclaimed series',
       mediaType: 'tv',
       method:
-        'Television records ordered by audience rating with adult-flagged entries removed and at least 300 recorded votes.',
+        'Orders series by audience rating and requires at least 300 votes. Adult titles are excluded.',
       query: {
         include_adult: false,
         language: 'en-US',
@@ -158,13 +158,13 @@ export const discoverSignalDefinitions: ReadonlyArray<DiscoverSignalDefinition> 
     },
     {
       description:
-        'Films and series connected to the strongest signals in your own CineScope archive.',
+        'Movies and series related to titles you enjoyed.',
       endpoint: null,
       index: '06',
       label: 'From your archive',
       mediaType: 'mixed',
       method:
-        'Up to four favourites, ratings of 7 or higher, and active television checkpoints become visible anchors. If no positive signal exists, CineScope falls back to recent unrated saves, combines their TMDB recommendation paths, and removes titles already in your archive or feedback memory.',
+        'Uses up to four favourites, high ratings, or active series as starting points. Titles already saved or dismissed are removed.',
       query: {},
       title: 'Follow the traces left by your archive.',
       value: 'archive',

@@ -117,8 +117,7 @@ export function DiscoverySplice({
                     </p>
 
                     <p className="mt-3 text-sm leading-7 text-[var(--color-app-muted)]">
-                        CineScope is reading several TMDB discovery signals
-                        without blocking the opening projection.
+                        Loading themed movie collections from TMDB.
                     </p>
                 </div>
             </div>
@@ -132,16 +131,16 @@ export function DiscoverySplice({
             >
                 <div className="max-w-lg text-center">
                     <p className="archive-label text-[var(--color-app-error)]">
-                        Discovery splice interrupted
+                        Collections unavailable
                     </p>
 
                     <h3 className="font-display mt-4 text-4xl text-[var(--color-app-text)] sm:text-5xl">
-                        The editorial cuts could not be assembled.
+                        Collections could not load.
                     </h3>
 
                     <p className="mt-5 text-sm leading-7 text-[var(--color-app-muted)]">
                         {errorMessage ??
-                            'TMDB did not return the discovery material needed for this scene.'}
+                            'TMDB did not return the required movies.'}
                     </p>
 
                     <button
@@ -153,7 +152,7 @@ export function DiscoverySplice({
                             aria-hidden="true"
                             className="size-4"
                         />
-                        Reassemble the cuts
+                        Try again
                     </button>
                 </div>
             </div>
@@ -165,13 +164,11 @@ export function DiscoverySplice({
                     <p className="archive-label">Archive note</p>
 
                     <h3 className="font-display mt-4 text-4xl text-[var(--color-app-text)] sm:text-5xl">
-                        No complete editorial cut is available.
+                        No movie collection is available.
                     </h3>
 
                     <p className="mt-5 text-sm leading-7 text-[var(--color-app-muted)]">
-                        TMDB responded, but the results did not contain
-                        enough suitable poster and backdrop artwork for
-                        this composition.
+                        The results did not include enough artwork to display this section.
                     </p>
 
                     <button
@@ -179,7 +176,7 @@ export function DiscoverySplice({
                         onClick={onRetry}
                         type="button"
                     >
-                        Request another assembly
+                        Try again
                     </button>
                 </div>
             </div>
@@ -411,11 +408,10 @@ export function DiscoverySplice({
                         >
                             <div className="mb-4 flex items-end justify-between gap-4">
                                 <div>
-                                    <p className="archive-label">Cut ledger</p>
+                                    <p className="archive-label">Titles in this collection</p>
 
                                     <p className="mt-2 text-sm text-[var(--color-app-muted)]">
-                                        {activeCut.movies.length} records in this
-                                        assembly
+                                        {activeCut.movies.length} titles
                                     </p>
                                 </div>
 
@@ -502,10 +498,8 @@ export function DiscoverySplice({
 
                     <div className="border-l border-[var(--color-line-soft)] pl-6">
                         <p className="text-pretty text-sm leading-7 text-[var(--color-app-muted)]">
-                            Fixed CineScope editorial groupings assembled from
-                            transparent TMDB filters. These are discovery cuts,
-                            not claims of personal taste or recommendation
-                            intelligence.
+                            Each collection uses visible TMDB filters. These lists
+                            are not personalized.
                         </p>
                     </div>
                 </header>

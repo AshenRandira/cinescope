@@ -86,14 +86,12 @@ export function MovieRecommendationsSection({
             className="movie-recommendations__title font-display text-balance"
             id="movie-recommendations-heading"
           >
-            Continue through related catalogue signals.
+            Explore related movies.
           </h2>
         </div>
 
         <p className="movie-recommendations__copy text-pretty">
-          Related records supplied by TMDB. These titles
-          are not personalized and do not represent a
-          CineScope quality ranking.
+          Related titles from TMDB. These suggestions are not personalized.
         </p>
       </header>
 
@@ -118,7 +116,7 @@ export function MovieRecommendationsSection({
                   <Link
                     className="movie-recommendation-card"
                     to={`/movies/${recommendation.id}`}
-                    aria-label={`Open movie record for ${recommendation.title}`}
+                    aria-label={`View movie details for ${recommendation.title}`}
                   >
                     <div className="movie-recommendation-card__artwork">
                       {posterUrl ? (
@@ -181,7 +179,7 @@ export function MovieRecommendationsSection({
           </h3>
 
           <Link to="/movies">
-            Return to the movie register
+            Return to Movies
             <span aria-hidden="true"> →</span>
           </Link>
         </div>

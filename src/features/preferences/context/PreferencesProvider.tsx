@@ -80,17 +80,17 @@ function getPreferenceSyncErrorMessage(
       : ''
 
   if (code.includes('permission-denied')) {
-    return 'Preference sync is paused until the updated Firestore rules are deployed. Your choices remain saved in this browser.'
+    return 'Saved on this device. Preference sync needs updated Firestore rules.'
   }
 
   if (
     code.includes('unavailable') ||
     (typeof navigator !== 'undefined' && !navigator.onLine)
   ) {
-    return 'Preference sync is temporarily offline. Your choices remain saved in this browser.'
+    return 'Saved on this device. Preference sync is temporarily offline.'
   }
 
-  return 'Preference sync could not finish. Your choices remain saved in this browser.'
+  return 'Saved on this device. Preference sync could not finish.'
 }
 
 function PreferencesStore({

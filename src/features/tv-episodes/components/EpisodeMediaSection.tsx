@@ -100,7 +100,7 @@ export function EpisodeMediaSection({
       <header className="tv-episode-section-heading">
         <div>
           <p className="archive-label">
-            03 / Moving-image register
+            03 / Images and videos
           </p>
           <h2
             className="font-display text-balance"
@@ -110,9 +110,7 @@ export function EpisodeMediaSection({
           </h2>
         </div>
         <p className="text-pretty">
-          Episode stills and supported video records
-          indexed by TMDB. External video links open on
-          YouTube.
+          Episode images and videos from TMDB. Video links open on YouTube.
         </p>
       </header>
 
@@ -158,14 +156,14 @@ export function EpisodeMediaSection({
               rel="noreferrer"
               target="_blank"
             >
-              Open transmission
+              Open video
               <ExternalLink aria-hidden="true" />
             </a>
           </aside>
         </div>
       ) : (
         <div className="tv-episode-video-empty">
-          <p>No video transmission</p>
+          <p>No video available</p>
           <h3 className="font-display">
             TMDB has no supported video attached to this
             episode.
@@ -197,7 +195,7 @@ export function EpisodeMediaSection({
       {stills.length > 0 ? (
         <div className="tv-episode-stills">
           <div className="tv-episode-stills__heading">
-            <p>Still register</p>
+            <p>Episode images</p>
             <span>
               {stills.length} preserved{' '}
               {stills.length === 1 ? 'frame' : 'frames'}

@@ -146,8 +146,8 @@ export function SearchPage() {
     criteria.media === 'both' &&
     movieIntentSupported !== tvIntentSupported
       ? movieIntentSupported
-        ? 'These exact genre signals map to movies only; television results are omitted until the genres are broadened.'
-        : 'These exact genre signals map to television only; movie results are omitted until the genres are broadened.'
+        ? 'These genres are available for movies only, so TV results are hidden.'
+        : 'These genres are available for TV only, so movie results are hidden.'
       : null
   const visibleScopeOptions = isIntentMode
     ? searchScopeOptions.filter(({ value }) => value !== 'person')
@@ -261,9 +261,9 @@ export function SearchPage() {
   if (isIntentMode && !supportedIntentMedia) {
     resultsContent = (
       <EmptyState
-        title="These exact filters cannot be mapped"
-        message="The selected genre does not have an equivalent TMDB genre for this media type. Change the medium or remove that genre to continue."
-        actionLabel="Reset interpreted filters"
+        title="This genre is not available"
+        message="Choose another media type or remove the genre."
+        actionLabel="Reset filters"
         onAction={() =>
           updateCriteria(createDefaultIntentCriteria())
         }
@@ -274,12 +274,12 @@ export function SearchPage() {
       <LoadingState
         title={
           isIntentMode
-            ? 'Projecting recommendations'
-            : 'Scanning the living archive'
+            ? 'Finding recommendations'
+            : 'Searching the catalogue'
         }
         message={
           isIntentMode
-            ? 'Applying the interpreted signals to the TMDB catalogue.'
+            ? 'Searching TMDB with the filters shown above.'
             : `Searching TMDB for records matching “${query}”.`
         }
       />
@@ -287,10 +287,10 @@ export function SearchPage() {
   } else if (activeSearch.isInitialError) {
     resultsContent = (
       <ErrorState
-        title="The archive search was interrupted"
+        title="Search could not finish"
         message={
           activeSearch.errorMessage ??
-          'The requested records could not be retrieved.'
+          'The requested results could not be retrieved.'
         }
         onRetry={activeSearch.retry}
         retryLabel="Search again"
@@ -302,7 +302,7 @@ export function SearchPage() {
         title="No matching records were found"
         message={
           isIntentMode
-            ? 'TMDB returned no records for this combination. Broaden one of the interpreted filters and try again.'
+            ? 'No titles match these filters. Remove or broaden one filter and try again.'
             : `TMDB returned no movies, television series, or people for “${query}”. Try another title or name.`
         }
         actionLabel={isIntentMode ? 'Reset filters' : 'Clear search'}
@@ -317,7 +317,7 @@ export function SearchPage() {
     resultsContent = (
       <EmptyState
         title="No loaded records match this filter"
-        message="Other media types were found. Return to all records or load another result page."
+        message="Results exist in another category. Show all results or load more."
         actionLabel="Show all records"
         onAction={() => handleScopeChange('all')}
       />
@@ -348,12 +348,10 @@ export function SearchPage() {
 
         <div className="search-opening__copy">
           <p className="text-pretty">
-            Search for a known record, or tell CineScope what you want to
-            watch in your own words.
+            Enter a title or person. You can also describe what you want to watch.
           </p>
           <p>
-            Viewing requests are interpreted locally, shown to you, and
-            converted into editable catalogue filters.
+            CineScope turns viewing requests into filters you can review and edit.
           </p>
         </div>
       </header>
@@ -367,8 +365,7 @@ export function SearchPage() {
             </h2>
           </div>
           <p>
-            Try a title or person, or a request such as “a funny family
-            movie under two hours.” CineScope selects the appropriate search.
+            Example: “a funny family movie under two hours.”
           </p>
         </div>
 
@@ -403,8 +400,7 @@ export function SearchPage() {
             </button>
           </div>
           <p className="search-form__help" id="archive-search-query-help">
-            Auto mode keeps simple names as catalogue search and recognizes
-            requests with multiple viewing signals.
+            CineScope automatically chooses title search or recommendations.
           </p>
           <p className="search-form__validation" id="archive-search-query-error" aria-live="polite">
             {validationMessage ?? ''}
@@ -423,7 +419,7 @@ export function SearchPage() {
         </form>
 
         <div className="search-suggestions">
-          <p>Try a signal</p>
+          <p>Try an example</p>
           <div>
             {SEARCH_SUGGESTIONS.map((suggestion) => (
               <button key={suggestion} onClick={() => commitSearch(suggestion)} type="button">
@@ -438,15 +434,14 @@ export function SearchPage() {
         <section className="intent-interpretation" aria-labelledby="intent-interpretation-title">
           <header>
             <div>
-              <p className="archive-label">What CineScope understood</p>
+              <p className="archive-label">Your request</p>
               <h2 className="intent-interpretation__title font-display" id="intent-interpretation-title">
-                Tune the projection.
+                Review the filters.
               </h2>
             </div>
             <div>
               <p>
-                These are deterministic catalogue signals—not an opaque AI
-                judgment. Edit any interpretation before continuing.
+                Check what CineScope understood. Change any filter before viewing results.
               </p>
               <button onClick={() => commitSearch(query, 'lookup')} type="button">
                 Search these words as a title or name
@@ -499,7 +494,7 @@ export function SearchPage() {
             </label>
             <label className="intent-controls__checkbox">
               <input checked={criteria.familyFriendly} onChange={(event) => handleFamilyFriendlyChange(event.target.checked)} type="checkbox" />
-              <span>Prioritize family catalogue genres</span>
+              <span>Family-friendly</span>
             </label>
           </div>
 
@@ -510,7 +505,7 @@ export function SearchPage() {
           ) : null}
 
           <fieldset className="intent-genres">
-            <legend>Genre signals · choose up to four</legend>
+            <legend>Genres · choose up to four</legend>
             <div>
               {preferenceGenreDefinitions.map((genre) => (
                 <button
@@ -526,7 +521,7 @@ export function SearchPage() {
           </fieldset>
 
           <button className="intent-interpretation__reset" onClick={() => updateCriteria(createDefaultIntentCriteria())} type="button">
-            Reset interpreted filters
+            Reset filters
           </button>
         </section>
       ) : null}
@@ -536,7 +531,7 @@ export function SearchPage() {
           <header className="search-results__heading">
             <div>
               <p className="archive-label">
-                {isIntentMode ? 'Recommendation projection' : 'Search projection'}
+                {isIntentMode ? 'Recommendations' : 'Search results'}
               </p>
               <h2 className="search-results__title font-display" id="search-results-title">
                 {isIntentMode ? 'Matches for' : 'Results for'} “{query}”
@@ -544,7 +539,7 @@ export function SearchPage() {
             </div>
             <p aria-live="polite">
               <strong>{activeSearch.records.length.toLocaleString()}</strong>{' '}
-              unique records loaded from{' '}
+              results loaded from{' '}
               <strong>{activeSearch.totalResults.toLocaleString()}</strong>{' '}
               reported catalogue matches.
             </p>
@@ -564,14 +559,14 @@ export function SearchPage() {
           {activeSearch.records.length > 0 ? (
             <section className="search-continuation" aria-labelledby="search-continuation-title">
               <div>
-                <p className="archive-label">Search continuation</p>
+                <p className="archive-label">More results</p>
                 <h3 className="search-continuation__title font-display" id="search-continuation-title">
-                  Extend the signal.
+                  Continue searching.
                 </h3>
                 <p aria-live="polite">
                   {activeSearch.isFetchingNextPage
                     ? `Retrieving catalogue page ${activeSearch.loadedPageCount + 1}.`
-                    : `${activeSearch.records.length.toLocaleString()} records are currently projected.`}
+                    : `${activeSearch.records.length.toLocaleString()} results are loaded.`}
                 </p>
               </div>
               <div className="search-continuation__action">
@@ -584,14 +579,14 @@ export function SearchPage() {
                 {activeSearch.hasNextPage ? (
                   <button aria-busy={activeSearch.isFetchingNextPage} disabled={activeSearch.isFetchingNextPage} onClick={activeSearch.loadNextPage} type="button">
                     {activeSearch.isFetchingNextPage
-                      ? 'Extending signal'
+                      ? 'Loading more'
                       : activeSearch.isNextPageError
                         ? 'Retry next page'
                         : 'Load more records'}
                     <ArrowRight aria-hidden="true" />
                   </button>
                 ) : (
-                  <p className="search-continuation__complete">The available result pages have been fully projected.</p>
+                  <p className="search-continuation__complete">All available results are loaded.</p>
                 )}
               </div>
             </section>
@@ -599,13 +594,12 @@ export function SearchPage() {
         </section>
       ) : (
         <section className="search-idle" aria-labelledby="search-idle-title">
-          <p className="archive-label">Awaiting query</p>
+          <p className="archive-label">Start searching</p>
           <h2 className="search-idle__title font-display" id="search-idle-title">
-            The archive is listening.
+            What do you want to watch?
           </h2>
           <p>
-            Submit a title, a name, or a natural-language viewing request to
-            begin.
+            Enter a title, person, mood, or viewing request above.
           </p>
         </section>
       )}

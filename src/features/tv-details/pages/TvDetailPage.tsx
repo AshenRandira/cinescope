@@ -128,14 +128,13 @@ export function TvDetailPage() {
           Invalid television record.
         </h1>
         <p className="movie-detail-state__message">
-          The requested route does not contain a valid
-          TMDB series identifier.
+          This series link is not valid.
         </p>
         <Link
           className="movie-detail-state__link"
           to="/tv"
         >
-          Return to the television register
+          Return to TV Shows
           <span aria-hidden="true"> →</span>
         </Link>
       </TvDetailRouteState>
@@ -146,8 +145,8 @@ export function TvDetailPage() {
     return (
       <TvDetailRouteState>
         <LoadingState
-          title="Tuning the series record"
-          message="Retrieving the series, seasons, credits, videos, and related catalogue material."
+          title="Loading series details"
+          message="Loading the series, seasons, cast, and videos."
         />
       </TvDetailRouteState>
     )
@@ -163,14 +162,13 @@ export function TvDetailPage() {
           This series could not be found.
         </h1>
         <p className="movie-detail-state__message">
-          TMDB does not currently contain a television
-          record for identifier {tvId}.
+          TMDB has no series with the ID {tvId}.
         </p>
         <Link
           className="movie-detail-state__link"
           to="/tv"
         >
-          Return to the television register
+          Return to TV Shows
           <span aria-hidden="true"> →</span>
         </Link>
       </TvDetailRouteState>
@@ -181,13 +179,13 @@ export function TvDetailPage() {
     return (
       <TvDetailRouteState>
         <ErrorState
-          title="The series record could not be tuned"
+          title="Series details could not load"
           message={
             details.errorMessage ??
             'The television record is temporarily unavailable.'
           }
           onRetry={details.retry}
-          retryLabel="Retry series record"
+          retryLabel="Try again"
         />
       </TvDetailRouteState>
     )
@@ -205,14 +203,13 @@ export function TvDetailPage() {
           No series record was returned.
         </h1>
         <p className="movie-detail-state__message">
-          Return to the register and select another
-          transmission.
+          Return to TV Shows and choose another series.
         </p>
         <Link
           className="movie-detail-state__link"
           to="/tv"
         >
-          Return to the television register
+          Return to TV Shows
           <span aria-hidden="true"> →</span>
         </Link>
       </TvDetailRouteState>
@@ -329,7 +326,7 @@ export function TvDetailPage() {
             to="/tv"
           >
             <span aria-hidden="true">←</span>
-            Television register
+            TV Shows
           </Link>
 
           <div className="movie-detail-hero__layout">
@@ -405,8 +402,8 @@ export function TvDetailPage() {
                 <div>
                   <dt>
                     {show.next_episode_to_air
-                      ? 'Next transmission'
-                      : 'Latest transmission'}
+                      ? 'Next episode'
+                      : 'Latest episode'}
                   </dt>
                   <dd>
                     {formatDate(
@@ -455,7 +452,7 @@ export function TvDetailPage() {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                03 / Signal anatomy
+                03 / Series details
               </p>
               <h2
                 className="movie-detail-section-heading__title font-display text-balance"
@@ -465,20 +462,18 @@ export function TvDetailPage() {
               </h2>
             </div>
             <p className="movie-detail-section-heading__copy text-pretty">
-              Air dates, episode volume, language, and
-              production information preserved from this
-              TMDB series record.
+              Air dates, episode count, language, and production details from TMDB.
             </p>
           </header>
 
           <div className="movie-detail-record__layout">
             <dl className="movie-detail-fact-grid">
               <div>
-                <dt>First transmission</dt>
+                <dt>First aired</dt>
                 <dd>{formatDate(show.first_air_date)}</dd>
               </div>
               <div>
-                <dt>Latest transmission</dt>
+                <dt>Last aired</dt>
                 <dd>{formatDate(show.last_air_date)}</dd>
               </div>
               <div>
@@ -490,7 +485,7 @@ export function TvDetailPage() {
                 </dd>
               </div>
               <div>
-                <dt>Episode register</dt>
+                <dt>Episodes</dt>
                 <dd>
                   {show.number_of_episodes.toLocaleString()}{' '}
                   episodes
@@ -543,7 +538,7 @@ export function TvDetailPage() {
 
           {show.next_episode_to_air ? (
             <Link
-              aria-label={`Open ${show.next_episode_to_air.name} in the season register`}
+              aria-label={`Open ${show.next_episode_to_air.name}`}
               className="tv-detail-next-episode"
               to={`/tv/${show.id}/season/${show.next_episode_to_air.season_number}#episode-${show.next_episode_to_air.episode_number}`}
             >
@@ -567,18 +562,17 @@ export function TvDetailPage() {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                04 / Season register
+                04 / Seasons
               </p>
               <h2
                 className="movie-detail-section-heading__title font-display text-balance"
                 id="tv-seasons-heading"
               >
-                Follow the transmission across seasons.
+                Browse seasons and episodes.
               </h2>
             </div>
             <p className="movie-detail-section-heading__copy text-pretty">
-              Season-level catalogue records, including
-              specials where TMDB has indexed them.
+              Seasons and specials listed by TMDB.
             </p>
           </header>
 
@@ -599,7 +593,7 @@ export function TvDetailPage() {
                 return (
                   <li key={season.id}>
                     <Link
-                      aria-label={`Open ${season.name} episode register`}
+                      aria-label={`Open episodes in ${season.name}`}
                       className="tv-season-card"
                       to={`/tv/${show.id}/season/${season.season_number}`}
                     >
@@ -628,7 +622,7 @@ export function TvDetailPage() {
                       <div className="tv-season-card__copy">
                         <p>
                           {season.season_number === 0
-                            ? 'Special transmission'
+                            ? 'Special'
                             : `Season ${season.season_number}`}
                         </p>
                         <h3 className="font-display">
@@ -647,7 +641,7 @@ export function TvDetailPage() {
                             'No season overview is currently attached to this record.'}
                         </p>
                         <span className="tv-season-card__action">
-                          Open episode register
+                          View episodes
                           <span aria-hidden="true"> →</span>
                         </span>
                       </div>
@@ -670,7 +664,7 @@ export function TvDetailPage() {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                05 / Credits register
+                05 / Cast and crew
               </p>
               <h2
                 className="movie-detail-section-heading__title font-display text-balance"
@@ -680,9 +674,7 @@ export function TvDetailPage() {
               </h2>
             </div>
             <p className="movie-detail-section-heading__copy text-pretty">
-              Principal cast from the available TMDB
-              television credits, accompanied by the
-              production signals behind the record.
+              Main cast in credited order, followed by key crew roles.
             </p>
           </header>
 
@@ -692,13 +684,13 @@ export function TvDetailPage() {
               aria-labelledby="tv-production-register-heading"
             >
               <p className="movie-detail-subsection-index">
-                Production register
+                Production details
               </p>
               <h3
                 className="movie-detail-subsection-title font-display"
                 id="tv-production-register-heading"
               >
-                Signal origins
+                Who made the series
               </h3>
               <dl className="movie-detail-key-crew__list">
                 <div>
@@ -759,7 +751,7 @@ export function TvDetailPage() {
                         key={member.credit_id}
                       >
                         <Link
-                          aria-label={`Open contributor record for ${member.name}`}
+                          aria-label={`View contributor profile for ${member.name}`}
                           className="movie-detail-cast-card__link"
                           to={`/people/${member.id}`}
                         >

@@ -169,14 +169,13 @@ export function TvSeasonPage() {
           Invalid season record.
         </h1>
         <p className="movie-detail-state__message">
-          The requested route does not contain a valid
-          TMDB series and season identifier.
+          This season link is not valid.
         </p>
         <Link
           className="movie-detail-state__link"
           to="/tv"
         >
-          Return to the television register
+          Return to TV Shows
           <span aria-hidden="true"> →</span>
         </Link>
       </SeasonRouteState>
@@ -187,8 +186,8 @@ export function TvSeasonPage() {
     return (
       <SeasonRouteState>
         <LoadingState
-          title="Rewinding the season record"
-          message="Retrieving the season, episode register, and credited personnel."
+          title="Loading season details"
+          message="Loading the season, episodes, and cast."
         />
       </SeasonRouteState>
     )
@@ -204,14 +203,13 @@ export function TvSeasonPage() {
           This season could not be found.
         </h1>
         <p className="movie-detail-state__message">
-          TMDB does not currently contain season{' '}
-          {seasonNumber} for series identifier {tvId}.
+          TMDB has no season {seasonNumber} for this series.
         </p>
         <Link
           className="movie-detail-state__link"
           to={`/tv/${tvId}`}
         >
-          Return to the series record
+          Return to the series
           <span aria-hidden="true"> →</span>
         </Link>
       </SeasonRouteState>
@@ -222,13 +220,13 @@ export function TvSeasonPage() {
     return (
       <SeasonRouteState>
         <ErrorState
-          title="The season record could not be tuned"
+          title="Season details could not load"
           message={
             seasonRecord.errorMessage ??
             'The season record is temporarily unavailable.'
           }
           onRetry={seasonRecord.retry}
-          retryLabel="Retry season record"
+          retryLabel="Try again"
         />
       </SeasonRouteState>
     )
@@ -250,7 +248,7 @@ export function TvSeasonPage() {
           className="movie-detail-state__link"
           to={`/tv/${tvId}`}
         >
-          Return to the series record
+          Return to the series
           <span aria-hidden="true"> →</span>
         </Link>
       </SeasonRouteState>
@@ -276,7 +274,7 @@ export function TvSeasonPage() {
   const cast = season.credits.cast.slice(0, 8)
   const seasonLabel =
     season.season_number === 0
-      ? 'Special transmissions'
+      ? 'Special episodes'
       : `Season ${season.season_number}`
   const seriesCandidate = {
     backdropPath: series.backdrop_path,
@@ -335,7 +333,7 @@ export function TvSeasonPage() {
               </h1>
               <p className="tv-season-hero__overview text-pretty">
                 {season.overview ||
-                  `The episode register for ${seasonLabel.toLowerCase()} is preserved below.`}
+                  `Browse every episode in ${seasonLabel.toLowerCase()} below.`}
               </p>
 
               <div className="tv-season-hero__controls">
@@ -347,11 +345,11 @@ export function TvSeasonPage() {
 
               <dl className="tv-season-hero__facts">
                 <div>
-                  <dt>Transmission</dt>
+                  <dt>Air date</dt>
                   <dd>{formatDate(season.air_date)}</dd>
                 </div>
                 <div>
-                  <dt>Episode register</dt>
+                  <dt>Episodes</dt>
                   <dd>
                     {episodes.length.toLocaleString()}{' '}
                     {episodes.length === 1
@@ -411,7 +409,7 @@ export function TvSeasonPage() {
         <header className="tv-season-section-heading">
           <div>
             <p className="archive-label">
-              02 / Episode register
+              02 / Episodes
             </p>
             <h2
               className="font-display text-balance"
@@ -462,7 +460,7 @@ export function TvSeasonPage() {
                   key={episode.id}
                 >
                   <Link
-                    aria-label={`Open episode record for ${episode.name}`}
+                    aria-label={`View episode details for ${episode.name}`}
                     className="tv-episode-card__link"
                     to={`/tv/${series.id}/season/${season.season_number}/episode/${episode.episode_number}`}
                   >
@@ -531,7 +529,7 @@ export function TvSeasonPage() {
                           <dd>{writers || 'Not indexed'}</dd>
                         </div>
                         <div>
-                          <dt>Guest register</dt>
+                          <dt>Guest cast</dt>
                           <dd>
                             {episode.guest_stars.length > 0
                               ? `${episode.guest_stars.length} credited`
@@ -541,7 +539,7 @@ export function TvSeasonPage() {
                       </dl>
 
                       <span className="tv-episode-card__action">
-                        Open episode record
+                        View episode details
                         <span aria-hidden="true"> →</span>
                       </span>
                     </div>
@@ -601,7 +599,7 @@ export function TvSeasonPage() {
               className="font-display text-balance"
               id="season-cast-heading"
             >
-              The ensemble attached to this transmission.
+              Cast and crew for this season.
             </h2>
           </div>
           <p className="text-pretty">
@@ -625,7 +623,7 @@ export function TvSeasonPage() {
               return (
                 <li key={member.credit_id}>
                   <Link
-                    aria-label={`Open contributor record for ${member.name}`}
+                    aria-label={`View contributor profile for ${member.name}`}
                     className="tv-season-cast__link"
                     to={`/people/${member.id}`}
                   >

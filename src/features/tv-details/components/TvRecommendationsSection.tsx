@@ -76,21 +76,19 @@ export function TvRecommendationsSection({
       <header className="movie-recommendations__heading">
         <div>
           <p className="archive-label">
-            07 / Adjacent transmissions
+            07 / Related series
           </p>
 
           <h2
             className="movie-recommendations__title font-display text-balance"
             id="tv-recommendations-heading"
           >
-            Continue through related series signals.
+            Explore related series.
           </h2>
         </div>
 
         <p className="movie-recommendations__copy text-pretty">
-          Related records supplied by TMDB. These series
-          are not personalized and do not represent a
-          CineScope quality ranking.
+          Related series from TMDB. These suggestions are not personalized.
         </p>
       </header>
 
@@ -111,7 +109,7 @@ export function TvRecommendationsSection({
               return (
                 <li key={recommendation.id}>
                   <Link
-                    aria-label={`Open series record for ${recommendation.name}`}
+                    aria-label={`View series details for ${recommendation.name}`}
                     className="movie-recommendation-card"
                     to={`/tv/${recommendation.id}`}
                   >
@@ -176,7 +174,7 @@ export function TvRecommendationsSection({
           </h3>
 
           <Link to="/tv">
-            Return to the television register
+            Return to TV Shows
             <span aria-hidden="true"> →</span>
           </Link>
         </div>

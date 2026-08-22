@@ -666,7 +666,7 @@ test('re-ranks archive recommendations by mood and remembers not-interested feed
     .click()
   await expect(
     page.getByText(
-      'Reflective Echo will stay out of future archive cuts.',
+      'Reflective Echo will no longer appear in recommendations.',
     ),
   ).toBeVisible()
   await expect(
@@ -688,7 +688,7 @@ test('re-ranks archive recommendations by mood and remembers not-interested feed
   await page.reload({ waitUntil: 'domcontentloaded' })
 
   await expect(
-    page.getByText('Synchronized with your account'),
+    page.getByText('Saved to your account'),
   ).toBeVisible()
   await expect(
     page.getByRole('heading', { name: 'Reflective Echo' }),
@@ -765,7 +765,7 @@ test('changes a password and permanently deletes account data behind fresh crede
     .getByRole('article')
     .filter({
       has: page.getByRole('heading', {
-        name: 'Change the access key.',
+        name: 'Change your password.',
       }),
     })
 
@@ -804,7 +804,7 @@ test('changes a password and permanently deletes account data behind fresh crede
     .getByRole('article')
     .filter({
       has: page.getByRole('heading', {
-        name: 'Close the archive.',
+        name: 'Delete your account.',
       }),
     })
 

@@ -325,7 +325,7 @@ export function ProfilePage() {
       )
       setExportMessage({
         kind: 'success',
-        text: 'A versioned JSON copy of your profile and current archive was downloaded.',
+        text: 'Your CineScope data was downloaded as a JSON file.',
       })
     } catch {
       setExportMessage({
@@ -439,7 +439,7 @@ export function ProfilePage() {
         <header className="profile-section-heading">
           <div>
             <p className="archive-label">
-              02 / Local archive
+              02 / Your library
             </p>
             <h2
               className="font-display"
@@ -498,21 +498,19 @@ export function ProfilePage() {
         <header className="profile-section-heading">
           <div>
             <p className="archive-label">
-              04 / Account register
+              04 / Account details
             </p>
             <h2
               className="font-display"
               id="profile-account-heading"
             >
-              Maintain your identity.
+              Manage your profile.
             </h2>
           </div>
           <aside className="profile-section-heading__note">
             <p className="archive-label">Authentication</p>
             <p>
-              Firebase Authentication protects your profile
-              and sign-in. CineScope never stores your
-              password.
+              Firebase protects your sign-in. CineScope never stores your password.
             </p>
           </aside>
         </header>
@@ -570,8 +568,8 @@ export function ProfilePage() {
               type="button"
             >
               {isSigningOut
-                ? 'Closing session…'
-                : 'Sign out of CineScope'}
+                ? 'Signing out…'
+                : 'Sign out'}
             </button>
           </aside>
         </div>
@@ -594,12 +592,9 @@ export function ProfilePage() {
             </h2>
           </div>
           <aside className="profile-section-heading__note">
-            <p className="archive-label">Fresh credentials</p>
+            <p className="archive-label">Security check</p>
             <p>
-              Password changes and account deletion require
-              your current password. CineScope sends the
-              resulting Firebase identity—not your password—to
-              its secure deletion service.
+              Enter your current password before changing it or deleting your account.
             </p>
           </aside>
         </header>
@@ -615,7 +610,7 @@ export function ProfilePage() {
             <p className="profile-security__description">
               {user.emailVerified
                 ? 'Firebase has confirmed the email address attached to this account.'
-                : 'Request a verification link, open it from your inbox, then refresh the account status.'}
+                : 'Send a verification email. Open its link, then refresh the status here.'}
             </p>
 
             {!user.emailVerified ? (
@@ -646,7 +641,7 @@ export function ProfilePage() {
               </div>
             ) : (
               <p className="profile-security__status">
-                Verified account signal
+                Email address verified
               </p>
             )}
 
@@ -659,10 +654,7 @@ export function ProfilePage() {
               Keep your own copy.
             </h3>
             <p className="profile-security__description">
-              Download a versioned JSON snapshot containing
-              your Firebase profile metadata and the current
-              CineScope archive on this device. Passwords and
-              authentication tokens are never included.
+              Download your profile, preferences, and library as JSON. Passwords and sign-in tokens are excluded.
             </p>
             <div className="profile-security__actions">
               <button onClick={handleExport} type="button">
@@ -676,12 +668,10 @@ export function ProfilePage() {
             <div>
               <p className="archive-label">Password</p>
               <h3 className="font-display">
-                Change the access key.
+                Change your password.
               </h3>
               <p className="profile-security__description">
-                Confirm the current password before setting a
-                new one. Firebase performs the credential
-                check and password update.
+                Enter your current password, then choose a new one.
               </p>
             </div>
 
@@ -748,14 +738,10 @@ export function ProfilePage() {
             <div>
               <p className="archive-label">Permanent deletion</p>
               <h3 className="font-display">
-                Close the archive.
+                Delete your account.
               </h3>
               <p className="profile-security__description">
-                This permanently deletes the Firebase account,
-                every record under its Firestore archive, and
-                the account archive stored in this browser. It
-                cannot be undone. Download your data first if
-                you may need it later.
+                This permanently deletes your account and synced CineScope data. It also clears this device. This cannot be undone, so download your data first if needed.
               </p>
             </div>
 

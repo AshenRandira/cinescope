@@ -240,8 +240,8 @@ function LibraryCard({
           to={getRecordTarget(record)}
         >
           {record.mediaType === 'movie'
-            ? 'Open film record'
-            : 'Open series record'}
+            ? 'View movie details'
+            : 'View series details'}
           <ArrowRight aria-hidden="true" />
         </Link>
       </div>
@@ -267,7 +267,7 @@ function ContinueWatchingShelf({
       <header className="continue-watching__heading">
         <div>
           <p className="archive-label">
-            Active transmissions
+            In progress
           </p>
           <h2
             className="font-display"
@@ -277,8 +277,7 @@ function ContinueWatchingShelf({
           </h2>
         </div>
         <p>
-          Episode checkpoints stay local first and follow
-          your account when archive sync is active.
+          Your episode progress is saved automatically.
         </p>
       </header>
 
@@ -332,7 +331,7 @@ function ContinueWatchingShelf({
                   <p>{record.title}</p>
                   <h3 className="font-display">
                     {resumeEpisode?.name ??
-                      'Return to the series record'}
+                      'Return to the series'}
                   </h3>
                   <small>
                     {progress.watchedEpisodeKeys.length}{' '}
@@ -344,7 +343,7 @@ function ContinueWatchingShelf({
                   <span>
                     {resumeEpisode
                       ? 'Open next episode'
-                      : 'Open series record'}{' '}
+                      : 'View series details'}{' '}
                     <ArrowRight aria-hidden="true" />
                   </span>
                 </div>
@@ -417,8 +416,8 @@ export function LibraryPage() {
 
         <div className="library-opening__copy">
           <p className="text-pretty">
-            A private working collection for films and
-            series you save, watch, favour, or rate.
+            Your private collection of saved, watched,
+            favourite, and rated titles.
           </p>
 
           <div
@@ -447,19 +446,19 @@ export function LibraryPage() {
         <header className="library-index__heading">
           <div>
             <p className="archive-label">
-              Collection index
+              Filter library
             </p>
 
             <h2
               className="library-index__title font-display"
               id="library-index-title"
             >
-              Read your archive.
+              Find saved titles.
             </h2>
           </div>
 
           <p>
-            Every control saves locally first
+            Changes save automatically
             {syncStatus === 'local'
               ? ' in this browser.'
               : ' while account sync runs in the background.'}
@@ -512,7 +511,7 @@ export function LibraryPage() {
             {filteredRecords.length === 1
               ? 'record'
               : 'records'}{' '}
-            on this shelf.
+            in this view.
           </p>
         </header>
 
@@ -523,22 +522,21 @@ export function LibraryPage() {
             </p>
 
             <h3 className="font-display">
-              Your archive begins with one record.
+              Your library is empty.
             </h3>
 
             <p>
-              Save a film from its detail page or save
-              a movie or series directly from Search.
+              Save a movie or series from Search or any detail page.
             </p>
 
             <div>
               <Link to="/discover">
-                Enter discovery
+                Explore recommendations
                 <ArrowRight aria-hidden="true" />
               </Link>
 
               <Link to="/search">
-                Search the archive
+                Search titles
                 <ArrowRight aria-hidden="true" />
               </Link>
             </div>
@@ -550,13 +548,11 @@ export function LibraryPage() {
             </p>
 
             <h3 className="font-display">
-              No records match this status yet.
+              No titles match this filter.
             </h3>
 
             <p>
-              Change a saved record’s watched,
-              favourite, or rating state, or return to
-              the complete collection.
+              Choose another filter or show the full library.
             </p>
 
             <button
@@ -567,7 +563,7 @@ export function LibraryPage() {
               }
               type="button"
             >
-              Show all records
+              Show full library
             </button>
           </div>
         ) : (

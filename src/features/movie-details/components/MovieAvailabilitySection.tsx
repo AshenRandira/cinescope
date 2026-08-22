@@ -247,9 +247,7 @@ import {
 
           <div className="movie-availability__introduction">
             <p className="text-pretty">
-              Availability varies by territory and may
-              change without notice. Select a country to
-              inspect the current provider record.
+              Choose a country to see current streaming options. Availability may change.
             </p>
 
             {availableRegions.length > 0 ? (
@@ -297,8 +295,7 @@ import {
             </h3>
 
             <p>
-              CineScope is retrieving regional
-              availability for {movieTitle}.
+              Loading streaming options for {movieTitle}.
             </p>
           </div>
         ) : null}
@@ -364,8 +361,7 @@ import {
             </h3>
 
             <p>
-              Try another viewing country or return later
-              as regional availability changes.
+              Try another country or check again later.
             </p>
           </div>
         ) : null}

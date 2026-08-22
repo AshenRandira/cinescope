@@ -222,21 +222,19 @@ import {
         <header className="movie-video-section__heading">
           <div>
             <p className="archive-label">
-              02 / Projection material
+              02 / Videos
             </p>
 
             <h2
               className="movie-video-section__title font-display text-balance"
               id="movie-video-heading"
             >
-              Motion preserved alongside the record.
+              Trailers and videos.
             </h2>
           </div>
 
           <p className="movie-video-section__copy text-pretty">
-            Official trailers and selected production
-            footage associated with this feature’s TMDB
-            catalogue entry.
+            Official trailers and production videos listed by TMDB.
           </p>
         </header>
 
@@ -261,7 +259,7 @@ import {
                 />
               ) : (
                 <span className="movie-video-feature__fallback">
-                  Projection artwork unavailable
+                  Video artwork unavailable
                 </span>
               )}
 
@@ -282,7 +280,7 @@ import {
 
             <aside className="movie-video-feature__record">
               <p className="movie-video-feature__index">
-                Primary projection
+                Featured video
               </p>
 
               <h3 className="font-display">
@@ -330,14 +328,14 @@ import {
                 }
               >
                 <Play aria-hidden="true" />
-                Begin projection
+                Play video
               </button>
             </aside>
           </div>
         ) : (
           <div className="movie-video-empty">
             <p className="movie-video-empty__index">
-              Projection unavailable
+              Video unavailable
             </p>
 
             <h3 className="font-display">
@@ -345,9 +343,7 @@ import {
             </h3>
 
             <p>
-              This movie record does not currently contain
-              a playable YouTube trailer or production
-              video.
+              No playable YouTube trailer or production video is available.
             </p>
           </div>
         )}
@@ -422,7 +418,7 @@ import {
                 <div>
                   <p>
                     {activeVideo.type ||
-                      'Video projection'}
+                      'Video'}
                   </p>
 
                   <h2
@@ -438,7 +434,7 @@ import {
                   className="movie-video-dialog__close"
                   type="button"
                   onClick={closeVideo}
-                  aria-label="Close video projection"
+                  aria-label="Close video"
                 >
                   <X aria-hidden="true" />
                 </button>
@@ -458,8 +454,7 @@ import {
 
               <footer className="movie-video-dialog__footer">
                 <p>
-                  Embedded from YouTube using
-                  privacy-enhanced playback.
+                  YouTube privacy-enhanced playback.
                 </p>
 
                 <a

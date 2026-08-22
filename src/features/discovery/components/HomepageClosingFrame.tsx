@@ -6,21 +6,21 @@ import './HomepageClosingFrame.css'
 const closingRoutes = [
   {
     description:
-      'Move deeper into cinema through the developing CineScope movie archive.',
+      'Browse movies by genre, runtime, rating, and release period.',
     index: '01',
     label: 'Enter the movie archive',
     to: '/movies',
   },
   {
     description:
-      'Follow episodic stories through the dedicated television index.',
+      'Browse popular, highly rated, and currently airing series.',
     index: '02',
     label: 'Tune into television',
     to: '/tv',
   },
   {
     description:
-      'Search the wider CineScope index by title, person, or series.',
+      'Search by title or person, or describe what you want to watch.',
     index: '03',
     label: 'Search the archive',
     to: '/search',
@@ -44,13 +44,11 @@ export function HomepageClosingFrame() {
             className="font-display text-balance mt-8 text-[clamp(3.75rem,8.5vw,9.75rem)] leading-[0.82] text-[var(--color-app-text)]"
             id="homepage-closing-frame-title"
           >
-            Every ending opens another reel.
+            Choose where to go next.
           </h2>
 
           <p className="text-pretty mx-auto mt-8 max-w-2xl text-base leading-8 text-[var(--color-app-muted)] sm:text-lg">
-            The homepage sequence ends here, but the archive
-            continues through cinema, television, and the wider
-            CineScope index.
+            Continue with movies, TV shows, or search.
           </p>
         </header>
 
@@ -108,9 +106,8 @@ export function HomepageClosingFrame() {
             </h3>
 
             <p className="mt-6 text-sm leading-7 text-[var(--color-app-muted)]">
-              CineScope uses movie, television, person, rating,
-              release, and artwork information supplied through
-              The Movie Database API.
+              CineScope uses movie, TV, contributor, rating, release,
+              and artwork data from TMDB.
             </p>
 
             <a
@@ -135,9 +132,8 @@ export function HomepageClosingFrame() {
             </p>
 
             <p className="mt-4 text-xs leading-6 text-[var(--color-app-subtle)]">
-              Availability, release information, rankings, and
-              popularity signals can change over time and may
-              vary by territory.
+              Availability, dates, rankings, and popularity may change
+              or vary by region.
             </p>
           </aside>
         </div>

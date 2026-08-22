@@ -525,7 +525,7 @@ export function HeaderSearch() {
                 className="header-search__message"
                 role="option"
               >
-                No names matched this projection.
+                No matching titles or people found.
               </div>
             )}
           </div>

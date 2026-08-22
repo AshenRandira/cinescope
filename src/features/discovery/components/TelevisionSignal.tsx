@@ -135,12 +135,11 @@ export function TelevisionSignal({
                     />
 
                     <p className="archive-label mt-6">
-                        Tuning the television signal
+                        Loading TV collections
                     </p>
 
                     <p className="mt-3 text-sm leading-7 text-[var(--color-app-muted)]">
-                        Weekly attention and the current broadcast
-                        window are being assembled independently.
+                        Loading trending and currently airing series.
                     </p>
                 </div>
             </div>
@@ -154,16 +153,16 @@ export function TelevisionSignal({
             >
                 <div className="max-w-lg text-center">
                     <p className="archive-label text-[var(--color-app-error)]">
-                        Television signal interrupted
+                        TV collections unavailable
                     </p>
 
                     <h3 className="font-display mt-4 text-4xl text-[var(--color-app-text)] sm:text-5xl">
-                        The transmission log could not be received.
+                        TV collections could not load.
                     </h3>
 
                     <p className="mt-5 text-sm leading-7 text-[var(--color-app-muted)]">
                         {errorMessage ??
-                            'TMDB did not return the television records required for this scene.'}
+                            'TMDB did not return the required series.'}
                     </p>
 
                     <button
@@ -175,7 +174,7 @@ export function TelevisionSignal({
                             aria-hidden="true"
                             className="size-4"
                         />
-                        Retune the signal
+                        Try again
                     </button>
                 </div>
             </div>
@@ -185,16 +184,15 @@ export function TelevisionSignal({
             <div className="grid min-h-[36rem] place-items-center border-y border-dashed border-[var(--color-line-soft)]">
                 <div className="max-w-lg text-center">
                     <p className="archive-label">
-                        Transmission note
+                        No results
                     </p>
 
                     <h3 className="font-display mt-4 text-4xl text-[var(--color-app-text)] sm:text-5xl">
-                        No complete television signal is available.
+                        No TV collection is available.
                     </h3>
 
                     <p className="mt-5 text-sm leading-7 text-[var(--color-app-muted)]">
-                        TMDB responded, but the records did not contain
-                        enough suitable widescreen artwork.
+                        The results did not include enough artwork to display this section.
                     </p>
 
                     <button
@@ -202,7 +200,7 @@ export function TelevisionSignal({
                         onClick={onRetry}
                         type="button"
                     >
-                        Request another transmission
+                        Try again
                     </button>
                 </div>
             </div>
@@ -236,7 +234,7 @@ export function TelevisionSignal({
         sceneContent = (
             <>
                 <div
-                    aria-label="Television signal modes"
+                    aria-label="Television collections"
                     className="television-signal__tabs border-y border-[var(--color-line-soft)]"
                     role="tablist"
                 >
@@ -247,7 +245,7 @@ export function TelevisionSignal({
                         return (
                             <button
                                 aria-controls="television-signal-panel"
-                                aria-label={`Signal ${signal.index}: ${signal.label}. ${signal.cue}`}
+                                aria-label={`Collection ${signal.index}: ${signal.label}. ${signal.cue}`}
                                 aria-selected={isActive}
                                 className="television-signal__tab"
                                 data-active={isActive}
@@ -268,7 +266,7 @@ export function TelevisionSignal({
                             >
                                 <span className="flex items-center justify-between gap-4">
                                     <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.18em] text-[var(--color-app-subtle)]">
-                                        Signal {signal.index}
+                                        Collection {signal.index}
                                     </span>
 
                                     <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.15em] text-[var(--color-projector)]">
@@ -332,7 +330,7 @@ export function TelevisionSignal({
                             <div>
                                 <div className="flex flex-wrap items-center justify-between gap-4">
                                     <p className="archive-label text-[var(--color-projector-strong)]">
-                                        Selected transmission{' '}
+                                        Featured series{' '}
                                         {String(
                                             safeShowIndex + 1,
                                         ).padStart(2, '0')}
@@ -410,7 +408,7 @@ export function TelevisionSignal({
                                 <div className="mt-9 grid max-w-3xl gap-6 border-t border-[var(--color-line-soft)] pt-6 sm:grid-cols-2">
                                     <div>
                                         <p className="archive-label">
-                                            Signal character
+                                            About this collection
                                         </p>
 
                                         <p className="mt-3 text-sm leading-7 text-[var(--color-app-muted)]">
@@ -432,16 +430,16 @@ export function TelevisionSignal({
                         </div>
 
                         <aside
-                            aria-label="Shows in this television signal"
+                            aria-label="Shows in this television collection"
                             className="border-t border-[var(--color-line-soft)] bg-[color:rgba(5,7,6,0.68)] lg:border-t-0 lg:border-l"
                         >
                             <div className="border-b border-[var(--color-line-soft)] px-5 py-6 sm:px-7">
                                 <p className="archive-label">
-                                    Transmission log
+                                    More series
                                 </p>
 
                                 <p className="mt-3 text-sm text-[var(--color-app-muted)]">
-                                    {activeSignal.shows.length} episodic records
+                                    {activeSignal.shows.length} series
                                 </p>
                             </div>
 
@@ -532,10 +530,7 @@ export function TelevisionSignal({
 
                     <div className="border-l border-[var(--color-line-soft)] pl-6">
                         <p className="text-pretty text-sm leading-7 text-[var(--color-app-muted)]">
-                            Television receives a wider, more continuous
-                            rhythm: one active transmission and a structured
-                            episodic log rather than another poster-led movie
-                            collection.
+                            Explore what is trending now and what is airing soon.
                         </p>
                     </div>
                 </header>

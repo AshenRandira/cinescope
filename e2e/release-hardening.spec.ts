@@ -51,7 +51,7 @@ test('shows safe recovery actions when a lazy route cannot load', async ({
 
   await expect(
     page.getByRole('heading', {
-      name: 'The projection stopped unexpectedly.',
+      name: 'This page stopped loading.',
     }),
   ).toBeVisible()
   await expect(
@@ -62,7 +62,7 @@ test('shows safe recovery actions when a lazy route cannot load', async ({
   ).not.toBeVisible()
 
   await page
-    .getByRole('link', { name: 'Return to the archive' })
+    .getByRole('link', { name: 'Return home' })
     .click()
   await expect(page).toHaveURL(/\/$/)
 })

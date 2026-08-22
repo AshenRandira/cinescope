@@ -27,7 +27,7 @@ The browser suite covers these public journeys:
 - 320 CSS-pixel overflow and mobile-navigation touch-target checks;
 - unknown and malformed deep-route handling.
 - public privacy and credits routes, index metadata, TMDB attribution, the web manifest, and the social preview asset.
-- a 17-route desktop/mobile UX audit for horizontal overflow, primary landmarks and headings, text below 12 CSS pixels, undersized controls, duplicate IDs, missing image alternatives, unnamed controls, browser/runtime errors, failed resources, and focused-control clearance above fixed mobile navigation.
+- a 17-route desktop/mobile UX audit for horizontal overflow, primary landmarks and headings, text below 12 CSS pixels, prose blocks over 220 characters, undersized controls, duplicate IDs, missing image alternatives, unnamed controls, browser/runtime errors, failed resources, and focused-control clearance above fixed mobile navigation.
 
 `e2e/fixtures.ts` intercepts every same-origin catalogue request used by these journeys. `.env.e2e` deliberately leaves Firebase and App Check unconfigured, so CI does not depend on real credentials, accounts, or live third-party data.
 

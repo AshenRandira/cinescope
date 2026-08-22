@@ -24,6 +24,7 @@ const publicRoutes = [
 
 type RouteAudit = {
   controlTargets: string[]
+  denseText: string[]
   duplicateIds: string[]
   hasHorizontalOverflow: boolean
   headingCount: number
@@ -96,6 +97,16 @@ async function auditRoute(page: Page, route: string) {
       })
       .map(describe)
 
+    const denseText = [...document.querySelectorAll('main p')]
+      .filter(isVisible)
+      .filter(
+        (element) =>
+          (element.textContent ?? '')
+            .replace(/\\s+/g, ' ')
+            .trim().length > 220,
+      )
+      .map(describe)
+
     const idCounts = [...document.querySelectorAll('[id]')]
       .map((element) => element.id)
       .reduce((counts, id) => {
@@ -152,6 +163,7 @@ async function auditRoute(page: Page, route: string) {
 
     return {
       controlTargets,
+      denseText,
       duplicateIds,
       hasHorizontalOverflow:
         document.documentElement.scrollWidth >
@@ -235,6 +247,10 @@ for (const viewport of [
         expect.soft(
           audit.controlTargets,
           `${route} controls must be at least 24 by 24 CSS pixels`,
+        ).toEqual([])
+        expect.soft(
+          audit.denseText,
+          `${route} must not present dense text blocks over 220 characters`,
         ).toEqual([])
         expect.soft(
           audit.duplicateIds,

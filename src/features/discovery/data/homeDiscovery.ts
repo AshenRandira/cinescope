@@ -123,9 +123,9 @@ import type {
       label: 'Quiet and strange',
       title: 'Stories that leave space for the unexplained.',
       description:
-        'Measured films with dramatic, mysterious, or speculative signals—selected for atmosphere rather than spectacle.',
+        'Atmospheric drama, mystery, and science fiction.',
       method:
-        'Drama, mystery, and science-fiction signals with established audience activity. Action and war titles are filtered out where possible.',
+        'Uses well-rated titles with an established audience. Action and war films are filtered out where possible.',
       query: {
         include_adult: false,
         include_video: false,
@@ -144,9 +144,9 @@ import type {
       label: 'High tension',
       title: 'Pressure building one decision at a time.',
       description:
-        'Thrillers, mysteries, and crime stories carrying a strong current audience signal without becoming a generic action list.',
+        'Popular thrillers, mysteries, and crime stories.',
       method:
-        'Thriller, crime, and mystery signals ordered by current TMDB popularity with a meaningful vote-count threshold.',
+        'Orders titles by TMDB popularity and requires a reliable number of audience votes.',
       query: {
         include_adult: false,
         include_video: false,
@@ -164,9 +164,9 @@ import type {
       label: 'Under two hours',
       title: 'Complete worlds that respect the clock.',
       description:
-        'Released feature-length stories running between 75 and 120 minutes, with enough audience response to avoid presenting random catalogue entries.',
+        'Released movies between 75 minutes and two hours.',
       method:
-        'Released on or before today, runtime between 75 and 120 minutes, with popularity, rating, and vote-count filters. This is an editorial utility cut, not a personalized recommendation.',
+        'Uses runtime, popularity, rating, and vote filters. This list is not personalized.',
       query: {
         include_adult: false,
         include_video: false,
@@ -207,12 +207,12 @@ import type {
     {
       id: 'current-signal',
       index: '02',
-      label: 'Current signal',
+      label: 'Trending movies',
       cue: 'This week',
       description:
         'Movies receiving the strongest weekly attention across TMDB.',
       sourceNote:
-        'A weekly trending signal—not a claim about permanent quality or personal taste.',
+        'Weekly trends show attention, not lasting quality or personal taste.',
       endpoint: '/trending/movie/week',
       query: {
         language: 'en-US',
@@ -241,7 +241,7 @@ import type {
       description:
         'Upcoming releases moving toward the present.',
       sourceNote:
-        'Only records with a future primary release date are retained in this map.',
+        'Only titles with a future primary release date are shown.',
       endpoint: '/movie/upcoming',
       query: {
         language: 'en-US',
@@ -254,12 +254,12 @@ import type {
     {
       id: 'current-frequency',
       index: '01',
-      label: 'Current frequency',
+      label: 'Trending series',
       cue: 'Trending this week',
       description:
         'Series currently receiving strong weekly attention across TMDB.',
       sourceNote:
-        'A weekly attention signal—not a personalized recommendation or a claim of lasting quality.',
+        'Weekly trends are not personalized and do not measure lasting quality.',
       endpoint: '/trending/tv/week',
       query: {
         language: 'en-US',
@@ -273,7 +273,7 @@ import type {
       description:
         'Series with episodes airing during TMDB’s current seven-day window.',
       sourceNote:
-        'Air dates can vary by network, territory, and timezone. This request uses the browser timezone.',
+        'Air dates vary by region and network. Times use your browser timezone.',
       endpoint: '/tv/on_the_air',
       query: {
         language: 'en-US',

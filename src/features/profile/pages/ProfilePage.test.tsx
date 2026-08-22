@@ -198,7 +198,7 @@ describe('profile security controls', () => {
 
     const passwordCard = screen
       .getByRole('heading', {
-        name: 'Change the access key.',
+        name: 'Change your password.',
       })
       .closest('article')
 
@@ -314,7 +314,7 @@ describe('profile security controls', () => {
     renderProfile()
 
     const dangerCard = screen
-      .getByRole('heading', { name: 'Close the archive.' })
+      .getByRole('heading', { name: 'Delete your account.' })
       .closest('article')
 
     expect(dangerCard).not.toBeNull()

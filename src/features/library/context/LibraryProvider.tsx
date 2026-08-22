@@ -177,7 +177,7 @@ function getCloudSyncErrorMessage(
       : ''
 
   if (code.includes('permission-denied')) {
-    return 'Cloud sync is paused until Firestore access rules are enabled. Your changes remain saved in this browser.'
+    return 'Saved on this device. Cloud sync needs updated Firestore rules.'
   }
 
   if (
@@ -185,10 +185,10 @@ function getCloudSyncErrorMessage(
     (typeof navigator !== 'undefined' &&
       !navigator.onLine)
   ) {
-    return 'Cloud sync is temporarily offline. Your changes remain saved in this browser.'
+    return 'Saved on this device. Cloud sync is temporarily offline.'
   }
 
-  return 'Cloud sync could not finish. Your changes remain saved in this browser.'
+  return 'Saved on this device. Cloud sync could not finish.'
 }
 
 function applyCloudChanges(

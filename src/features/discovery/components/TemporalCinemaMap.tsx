@@ -142,8 +142,7 @@ export function TemporalCinemaMap({
                     </p>
 
                     <p className="mt-3 text-sm leading-7 text-[var(--color-app-muted)]">
-                        Current, theatrical, upcoming, and archival
-                        signals are being placed on one temporal map.
+                        Loading older, trending, theatrical, and upcoming movies.
                     </p>
                 </div>
             </div>
@@ -157,16 +156,16 @@ export function TemporalCinemaMap({
             >
                 <div className="max-w-lg text-center">
                     <p className="archive-label text-[var(--color-app-error)]">
-                        Temporal signal interrupted
+                        Release timeline unavailable
                     </p>
 
                     <h3 className="font-display mt-4 text-4xl text-[var(--color-app-text)] sm:text-5xl">
-                        The cinema map could not be plotted.
+                        Release timeline could not load.
                     </h3>
 
                     <p className="mt-5 text-sm leading-7 text-[var(--color-app-muted)]">
                         {errorMessage ??
-                            'TMDB did not return the records required for this temporal sequence.'}
+                            'TMDB did not return the required movies.'}
                     </p>
 
                     <button
@@ -178,7 +177,7 @@ export function TemporalCinemaMap({
                             aria-hidden="true"
                             className="size-4"
                         />
-                        Plot the map again
+                        Try again
                     </button>
                 </div>
             </div>
@@ -192,12 +191,11 @@ export function TemporalCinemaMap({
                     </p>
 
                     <h3 className="font-display mt-4 text-4xl text-[var(--color-app-text)] sm:text-5xl">
-                        No complete temporal station is available.
+                        No release group is available.
                     </h3>
 
                     <p className="mt-5 text-sm leading-7 text-[var(--color-app-muted)]">
-                        The returned records did not include enough valid
-                        release dates and backdrop artwork for this map.
+                        The results did not include enough dates and artwork to display this section.
                     </p>
 
                     <button
@@ -205,7 +203,7 @@ export function TemporalCinemaMap({
                         onClick={onRetry}
                         type="button"
                     >
-                        Request another temporal reading
+                        Try again
                     </button>
                 </div>
             </div>
@@ -355,7 +353,7 @@ export function TemporalCinemaMap({
 
                             <div className="mt-12 border-t border-[var(--color-line-soft)] pt-6">
                                 <p className="archive-label">
-                                    Signal definition
+                                    About this group
                                 </p>
 
                                 <p className="mt-3 text-sm leading-7 text-[var(--color-app-muted)]">
@@ -489,8 +487,7 @@ export function TemporalCinemaMap({
                         </p>
 
                         <p className="mt-5 max-w-xs text-sm leading-7 text-[var(--color-app-muted)]">
-                            Four positions in cinematic time, connected
-                            without collapsing into another content rail.
+                            Explore older, current, theatrical, and upcoming movies.
                         </p>
                     </div>
 

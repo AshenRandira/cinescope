@@ -2,7 +2,7 @@
 
 Snapshot date: 23 August 2026
 
-Candidate branch: `fix/final-ux-audit`
+Candidate branch: `fix/content-clarity`
 
 Release status: **not approved for public deployment or V1 tagging**
 
@@ -21,6 +21,7 @@ Release status: **not approved for public deployment or V1 tagging**
 - [x] New-tab external links include opener protection.
 - [x] Social/community functionality is explicitly deferred for V1 with documented product, data, security, privacy, moderation, and approval boundaries.
 - [x] Automated UX audit covers 17 public routes at desktop and mobile widths, including readability, semantics, accessible control names and sizes, resource/runtime failures, and fixed-navigation focus clearance.
+- [x] Task guidance, controls, status messages, and supporting copy use direct language and concise prose while preserving CineScope's editorial identity in display headings.
 
 ## Human verification required
 

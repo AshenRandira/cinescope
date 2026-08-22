@@ -13,7 +13,7 @@ test('searches for a movie and opens its detail record', async ({ page }) => {
     page.getByRole('heading', { name: /Results for .*fixture/i }),
   ).toBeVisible()
   await page
-    .getByRole('link', { name: 'Open movie record for Fixture Film' })
+    .getByRole('link', { name: 'View movie details for Fixture Film' })
     .click()
 
   await expect(page).toHaveURL(/\/movies\/550$/)
@@ -51,7 +51,7 @@ test('turns a natural-language viewing need into editable recommendations', asyn
 
   await expect(page).toHaveURL(/mode=intent/)
   await expect(
-    page.getByRole('heading', { name: 'Tune the projection.' }),
+    page.getByRole('heading', { name: 'Review the filters.' }),
   ).toBeVisible()
   await expect(page.getByLabel('Medium')).toHaveValue('movie')
   await expect(page.getByLabel('Maximum runtime')).toHaveValue('120')
@@ -66,20 +66,20 @@ test('navigates from television to a season and episode, then back', async ({ pa
   await page.goto('/tv', { waitUntil: 'domcontentloaded' })
 
   const seriesLink = page
-    .getByRole('link', { name: 'Open series record' })
+    .getByRole('link', { name: 'View series details' })
     .first()
   await seriesLink.focus()
   await seriesLink.press('Enter')
   await expect(page).toHaveURL(/\/tv\/1399$/)
 
   const seasonLink = page
-    .getByRole('link', { name: 'Open Season 1 episode register' })
+    .getByRole('link', { name: 'Open episodes in Season 1' })
   await seasonLink.focus()
   await seasonLink.press('Enter')
   await expect(page).toHaveURL(/\/tv\/1399\/season\/1$/)
 
   const episodeLink = page
-    .getByRole('link', { name: 'Open episode record for Pilot Projection' })
+    .getByRole('link', { name: 'View episode details for Pilot Projection' })
   await episodeLink.focus()
   await episodeLink.press('Enter')
   await expect(page).toHaveURL(/\/tv\/1399\/season\/1\/episode\/1$/)
@@ -88,7 +88,7 @@ test('navigates from television to a season and episode, then back', async ({ pa
   ).toBeVisible()
 
   const backLink = page.getByRole('link', {
-    name: /Season 1 episode register/,
+    name: /Season 1 episodes/,
   })
   await backLink.focus()
   await backLink.press('Enter')
@@ -159,7 +159,7 @@ test('restores focus after closing the movie media dialog', async ({ page }) => 
   await expect(page.getByRole('dialog')).toBeVisible()
   await expect(page.getByTitle('Fixture Trailer video')).toBeVisible()
 
-  await page.getByRole('button', { name: 'Close video projection' }).click()
+  await page.getByRole('button', { name: 'Close video' }).click()
 
   await expect(page.getByRole('dialog')).not.toBeVisible()
   await expect(playButton).toBeFocused()
@@ -178,7 +178,7 @@ test('renders appropriate states for unknown and malformed deep routes', async (
   await page.goto('/movies/not-a-number', { waitUntil: 'domcontentloaded' })
 
   await expect(
-    page.getByRole('heading', { name: 'Invalid movie record.' }),
+    page.getByRole('heading', { name: 'Invalid movie address.' }),
   ).toBeVisible()
-  await expect(page.getByRole('link', { name: /Return to the movie register/ })).toBeVisible()
+  await expect(page.getByRole('link', { name: /Return to Movies/ })).toBeVisible()
 })

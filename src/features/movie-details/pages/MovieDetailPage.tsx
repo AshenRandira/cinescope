@@ -126,19 +126,18 @@ export function MovieDetailPage() {
         </p>
 
         <h1 className="movie-detail-state__title font-display">
-          Invalid movie record.
+          Invalid movie address.
         </h1>
 
         <p className="movie-detail-state__message">
-          The requested route does not contain a valid
-          TMDB movie identifier.
+          This movie link is not valid.
         </p>
 
         <Link
           className="movie-detail-state__link"
           to="/movies"
         >
-          Return to the movie register
+          Return to Movies
           <span aria-hidden="true"> →</span>
         </Link>
       </MovieDetailRouteState>
@@ -149,8 +148,8 @@ export function MovieDetailPage() {
     return (
       <MovieDetailRouteState>
         <LoadingState
-          title="Preparing the feature record"
-          message="Retrieving the movie, credits, videos, and related catalogue material."
+          title="Loading movie details"
+          message="Loading the movie, cast, and videos."
         />
       </MovieDetailRouteState>
     )
@@ -168,15 +167,14 @@ export function MovieDetailPage() {
         </h1>
 
         <p className="movie-detail-state__message">
-          TMDB does not currently contain a movie record
-          for identifier {movieId}.
+          TMDB has no movie with the ID {movieId}.
         </p>
 
         <Link
           className="movie-detail-state__link"
           to="/movies"
         >
-          Return to the movie register
+          Return to Movies
           <span aria-hidden="true"> →</span>
         </Link>
       </MovieDetailRouteState>
@@ -187,13 +185,13 @@ export function MovieDetailPage() {
     return (
       <MovieDetailRouteState>
         <ErrorState
-          title="The feature record could not be projected"
+          title="Movie details could not load"
           message={
             details.errorMessage ??
             'The movie record is temporarily unavailable.'
           }
           onRetry={details.retry}
-          retryLabel="Retry movie record"
+          retryLabel="Try again"
         />
       </MovieDetailRouteState>
     )
@@ -213,14 +211,14 @@ export function MovieDetailPage() {
         </h1>
 
         <p className="movie-detail-state__message">
-          Return to the register and select another film.
+          Return to Movies and choose another title.
         </p>
 
         <Link
           className="movie-detail-state__link"
           to="/movies"
         >
-          Return to the movie register
+          Return to Movies
           <span aria-hidden="true"> →</span>
         </Link>
       </MovieDetailRouteState>
@@ -313,7 +311,7 @@ export function MovieDetailPage() {
             to="/movies"
           >
             <span aria-hidden="true">←</span>
-            Movie register
+            Movies
           </Link>
 
           <div className="movie-detail-hero__layout">

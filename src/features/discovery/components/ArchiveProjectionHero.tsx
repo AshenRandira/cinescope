@@ -125,7 +125,7 @@ function FramePanel({
       >
         <p className="max-w-2xl text-pretty text-base leading-8 text-[var(--color-paper-200)] md:text-lg">
           {movie.overview ||
-            'A featured story selected from the living CineScope archive.'}
+            'A featured movie from CineScope discovery.'}
         </p>
       </div>
     )
@@ -161,7 +161,7 @@ function FramePanel({
         </div>
 
         <div className="bg-[color:rgb(7_8_6/0.74)] px-4 py-5 backdrop-blur-sm">
-          <p className="archive-label">Current signal</p>
+          <p className="archive-label">Featured now</p>
 
           <p className="font-display mt-3 text-4xl italic text-[var(--color-paper-100)]">
             {formatCompactNumber(movie.popularity)}
@@ -316,7 +316,7 @@ export function ArchiveProjectionHero({
             <div className="relative z-10 min-w-0">
               <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
                 <p className="archive-label text-[var(--color-projector)]">
-                  Now projecting
+                  Featured now
                 </p>
 
                 <span
@@ -325,7 +325,7 @@ export function ArchiveProjectionHero({
                 />
 
                 <p className="font-mono text-[var(--font-size-label)] uppercase tracking-[0.16em] text-[var(--color-paper-500)]">
-                  Reel{' '}
+                  Movie{' '}
                   {String(activeMovieIndex + 1).padStart(2, '0')}
                   {' / '}
                   {String(movies.length).padStart(2, '0')}
@@ -496,7 +496,7 @@ export function ArchiveProjectionHero({
 
           <div className="border-t border-[var(--color-line)]">
             <div
-              aria-label="Featured movie reel"
+              aria-label="Featured movies"
               className="flex overflow-x-auto"
               role="group"
             >

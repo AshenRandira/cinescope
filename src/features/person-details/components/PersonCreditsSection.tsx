@@ -165,10 +165,7 @@ export function PersonCreditsSection({
           </h2>
         </div>
         <p className="text-pretty">
-          Movie and television credits supplied by TMDB.
-          The opening selection favours the contributor&apos;s
-          known department, then catalogue prominence. It
-          is not a CineScope quality ranking.
+          Movie and TV credits from TMDB, starting with the contributor&apos;s best-known work.
         </p>
       </header>
 
@@ -188,7 +185,7 @@ export function PersonCreditsSection({
             return (
               <li key={`${credit.media_type}:${credit.id}`}>
                 <Link
-                  aria-label={`Open ${credit.media_type === 'movie' ? 'movie' : 'series'} record for ${title}`}
+                  aria-label={`View ${credit.media_type === 'movie' ? 'movie' : 'series'} details for ${title}`}
                   className="person-credit-card"
                   to={getCreditTarget(credit)}
                 >
@@ -239,7 +236,7 @@ export function PersonCreditsSection({
         <div className="person-chronology">
           <div className="person-chronology__heading">
             <div>
-              <p>Career register</p>
+              <p>Filmography</p>
               <h3 className="font-display">
                 Recent recorded work
               </h3>

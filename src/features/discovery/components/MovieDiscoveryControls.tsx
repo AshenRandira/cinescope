@@ -67,26 +67,24 @@ export function MovieDiscoveryControls({
       <header className="movie-parameters__heading">
         <div>
           <p className="archive-label">
-            Projection parameters
+            Movie filters
           </p>
 
           <h2
             className="movie-parameters__title font-display"
             id="movie-parameters-title"
           >
-            Shape the register.
+            Filter movies.
           </h2>
         </div>
 
         <p className="movie-parameters__introduction">
-          Adjust concrete catalogue properties.
-          CineScope does not infer personal taste or
-          describe these results as recommendations.
+          Filter the TMDB movie catalogue. These results are not personalized.
         </p>
       </header>
 
       <fieldset className="movie-parameters__genres">
-        <legend>Genre aperture</legend>
+        <legend>Genre</legend>
 
         <div className="movie-parameters__genre-index">
           <button
@@ -118,7 +116,7 @@ export function MovieDiscoveryControls({
             className="movie-parameters__genre-status"
             role="status"
           >
-            Loading the TMDB movie genre index.
+            Loading movie genres.
           </p>
         ) : null}
 
@@ -129,22 +127,21 @@ export function MovieDiscoveryControls({
           >
             <p>
               {genreErrorMessage ??
-                'The genre index is temporarily unavailable.'}
+                'Movie genres are temporarily unavailable.'}
             </p>
 
             <button
               type="button"
               onClick={onRetryGenres}
             >
-              Retry genre index
+              Retry genres
             </button>
           </div>
         ) : null}
 
         {isGenreEmpty ? (
           <p className="movie-parameters__genre-status">
-            TMDB returned an empty movie genre
-            index.
+            TMDB returned no movie genres.
           </p>
         ) : null}
       </fieldset>

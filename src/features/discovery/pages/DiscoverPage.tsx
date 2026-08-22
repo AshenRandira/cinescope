@@ -69,8 +69,8 @@ function getRecordAction(
   record: DiscoverRecord,
 ): string {
   return record.mediaType === 'movie'
-    ? 'Open film record'
-    : 'Open series record'
+    ? 'View movie details'
+    : 'View series details'
 }
 
 function getScoreLabel(
@@ -92,13 +92,13 @@ function getFeedbackStatusLabel(
   switch (status) {
     case 'connecting':
     case 'syncing':
-      return 'Saving feedback signal'
+      return 'Saving your feedback'
     case 'error':
       return 'Saved locally / sync paused'
     case 'local':
       return 'Saved in this browser'
     case 'synced':
-      return 'Synchronized with your account'
+      return 'Saved to your account'
   }
 }
 
@@ -113,7 +113,7 @@ function RecommendationExplanation({
 
   return (
     <aside className="discover-recommendation-reason">
-      <p className="archive-label">Why this record</p>
+      <p className="archive-label">Why it matches</p>
       {record.recommendationReasons.map((reason) => (
         <p key={reason}>{reason}</p>
       ))}
@@ -183,8 +183,8 @@ function DiscoverLead({
       <div className="discover-lead__copy">
         <p className="archive-label">
           {record.mediaType === 'movie'
-            ? 'Feature signal'
-            : 'Episodic signal'}
+            ? 'Featured movie'
+            : 'Featured series'}
         </p>
 
         <h3
@@ -487,24 +487,24 @@ export function DiscoverPage() {
   if (discovery.isPending) {
     projectionContent = (
       <LoadingState
-        title="Cutting a new discovery reel"
+        title="Finding recommendations"
         message={
           isArchiveSignal
-            ? 'Following TMDB recommendation paths from the strongest records in your archive.'
-            : `Reading the ${discovery.definition.label.toLowerCase()} signal from TMDB.`
+            ? 'Finding titles related to movies and series you enjoyed.'
+            : `Loading ${discovery.definition.label.toLowerCase()} titles from TMDB.`
         }
       />
     )
   } else if (discovery.isError) {
     projectionContent = (
       <ErrorState
-        title="The discovery signal was interrupted"
+        title="Recommendations could not load"
         message={
           discovery.errorMessage ??
           'TMDB did not return the requested discovery records.'
         }
         onRetry={discovery.retry}
-        retryLabel="Read the signal again"
+        retryLabel="Try again"
       />
     )
   } else if (discovery.isEmpty) {
@@ -516,12 +516,12 @@ export function DiscoverPage() {
         actionLabel={
           needsArchiveRecords
             ? 'Explore films to save'
-            : 'Return to current collision'
+            : 'Show trending titles'
         }
         message={
           needsArchiveRecords
-            ? 'Favourite a record, rate it 7 or higher, or keep a few unrated films and series. CineScope will use those visible choices as recommendation anchors.'
-            : 'TMDB responded successfully, but this cut contained no new film or series artwork outside your existing archive.'
+            ? 'Save or favourite a few titles, or rate them 7 or higher. CineScope will use those choices to find related titles.'
+            : 'No new titles were available for this method. Try another option.'
         }
         onAction={() => {
           if (needsArchiveRecords) {
@@ -533,8 +533,8 @@ export function DiscoverPage() {
         }}
         title={
           needsArchiveRecords
-            ? 'Your archive needs a few signals'
-            : 'This discovery reel is empty'
+            ? 'Add a few titles first'
+            : 'No recommendations found'
         }
       />
     )
@@ -553,7 +553,7 @@ export function DiscoverPage() {
             <strong>
               {discovery.records.length.toLocaleString()}
             </strong>{' '}
-            usable records in this cut
+            recommendations
           </p>
 
           <p>
@@ -562,8 +562,8 @@ export function DiscoverPage() {
                   discovery.seedTitles.length === 1
                     ? 'anchor'
                     : 'anchors'
-                } / cut ${page}`
-              : `Cut ${page} of ${discovery.availablePages} available`}
+                } / page ${page}`
+              : `Page ${page} of ${discovery.availablePages}`}
           </p>
         </div>
 
@@ -581,21 +581,21 @@ export function DiscoverPage() {
             <header className="discover-contact-sheet__heading">
               <div>
                 <p className="archive-label">
-                  Supporting frames
+                  More recommendations
                 </p>
 
                 <h3
                   className="discover-contact-sheet__title font-display"
                   id="discover-contact-sheet-title"
                 >
-                  Keep following the pattern.
+                  More to explore.
                 </h3>
               </div>
 
               <p>
                 {isArchiveSignal
-                  ? 'These records recur across recommendation paths connected to your archive. They are suggestions, not guarantees.'
-                  : 'These records share a transparent catalogue method, not a prediction about personal taste.'}
+                  ? 'These suggestions are related to titles in your archive.'
+                  : 'These titles use the same catalogue method. They are not personalized.'}
               </p>
             </header>
 
@@ -633,16 +633,13 @@ export function DiscoverPage() {
 
         <div className="discover-opening__copy">
           <p className="text-pretty">
-            Choose a visible catalogue signal, or
-            follow recommendation paths grounded in
-            the records you have kept.
+            Choose a discovery method or get suggestions
+            based on titles you enjoyed.
           </p>
 
           <p>
-            Every result comes from TMDB. Each method
-            is stated below, personal signals remain
-            inspectable, and the URL preserves the
-            active cut.
+            Every option explains how its results are
+            selected from TMDB.
           </p>
         </div>
       </header>
@@ -654,7 +651,7 @@ export function DiscoverPage() {
         <header className="discover-console__heading">
           <div>
             <p className="archive-label">
-              Discovery signals
+              Discovery methods
             </p>
 
             <h2
@@ -666,15 +663,13 @@ export function DiscoverPage() {
           </div>
 
           <p>
-            Each signal changes the source endpoint,
-            catalogue constraints, or visible archive
-            anchors.
+            Select an option to update the recommendations.
           </p>
         </header>
 
         <div
           className="discover-console__signals"
-          aria-label="Discovery signal"
+          aria-label="Discovery method"
           role="group"
         >
           {discoverSignalDefinitions.map(
@@ -715,17 +710,17 @@ export function DiscoverPage() {
             {isArchiveSignal ? (
               <div className="discover-console__personalization">
                 <p className="discover-console__anchors">
-                  <strong>Active anchors</strong>
+                  <strong>Based on</strong>
                   {discovery.seedTitles.length > 0
                     ? discovery.seedTitles.join(' / ')
                     : 'Add records to your library to begin.'}
                 </p>
                 <p className="discover-console__anchors">
-                  <strong>Preference lens</strong>
+                  <strong>Your preferences</strong>
                   {discovery.preferenceSummary}
                 </p>
                 <div className="discover-console__anchors">
-                  <strong>Feedback memory</strong>
+                  <strong>Feedback status</strong>
                   <p>
                     {feedbackSyncError ??
                       getFeedbackStatusLabel(
@@ -782,7 +777,7 @@ export function DiscoverPage() {
             type="button"
           >
             <RotateCw aria-hidden="true" />
-            Re-cut signal
+            Show different titles
           </button>
         </div>
       </section>
@@ -795,7 +790,7 @@ export function DiscoverPage() {
         <header className="discover-projection__heading">
           <div>
             <p className="archive-label">
-              Current reel / {String(page).padStart(2, '0')}
+              Results page / {String(page).padStart(2, '0')}
             </p>
 
             <h2
@@ -817,7 +812,7 @@ export function DiscoverPage() {
             >
               <p>
                 <strong>{lastDismissedRecord.title}</strong>{' '}
-                will stay out of future archive cuts.
+                will no longer appear in recommendations.
               </p>
               <button
                 onClick={handleUndoDismissal}

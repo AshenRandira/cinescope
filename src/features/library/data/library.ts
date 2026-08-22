@@ -251,7 +251,7 @@ export function getLibrarySyncCopy(
     case 'connecting':
       return {
         detail:
-          'Your browser archive is ready while CineScope connects to your account.',
+          'Your library is ready while CineScope connects to your account.',
         label: 'Connecting archive',
       }
     case 'syncing':
@@ -263,7 +263,7 @@ export function getLibrarySyncCopy(
     case 'synced':
       return {
         detail:
-          'This collection is saved locally and synced securely to your account.',
+          'Saved on this device and synced to your account.',
         label: 'Account sync active',
       }
     case 'error':
@@ -276,7 +276,7 @@ export function getLibrarySyncCopy(
     case 'local':
       return {
         detail:
-          'Saved on this browser. Sign in to keep the collection with your account.',
+          'Saved on this device. Sign in to sync it with your account.',
         label: 'Browser archive',
       }
   }

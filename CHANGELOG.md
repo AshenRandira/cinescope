@@ -18,6 +18,7 @@ All notable CineScope changes are recorded here. The project has not been tagged
 - Web application manifest, robots policy, dynamic canonical/social metadata, favicon, and 1200x630 social preview.
 - Deferred social/community scope covering opt-in identity, public-content boundaries, Security Rules, privacy, moderation, retention, testing, and explicit approval requirements.
 - Cross-route UX safeguards covering readable supporting text, complete design-token fallbacks, accessible control sizing and naming, semantic page headings, clean browser resources, and mobile focus clearance above the fixed navigation.
+- Clearer cross-site content that keeps the editorial identity in headings while using direct labels, short guidance, and plain loading, empty, error, and action states.
 
 ### Security
 

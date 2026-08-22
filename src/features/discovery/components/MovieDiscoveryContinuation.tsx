@@ -24,8 +24,8 @@ export function MovieDiscoveryContinuation({
   const nextPageNumber = loadedPageCount + 1
 
   const statusMessage = isFetchingNextPage
-    ? `Retrieving catalogue page ${nextPageNumber}.`
-    : `${loadedCount.toLocaleString()} of ${totalResults.toLocaleString()} reported matches are currently projected.`
+    ? `Loading result page ${nextPageNumber}.`
+    : `${loadedCount.toLocaleString()} of ${totalResults.toLocaleString()} movies loaded.`
 
   return (
     <section
@@ -34,14 +34,14 @@ export function MovieDiscoveryContinuation({
     >
       <div className="movie-continuation__copy">
         <p className="archive-label">
-          Catalogue continuation
+          More results
         </p>
 
         <h3
           className="movie-continuation__title font-display"
           id="movie-continuation-title"
         >
-          Continue the reel.
+          Continue browsing.
         </h3>
 
         <p
@@ -60,9 +60,7 @@ export function MovieDiscoveryContinuation({
             role="alert"
           >
             <p>
-              The next catalogue page could not be
-              retrieved. Previously loaded films
-              remain available.
+              More movies could not load. Your current results remain available.
             </p>
 
             {errorMessage ? (
@@ -79,10 +77,10 @@ export function MovieDiscoveryContinuation({
             onClick={onContinue}
           >
             {isFetchingNextPage
-              ? 'Preparing next reel'
+              ? 'Loading more movies'
               : isNextPageError
-                ? 'Retry next reel'
-                : 'Continue the reel'}
+                ? 'Retry loading more'
+                : 'Load more movies'}
 
             <span aria-hidden="true">
               {isFetchingNextPage ? '...' : '>'}
@@ -90,8 +88,7 @@ export function MovieDiscoveryContinuation({
           </button>
         ) : (
           <p className="movie-continuation__complete">
-            No additional catalogue pages are
-            available for this discovery method.
+            All available movies are loaded.
           </p>
         )}
       </div>

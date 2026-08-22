@@ -22,7 +22,7 @@ export function RequireAuth({
       <section className="auth-route-state">
         <LoadingState
           title="Restoring your archive session"
-          message="CineScope is checking the locally persisted Firebase session."
+          message="Checking your sign-in status."
         />
       </section>
     )

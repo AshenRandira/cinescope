@@ -147,13 +147,13 @@ function TelevisionLead({
         )}
 
         <span className="tv-signal-index">
-          SIGNAL 01
+          FEATURED
         </span>
       </div>
 
       <div className="tv-lead__copy">
         <p className="archive-label">
-          Primary transmission
+          Featured series
         </p>
 
         <h3
@@ -186,12 +186,12 @@ function TelevisionLead({
 
         <dl className="tv-signal-facts">
           <div>
-            <dt>TMDB audience signal</dt>
+            <dt>TMDB rating</dt>
             <dd>{getScoreLabel(record)}</dd>
           </div>
 
           <div>
-            <dt>Recorded responses</dt>
+            <dt>Audience votes</dt>
             <dd>
               {record.voteCount.toLocaleString()}
             </dd>
@@ -202,7 +202,7 @@ function TelevisionLead({
           className="tv-record-link"
           to={getTvTarget(record)}
         >
-          Open series record
+          View series details
           <ArrowRight aria-hidden="true" />
         </Link>
       </div>
@@ -300,11 +300,11 @@ function TelevisionCard({
 
         <footer className="tv-card__footer">
           <Link to={getTvTarget(record)}>
-            Open series record
+            View series details
             <ArrowRight aria-hidden="true" />
           </Link>
 
-          <span>Series record indexed</span>
+          <span>Series</span>
         </footer>
       </div>
     </article>
@@ -350,27 +350,27 @@ export function TvShowsPage() {
   if (shows.isPending) {
     registerContent = (
       <LoadingState
-        title="Tuning the television register"
-        message={`Retrieving ${activeView.label.toLowerCase()} series from TMDB.`}
+        title="Loading TV shows"
+        message={`Getting ${activeView.label.toLowerCase()} series from TMDB.`}
       />
     )
   } else if (shows.isInitialError) {
     registerContent = (
       <ErrorState
-        title="The television signal was interrupted"
+        title="TV shows could not load"
         message={
           shows.errorMessage ??
           'TMDB did not return the requested television records.'
         }
         onRetry={shows.retry}
-        retryLabel="Retune the register"
+        retryLabel="Try again"
       />
     )
   } else if (shows.isEmpty) {
     registerContent = (
       <EmptyState
         title="No television records were returned"
-        message="TMDB responded successfully, but this transmission window did not contain usable series records."
+        message="No series are available for this view. Try another option."
       />
     )
   } else {
@@ -388,7 +388,7 @@ export function TvShowsPage() {
             <strong>
               {shows.records.length.toLocaleString()}
             </strong>{' '}
-            unique series currently tuned
+            series loaded
           </p>
 
           <p>
@@ -410,21 +410,19 @@ export function TvShowsPage() {
             <header className="tv-contact-sheet__heading">
               <div>
                 <p className="archive-label">
-                  Transmission index
+                  More series
                 </p>
 
                 <h3
                   className="tv-contact-sheet__title font-display"
                   id="tv-contact-sheet-title"
                 >
-                  Continue across the schedule.
+                  Explore the results.
                 </h3>
               </div>
 
               <p>
-                Each frame opens a complete series
-                record with seasons, credits, viewing
-                providers, and related transmissions.
+                Open a series to see seasons, cast, streaming options, and related titles.
               </p>
             </header>
 
@@ -449,14 +447,14 @@ export function TvShowsPage() {
         >
           <div>
             <p className="archive-label">
-              Transmission continuation
+              More results
             </p>
 
             <h3
               className="tv-continuation__title font-display"
               id="tv-continuation-title"
             >
-              Keep the receiver open.
+              Continue browsing.
             </h3>
 
             <p aria-live="polite">
@@ -470,9 +468,7 @@ export function TvShowsPage() {
             {shows.isNextPageError ? (
               <div role="alert">
                 <p>
-                  The next catalogue page could not be
-                  retrieved. Existing series remain
-                  available.
+                  More series could not load. Your current results remain available.
                 </p>
 
                 {shows.errorMessage ? (
@@ -502,8 +498,7 @@ export function TvShowsPage() {
               </button>
             ) : (
               <p className="tv-continuation__complete">
-                The available series pages have been
-                fully tuned.
+                All available series are loaded.
               </p>
             )}
           </div>
@@ -517,7 +512,7 @@ export function TvShowsPage() {
       <header className="tv-register__opening">
         <div>
           <p className="archive-label">
-            06 / Television Register
+            06 / TV catalogue
           </p>
 
           <h1 className="tv-register__title font-display text-balance">
@@ -527,15 +522,12 @@ export function TvShowsPage() {
 
         <div className="tv-register__opening-copy">
           <p className="text-pretty">
-            Television records organised around
-            attention, audience response, and current
-            broadcast windows.
+            Browse series by popularity, rating, or
+            broadcast schedule.
           </p>
 
           <p>
-            These are TMDB catalogue views, not
-            personalised recommendations or a
-            CineScope quality ranking.
+            These TMDB lists are not personalized.
           </p>
         </div>
       </header>
@@ -547,20 +539,19 @@ export function TvShowsPage() {
         <header className="tv-frequency__heading">
           <div>
             <p className="archive-label">
-              Receiver controls
+              Browse by
             </p>
 
             <h2
               className="tv-frequency__title font-display"
               id="tv-frequency-title"
             >
-              Select a transmission.
+              Choose a TV list.
             </h2>
           </div>
 
           <p>
-            Change the catalogue view without losing
-            a shareable archive address.
+            Your choice stays in the page link, so it can be shared.
           </p>
         </header>
 
@@ -608,7 +599,7 @@ export function TvShowsPage() {
             className="tv-frequency__genre-status"
             role="status"
           >
-            Loading the TMDB television genre index.
+            Loading TV genres.
           </p>
         ) : null}
 
@@ -619,14 +610,14 @@ export function TvShowsPage() {
           >
             <p>
               {genres.errorMessage ??
-                'The television genre index is temporarily unavailable.'}
+                'TV genres are temporarily unavailable.'}
             </p>
 
             <button
               onClick={genres.retry}
               type="button"
             >
-              Retry genre index
+              Retry genres
             </button>
           </div>
         ) : null}

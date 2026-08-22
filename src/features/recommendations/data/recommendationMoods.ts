@@ -22,7 +22,7 @@ export const recommendationMoodDefinitions: ReadonlyArray<RecommendationMoodDefi
   [
     {
       description:
-        'Keep the full archive ranking without an additional mood signal.',
+        'Use your archive without adding a mood preference.',
       label: 'Open to anything',
       movieGenreIds: [],
       tvGenreIds: [],
@@ -30,7 +30,7 @@ export const recommendationMoodDefinitions: ReadonlyArray<RecommendationMoodDefi
     },
     {
       description:
-        'Bring comedy, family, romance, and animation closer to the front.',
+        'Prioritize comedy, family, romance, and animation.',
       label: 'Comforting',
       movieGenreIds: [16, 35, 10749, 10751],
       tvGenreIds: [16, 35, 10751, 10762],
@@ -46,7 +46,7 @@ export const recommendationMoodDefinitions: ReadonlyArray<RecommendationMoodDefi
     },
     {
       description:
-        'Raise crime, horror, mystery, thriller, and political pressure.',
+        'Prioritize crime, horror, mystery, thrillers, and political drama.',
       label: 'High tension',
       movieGenreIds: [27, 53, 80, 9648],
       tvGenreIds: [80, 9648, 10768],
@@ -54,7 +54,7 @@ export const recommendationMoodDefinitions: ReadonlyArray<RecommendationMoodDefi
     },
     {
       description:
-        'Move adventure, animation, fantasy, and speculative worlds forward.',
+        'Prioritize adventure, animation, fantasy, and science fiction.',
       label: 'Transporting',
       movieGenreIds: [12, 14, 16, 878],
       tvGenreIds: [16, 10759, 10765],
