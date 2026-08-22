@@ -16,6 +16,7 @@ All notable CineScope changes are recorded here. The project has not been tagged
 - Vitest, React Testing Library, Playwright, Firebase Emulator Suite, coverage enforcement, bundle budgets, release-metadata checks, and GitHub Actions quality gates.
 - Route loading feedback, focus transfer, reduced-motion behavior, root error recovery, public credits, privacy, terms, and accessibility information.
 - Web application manifest, robots policy, dynamic canonical/social metadata, favicon, and 1200x630 social preview.
+- Deferred social/community scope covering opt-in identity, public-content boundaries, Security Rules, privacy, moderation, retention, testing, and explicit approval requirements.
 
 ### Security
 

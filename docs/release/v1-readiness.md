@@ -1,8 +1,8 @@
 # CineScope V1 readiness
 
-Snapshot date: 22 August 2026
+Snapshot date: 23 August 2026
 
-Candidate branch: `chore/v1-release-readiness`
+Candidate branch: `docs/deferred-social-community`
 
 Release status: **not approved for public deployment or V1 tagging**
 
@@ -19,6 +19,7 @@ Release status: **not approved for public deployment or V1 tagging**
 - [x] TMDB logo and required attribution in a globally reachable credits route and application footer.
 - [x] Privacy/data, release-candidate terms, accessibility, architecture, environment, deployment, operations, changelog, and draft release-note documentation.
 - [x] New-tab external links include opener protection.
+- [x] Social/community functionality is explicitly deferred for V1 with documented product, data, security, privacy, moderation, and approval boundaries.
 
 ## Human verification required
 

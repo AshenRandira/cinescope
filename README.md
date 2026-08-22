@@ -105,6 +105,7 @@ Before enabling that workflow, follow [the Firebase Hosting operations guide](do
 - [Architecture](docs/architecture.md)
 - [Environment variables and secrets](docs/environment-variables.md)
 - [Quality assurance](docs/quality-assurance.md)
+- [Deferred social and community scope](docs/product/deferred-social-community.md)
 - [V1 readiness checklist](docs/release/v1-readiness.md)
 - [Draft V1 release notes](docs/release/v1-release-notes.md)
 - [Changelog](CHANGELOG.md)

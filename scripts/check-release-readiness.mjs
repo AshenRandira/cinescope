@@ -135,6 +135,7 @@ for (const requiredDocument of [
   'CHANGELOG.md',
   'docs/architecture.md',
   'docs/environment-variables.md',
+  'docs/product/deferred-social-community.md',
   'docs/release/v1-readiness.md',
   'docs/release/v1-release-notes.md',
 ]) {
@@ -150,4 +151,4 @@ console.log('- document and social metadata: valid')
 console.log('- 1200x630 social preview: valid')
 console.log('- public policy and TMDB credits routes: valid')
 console.log('- protected external links: valid')
-console.log('- architecture, environment, readiness, and release documents: valid')
+console.log('- architecture, environment, community boundary, readiness, and release documents: valid')
