@@ -65,6 +65,12 @@ export function HomePage() {
 
   return (
     <>
+      {featured.isPending || featured.isError || featured.isEmpty ? (
+        <h1 className="sr-only">
+          Discover your next story with CineScope
+        </h1>
+      ) : null}
+
       {openingScene}
 
       <DiscoverySplice

@@ -23,6 +23,7 @@
 
   --color-paper-100: #f5f1e9;
   --color-paper-200: #e8e2d8;
+  --color-paper-300: #d6d0c6;
   --color-paper-400: #c4bdb3;
   --color-paper-500: #aaa39a;
   --color-paper-600: #8f8981;
@@ -220,6 +221,21 @@
   --color-app-error:
     var(--color-error);
 
+  --font-body:
+    var(--font-interface);
+
+  --motion-duration-micro:
+    var(--duration-micro);
+
+  --motion-duration-standard:
+    var(--duration-interface);
+
+  --motion-duration-slow:
+    var(--duration-scene);
+
+  --motion-easing-standard:
+    var(--ease-standard);
+
   --shadow-app-elevated:
     var(--shadow-elevated);
 
@@ -321,6 +337,20 @@ svg {
 
 img {
   height: auto;
+}
+
+@media (max-width: 47.999rem) {
+  html {
+    scroll-padding-block-end: calc(
+      5.5rem + env(safe-area-inset-bottom)
+    );
+  }
+
+  :is(input, textarea, select, button) {
+    scroll-margin-block-end: calc(
+      5.5rem + env(safe-area-inset-bottom)
+    );
+  }
 }
 
 ::selection {

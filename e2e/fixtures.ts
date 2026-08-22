@@ -75,6 +75,13 @@ const movieRecommendationResponse = {
   total_results: 1,
 }
 
+const homeMovieResponse = {
+  page: 1,
+  results: [recommendationMovieSummary],
+  total_pages: 1,
+  total_results: 1,
+}
+
 const tvSummary = {
   adult: false,
   backdrop_path: null,
@@ -222,6 +229,50 @@ const tvDiscoveryResponse = {
   total_results: 1,
 }
 
+const personDetails = {
+  adult: false,
+  also_known_as: [],
+  biography:
+    'A stable contributor biography used only by automated browser tests.',
+  birthday: '1980-01-01',
+  combined_credits: {
+    cast: [
+      {
+        ...movieSummary,
+        character: 'The Archivist',
+        credit_id: 'fixture-credit',
+        media_type: 'movie',
+      },
+    ],
+    crew: [],
+    id: 287,
+  },
+  deathday: null,
+  external_ids: {
+    facebook_id: null,
+    freebase_id: null,
+    freebase_mid: null,
+    id: 287,
+    imdb_id: null,
+    instagram_id: null,
+    tiktok_id: null,
+    tvrage_id: null,
+    twitter_id: null,
+    wikidata_id: null,
+    youtube_id: null,
+  },
+  gender: 0,
+  homepage: null,
+  id: 287,
+  images: { id: 287, profiles: [] },
+  imdb_id: null,
+  known_for_department: 'Acting',
+  name: 'Fixture Contributor',
+  place_of_birth: 'Fixture City',
+  popularity: 42,
+  profile_path: null,
+}
+
 function fulfillJson(route: Route, json: unknown): Promise<void> {
   return route.fulfill({ json })
 }
@@ -256,8 +307,11 @@ export async function installPublicApiFixtures(
     })
   }
 
-  await page.route(/\.(?:woff2?|ttf|otf)(?:\?.*)?$/, (route) =>
-    route.abort(),
+  await page.route('https://image.tmdb.org/**', (route) =>
+    route.fulfill({
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="1200" height="800" fill="#30261f"/><circle cx="840" cy="260" r="260" fill="#6f4f37" opacity=".72"/></svg>',
+      contentType: 'image/svg+xml',
+    }),
   )
 
   if (
@@ -280,6 +334,20 @@ export async function installPublicApiFixtures(
     )
 
     switch (pathname) {
+      case '/movie/popular':
+      case '/movie/now_playing':
+      case '/movie/upcoming':
+      case '/trending/movie/week':
+        await fulfillJson(route, homeMovieResponse)
+        return
+      case '/trending/all/week':
+        await fulfillJson(route, {
+          ...homeMovieResponse,
+          results: [
+            { ...recommendationMovieSummary, media_type: 'movie' },
+          ],
+        })
+        return
       case '/search/multi':
         await fulfillJson(route, searchResponse)
         return
@@ -288,6 +356,15 @@ export async function installPublicApiFixtures(
         return
       case '/discover/tv':
         await fulfillJson(route, tvDiscoveryResponse)
+        return
+      case '/genre/movie/list':
+        await fulfillJson(route, {
+          genres: [
+            { id: 18, name: 'Drama' },
+            { id: 35, name: 'Comedy' },
+            { id: 10751, name: 'Family' },
+          ],
+        })
         return
       case '/movie/550':
         await fulfillJson(route, movieDetails)
@@ -302,6 +379,8 @@ export async function installPublicApiFixtures(
         await fulfillJson(route, { genres: [{ id: 18, name: 'Drama' }] })
         return
       case '/tv/popular':
+      case '/tv/on_the_air':
+      case '/trending/tv/week':
         await fulfillJson(route, tvDiscoveryResponse)
         return
       case '/tv/1399':
@@ -318,6 +397,9 @@ export async function installPublicApiFixtures(
         return
       case '/tv/1399/season/1/episode/2':
         await fulfillJson(route, secondEpisodeDetails)
+        return
+      case '/person/287':
+        await fulfillJson(route, personDetails)
         return
       default:
         await route.fulfill({
