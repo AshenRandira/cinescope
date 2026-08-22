@@ -28,6 +28,10 @@ import {
   SEARCH_MINIMUM_LENGTH,
   type SearchRecord,
 } from '../data/search'
+import {
+  parseNaturalLanguageIntent,
+  serializeIntentSearch,
+} from '../data/intentSearch'
 import { useCineScopeSearch } from '../hooks/useCineScopeSearch'
 
 import './HeaderSearch.css'
@@ -35,12 +39,21 @@ import './HeaderSearch.css'
 const HEADER_SEARCH_DEBOUNCE = 250
 const HEADER_SUGGESTION_LIMIT = 6
 
-function getSearchTarget(query: string): string {
+function getLookupTarget(query: string): string {
   const searchParams = new URLSearchParams({
     q: query,
   })
 
   return `/search?${searchParams.toString()}`
+}
+
+function getIntentTarget(query: string): string {
+  const parsed = parseNaturalLanguageIntent(query)
+
+  return `/search?${serializeIntentSearch(
+    query,
+    parsed.criteria,
+  ).toString()}`
 }
 
 function getSuggestionTarget(
@@ -99,8 +112,13 @@ export function HeaderSearch() {
   const normalizedQuery = normalizeSearchQuery(
     draftQuery,
   )
+  const parsedIntent = useMemo(
+    () => parseNaturalLanguageIntent(normalizedQuery),
+    [normalizedQuery],
+  )
   const search = useCineScopeSearch(
     debouncedQuery,
+    isOpen,
   )
   const suggestions = useMemo(
     () =>
@@ -199,7 +217,9 @@ export function HeaderSearch() {
     navigate(target)
   }
 
-  function commitSearch(): void {
+  function commitSearch(
+    mode: 'auto' | 'lookup' = 'auto',
+  ): void {
     if (!normalizedQuery) {
       openTarget('/search')
       return
@@ -215,14 +235,18 @@ export function HeaderSearch() {
     }
 
     setValidationMessage(null)
-    openTarget(getSearchTarget(normalizedQuery))
+    openTarget(
+      mode === 'auto' && parsedIntent.isIntent
+        ? getIntentTarget(normalizedQuery)
+        : getLookupTarget(normalizedQuery),
+    )
   }
 
   function handleSubmit(
     event: FormEvent<HTMLFormElement>,
   ): void {
     event.preventDefault()
-    commitSearch()
+    commitSearch('auto')
   }
 
   function handleChange(
@@ -338,7 +362,7 @@ export function HeaderSearch() {
             isExpanded ? listboxId : undefined
           }
           aria-expanded={isExpanded}
-          aria-label="Search movies, TV series, and people"
+          aria-label="Search titles and people, or describe what you want to watch"
           autoComplete="off"
           maxLength={SEARCH_MAXIMUM_LENGTH}
           onChange={handleChange}
@@ -368,7 +392,7 @@ export function HeaderSearch() {
         ) : null}
 
         <button
-          aria-label="Show all search results"
+          aria-label="Search or recommend"
           className="header-search__submit"
           type="submit"
         >
@@ -506,14 +530,36 @@ export function HeaderSearch() {
             )}
           </div>
 
+          {canSearch && parsedIntent.isIntent ? (
+            <div className="header-search__intent-preview">
+              <div>
+                <strong>Viewing request detected</strong>
+                <span>
+                  {parsedIntent.recognizedSignals.length > 0
+                    ? parsedIntent.recognizedSignals.join(' / ')
+                    : 'Open catalogue request'}
+                </span>
+              </div>
+
+              <button
+                onClick={() => commitSearch('lookup')}
+                type="button"
+              >
+                Search names instead
+              </button>
+            </div>
+          ) : null}
+
           {canSearch ? (
             <button
               className="header-search__all-results"
-              onClick={commitSearch}
+              onClick={() => commitSearch('auto')}
               type="button"
             >
               <span>
-                Show all results for “{normalizedQuery}”
+                {parsedIntent.isIntent
+                  ? `Recommend for “${normalizedQuery}”`
+                  : `Show all results for “${normalizedQuery}”`}
               </span>
               <Search aria-hidden="true" />
             </button>

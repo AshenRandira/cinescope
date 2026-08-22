@@ -85,16 +85,24 @@ const movieDiscoveryQuery = Object.freeze({
   'vote_average.gte': isRating,
   'vote_count.gte': isVoteCount,
   with_genres: isGenreList,
+  with_original_language: isLanguage,
   without_genres: isGenreList,
   'with_runtime.gte': isRuntime,
   'with_runtime.lte': isRuntime,
 })
 const tvDiscoveryQuery = Object.freeze({
+  'first_air_date.gte': isDate,
+  'first_air_date.lte': isDate,
   include_adult: isBooleanFalse,
   language: isLanguage,
   page: isPage,
   sort_by: isSort,
+  'vote_average.gte': isRating,
   'vote_count.gte': isVoteCount,
+  with_genres: isGenreList,
+  with_original_language: isLanguage,
+  'with_runtime.gte': isRuntime,
+  'with_runtime.lte': isRuntime,
 })
 const searchQuery = Object.freeze({
   include_adult: isBooleanFalse,

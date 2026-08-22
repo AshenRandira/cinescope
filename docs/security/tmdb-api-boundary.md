@@ -17,7 +17,9 @@ The boundary supports GET only. Route patterns are explicitly limited to the cat
 - person details;
 - multi-search.
 
-Each route has a query-parameter contract. Unknown parameters, duplicate parameters, invalid IDs, unsupported expansions, unsafe paths, adult-content opt-ins, invalid pagination, malformed dates, and oversized search values are rejected before an upstream request is made.
+Each route has a query-parameter contract. Movie and television discovery admit only the date, genre, original-language, runtime, vote, sorting, pagination, and adult-content exclusions used by the catalogue and intent-search interfaces. Unknown parameters, duplicate parameters, invalid IDs, unsupported expansions, unsafe paths, adult-content opt-ins, invalid pagination, malformed dates, and oversized search values are rejected before an upstream request is made.
+
+Natural-language intent interpretation happens in the browser. The original sentence is not forwarded upstream: the Function receives only the resulting allowlisted Discover parameters. See [intent-based catalogue search](../intent-search.md).
 
 Upstream requests time out after eight seconds and responses larger than five MiB are rejected. Upstream authentication details and bodies are never returned in API errors. Responses contain a normalized error code, safe message, and request reference.
 

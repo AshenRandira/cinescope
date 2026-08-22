@@ -1,6 +1,6 @@
 # CineScope
 
-CineScope is a cinematic React archive for discovering films, television, and contributors through TMDB. Visitors can keep a local library; authenticated members can also synchronize that library with their Firebase account.
+CineScope is a cinematic React archive for discovering films, television, and contributors through TMDB. Search accepts known titles and people or an explainable natural-language viewing request. Visitors can keep a local library; authenticated members can also synchronize that library with their Firebase account.
 
 ## Local development
 
@@ -52,7 +52,7 @@ Library records are stored at `users/{uid}/library/{movie:id|tv:id}`. Discovery 
 
 The browser archive remains the immediate source of truth. Library and episode-progress changes write locally before navigation; on sign-in, guest records move into a user-scoped archive, reconcile by their latest update time, and then sync to Firestore. If the network or Firestore configuration is unavailable, edits stay local and the interface exposes a retry action.
 
-The protected profile also supports discovery preferences, verification-email resend/status refresh, password changes after current-password reauthentication, a versioned JSON account export, and permanent account deletion. Favourite genres, preferred medium, original language, viewing progress, and a session mood gently re-rank archive recommendations while keeping a mixed catalogue. Inspectable reasons explain the active signals, and not-interested feedback stays local-first before account synchronization. Deletion uses the Firebase-issued identity token with the `deleteAccount` callable, recursively removes the member's Firestore tree, deletes the Firebase Authentication user, and then clears user-scoped browser data. CineScope does not issue or store a parallel JWT. See [the account security boundary](docs/security/account-security.md).
+The protected profile also supports discovery preferences, verification-email resend/status refresh, password changes after current-password reauthentication, a versioned JSON account export, and permanent account deletion. Favourite genres, preferred medium, original language, viewing progress, and a session mood gently re-rank archive recommendations while keeping a mixed catalogue. The shared search field can also interpret a free-form viewing need into editable TMDB Discover filters and match explanations without an external AI service; see [intent-based catalogue search](docs/intent-search.md). Inspectable reasons explain the active signals, and not-interested feedback stays local-first before account synchronization. Deletion uses the Firebase-issued identity token with the `deleteAccount` callable, recursively removes the member's Firestore tree, deletes the Firebase Authentication user, and then clears user-scoped browser data. CineScope does not issue or store a parallel JWT. See [the account security boundary](docs/security/account-security.md).
 
 ## Validation
 

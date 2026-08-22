@@ -196,6 +196,25 @@ const searchResponse = {
   total_results: 1,
 }
 
+const intentMovieSummary = {
+  ...movieSummary,
+  genre_ids: [35, 10751],
+  id: 552,
+  original_title: 'Fixture Family Comedy',
+  overview: 'A concise comedy selected for a family viewing request.',
+  release_date: '2018-06-08',
+  title: 'Fixture Family Comedy',
+  vote_average: 7.6,
+  vote_count: 160,
+}
+
+const movieDiscoveryResponse = {
+  page: 1,
+  results: [intentMovieSummary],
+  total_pages: 1,
+  total_results: 1,
+}
+
 const tvDiscoveryResponse = {
   page: 1,
   results: [tvSummary],
@@ -263,6 +282,12 @@ export async function installPublicApiFixtures(
     switch (pathname) {
       case '/search/multi':
         await fulfillJson(route, searchResponse)
+        return
+      case '/discover/movie':
+        await fulfillJson(route, movieDiscoveryResponse)
+        return
+      case '/discover/tv':
+        await fulfillJson(route, tvDiscoveryResponse)
         return
       case '/movie/550':
         await fulfillJson(route, movieDetails)

@@ -174,6 +174,17 @@ export function SearchResultCard({
             </p>
           ) : null}
 
+          {record.matchReasons.length > 0 ? (
+            <div className="search-record__match">
+              <span>Why it matches</span>
+              <ul>
+                {record.matchReasons.map((reason) => (
+                  <li key={reason}>{reason}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
           <footer className="search-record__footer">
             {record.mediaType === 'movie' ? (
               <Link

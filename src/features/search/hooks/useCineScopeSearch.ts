@@ -19,9 +19,10 @@ import {
 
 export function useCineScopeSearch(
   query: string,
+  enabled = true,
 ) {
   const isEnabled =
-    query.length >= SEARCH_MINIMUM_LENGTH
+    enabled && query.length >= SEARCH_MINIMUM_LENGTH
 
   const searchQuery = useInfiniteQuery({
     queryKey: getSearchQueryKey(query),

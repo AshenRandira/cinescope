@@ -14,10 +14,12 @@ export type SearchScope =
 
 export type SearchRecord = {
   dateYear: string | null
+  genreIds: number[]
   id: number
   imagePath: string | null
   imageType: 'poster' | 'profile'
   knownForDepartment: string | null
+  matchReasons: string[]
   mediaType: SearchMediaType
   originalLanguage: string | null
   overview: string | null
@@ -161,10 +163,12 @@ export function adaptSearchRecord(
     case 'movie':
       return {
         dateYear: getYear(result.release_date),
+        genreIds: result.genre_ids,
         id: result.id,
         imagePath: result.poster_path,
         imageType: 'poster',
         knownForDepartment: null,
+        matchReasons: [],
         mediaType: 'movie',
         originalLanguage:
           result.original_language.trim() || null,
@@ -184,10 +188,12 @@ export function adaptSearchRecord(
     case 'tv':
       return {
         dateYear: getYear(result.first_air_date),
+        genreIds: result.genre_ids,
         id: result.id,
         imagePath: result.poster_path,
         imageType: 'poster',
         knownForDepartment: null,
+        matchReasons: [],
         mediaType: 'tv',
         originalLanguage:
           result.original_language.trim() || null,
@@ -207,12 +213,14 @@ export function adaptSearchRecord(
     case 'person':
       return {
         dateYear: null,
+        genreIds: [],
         id: result.id,
         imagePath: result.profile_path,
         imageType: 'profile',
         knownForDepartment:
           result.known_for_department.trim() ||
           'Department unavailable',
+        matchReasons: [],
         mediaType: 'person',
         originalLanguage: null,
         overview: null,

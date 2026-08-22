@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   Search,
+  Sparkles,
   X,
 } from 'lucide-react'
 import {
@@ -17,9 +18,24 @@ import {
   ErrorState,
   LoadingState,
 } from '../../../components/feedback'
-
+import {
+  preferenceGenreDefinitions,
+  preferredLanguageOptions,
+  type PreferenceGenreId,
+} from '../../preferences/data/preferences'
+import {
+  recommendationMoodDefinitions,
+} from '../../recommendations/data/recommendationMoods'
 import { SearchResultCard } from '../components/SearchResultCard'
-
+import {
+  createDefaultIntentCriteria,
+  intentMediaOptions,
+  parseIntentCriteria,
+  parseNaturalLanguageIntent,
+  serializeIntentSearch,
+  supportsIntentMedia,
+  type IntentSearchCriteria,
+} from '../data/intentSearch'
 import {
   countSearchRecords,
   filterSearchRecords,
@@ -29,78 +45,113 @@ import {
   searchScopeOptions,
   type SearchScope,
 } from '../data/search'
-
 import { useCineScopeSearch } from '../hooks/useCineScopeSearch'
+import { useIntentSearch } from '../hooks/useIntentSearch'
 
 import './SearchPage.css'
 
 const SEARCH_SUGGESTIONS = [
   'Dune',
-  'Alien',
-  'Batman',
   'Studio Ghibli',
+  'a funny family movie under two hours',
+  'a reflective Korean drama from the 2010s',
 ] as const
 
-function getSearchParams(
+const decadeOptions = Array.from(
+  { length: 7 },
+  (_, index) =>
+    Math.floor(new Date().getFullYear() / 10) * 10 - index * 10,
+)
+
+const runtimeOptions = [90, 100, 120, 150, 180] as const
+
+function getLookupParams(
   query: string,
   scope: SearchScope,
 ): URLSearchParams {
-  const searchParams = new URLSearchParams()
+  const params = new URLSearchParams()
 
-  if (query) {
-    searchParams.set('q', query)
-  }
+  if (query) params.set('q', query)
+  if (scope !== 'all') params.set('type', scope)
 
-  if (scope !== 'all') {
-    searchParams.set('type', scope)
-  }
+  return params
+}
 
-  return searchParams
+function withScope(
+  params: URLSearchParams,
+  scope: SearchScope,
+): URLSearchParams {
+  if (scope === 'all') params.delete('type')
+  else params.set('type', scope)
+
+  return params
 }
 
 export function SearchPage() {
-  const [searchParams, setSearchParams] =
-    useSearchParams()
-
-  const inputRef =
-    useRef<HTMLInputElement>(null)
-
+  const [searchParams, setSearchParams] = useSearchParams()
+  const inputRef = useRef<HTMLInputElement>(null)
   const parsedQuery = normalizeSearchQuery(
     searchParams.get('q') ?? '',
   )
-
   const query =
     parsedQuery.length >= SEARCH_MINIMUM_LENGTH
       ? parsedQuery
       : ''
-
-  const scope = parseSearchScope(
-    searchParams.get('type'),
+  const isIntentMode = searchParams.get('mode') === 'intent'
+  const naturalIntent = useMemo(
+    () => parseNaturalLanguageIntent(parsedQuery),
+    [parsedQuery],
   )
-
-  const [draftQuery, setDraftQuery] =
-    useState(parsedQuery)
-
-  const [
-    validationMessage,
-    setValidationMessage,
-  ] = useState<string | null>(null)
-
-  const search = useCineScopeSearch(query)
-
-  const filteredRecords = useMemo(
+  const criteria = useMemo(
     () =>
-      filterSearchRecords(
-        search.records,
-        scope,
+      parseIntentCriteria(
+        searchParams,
+        naturalIntent.criteria,
       ),
-    [scope, search.records],
+    [naturalIntent.criteria, searchParams],
   )
+  const parsedScope = parseSearchScope(searchParams.get('type'))
+  const scope =
+    isIntentMode && parsedScope === 'person'
+      ? 'all'
+      : parsedScope
+  const [draftQuery, setDraftQuery] = useState(parsedQuery)
+  const [validationMessage, setValidationMessage] =
+    useState<string | null>(null)
 
-  const scopeCounts = useMemo(
-    () => countSearchRecords(search.records),
-    [search.records],
+  const lookupSearch = useCineScopeSearch(
+    query,
+    !isIntentMode,
   )
+  const intentSearch = useIntentSearch(
+    criteria,
+    isIntentMode && Boolean(query),
+  )
+  const activeSearch = isIntentMode
+    ? intentSearch
+    : lookupSearch
+  const filteredRecords = useMemo(
+    () => filterSearchRecords(activeSearch.records, scope),
+    [activeSearch.records, scope],
+  )
+  const scopeCounts = useMemo(
+    () => countSearchRecords(activeSearch.records),
+    [activeSearch.records],
+  )
+  const movieIntentSupported = supportsIntentMedia(criteria, 'movie')
+  const tvIntentSupported = supportsIntentMedia(criteria, 'tv')
+  const supportedIntentMedia =
+    movieIntentSupported || tvIntentSupported
+  const limitedIntentMessage =
+    criteria.media === 'both' &&
+    movieIntentSupported !== tvIntentSupported
+      ? movieIntentSupported
+        ? 'These exact genre signals map to movies only; television results are omitted until the genres are broadened.'
+        : 'These exact genre signals map to television only; movie results are omitted until the genres are broadened.'
+      : null
+  const visibleScopeOptions = isIntentMode
+    ? searchScopeOptions.filter(({ value }) => value !== 'person')
+    : searchScopeOptions
 
   useEffect(() => {
     setDraftQuery(parsedQuery)
@@ -109,26 +160,23 @@ export function SearchPage() {
 
   useEffect(() => {
     document.title = query
-      ? `Search: ${query} — CineScope`
+      ? `${isIntentMode ? 'Recommendations' : 'Search'}: ${query} — CineScope`
       : 'Search — CineScope'
-  }, [query])
+  }, [isIntentMode, query])
 
   function commitSearch(
     value: string,
+    mode: 'auto' | 'intent' | 'lookup' = 'auto',
   ): void {
-    const normalizedQuery =
-      normalizeSearchQuery(value)
+    const normalized = normalizeSearchQuery(value)
 
-    if (!normalizedQuery) {
+    if (!normalized) {
       setSearchParams(new URLSearchParams())
       setValidationMessage(null)
       return
     }
 
-    if (
-      normalizedQuery.length <
-      SEARCH_MINIMUM_LENGTH
-    ) {
+    if (normalized.length < SEARCH_MINIMUM_LENGTH) {
       setValidationMessage(
         `Enter at least ${SEARCH_MINIMUM_LENGTH} characters to search the archive.`,
       )
@@ -136,32 +184,69 @@ export function SearchPage() {
       return
     }
 
-    setDraftQuery(normalizedQuery)
+    const parsedIntent = parseNaturalLanguageIntent(normalized)
+    const shouldUseIntent =
+      mode === 'intent' ||
+      (mode === 'auto' && parsedIntent.isIntent)
+
+    setDraftQuery(normalized)
     setValidationMessage(null)
     setSearchParams(
-      getSearchParams(normalizedQuery, 'all'),
+      shouldUseIntent
+        ? serializeIntentSearch(normalized, parsedIntent.criteria)
+        : getLookupParams(normalized, 'all'),
     )
   }
 
-  function handleSubmit(
-    event: FormEvent<HTMLFormElement>,
-  ): void {
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
     commitSearch(draftQuery)
   }
 
-  function handleSuggestion(
-    suggestion: string,
-  ): void {
-    commitSearch(suggestion)
+  function handleScopeChange(nextScope: SearchScope): void {
+    const params = isIntentMode
+      ? serializeIntentSearch(query, criteria)
+      : getLookupParams(query, nextScope)
+
+    setSearchParams(
+      isIntentMode
+        ? withScope(params, nextScope)
+        : params,
+    )
   }
 
-  function handleScopeChange(
-    nextScope: SearchScope,
+  function updateCriteria(
+    changes: Partial<IntentSearchCriteria>,
   ): void {
     setSearchParams(
-      getSearchParams(query, nextScope),
+      withScope(
+        serializeIntentSearch(query, {
+          ...criteria,
+          ...changes,
+        }),
+        scope,
+      ),
     )
+  }
+
+  function toggleGenre(genre: PreferenceGenreId): void {
+    const genres = criteria.genres.includes(genre)
+      ? criteria.genres.filter((value) => value !== genre)
+      : [...criteria.genres, genre].slice(0, 4)
+
+    updateCriteria({ genres })
+  }
+
+  function handleFamilyFriendlyChange(checked: boolean): void {
+    updateCriteria({
+      familyFriendly: checked,
+      genres: checked
+        ? [
+            'family' as PreferenceGenreId,
+            ...criteria.genres.filter((genre) => genre !== 'family'),
+          ].slice(0, 4)
+        : criteria.genres.filter((genre) => genre !== 'family'),
+    })
   }
 
   function handleClear(): void {
@@ -173,61 +258,80 @@ export function SearchPage() {
 
   let resultsContent
 
-  if (search.isPending) {
+  if (isIntentMode && !supportedIntentMedia) {
     resultsContent = (
-      <LoadingState
-        title="Scanning the living archive"
-        message={`Searching TMDB for records matching “${query}”.`}
+      <EmptyState
+        title="These exact filters cannot be mapped"
+        message="The selected genre does not have an equivalent TMDB genre for this media type. Change the medium or remove that genre to continue."
+        actionLabel="Reset interpreted filters"
+        onAction={() =>
+          updateCriteria(createDefaultIntentCriteria())
+        }
       />
     )
-  } else if (search.isInitialError) {
+  } else if (activeSearch.isPending) {
+    resultsContent = (
+      <LoadingState
+        title={
+          isIntentMode
+            ? 'Projecting recommendations'
+            : 'Scanning the living archive'
+        }
+        message={
+          isIntentMode
+            ? 'Applying the interpreted signals to the TMDB catalogue.'
+            : `Searching TMDB for records matching “${query}”.`
+        }
+      />
+    )
+  } else if (activeSearch.isInitialError) {
     resultsContent = (
       <ErrorState
         title="The archive search was interrupted"
         message={
-          search.errorMessage ??
+          activeSearch.errorMessage ??
           'The requested records could not be retrieved.'
         }
-        onRetry={search.retry}
+        onRetry={activeSearch.retry}
         retryLabel="Search again"
       />
     )
-  } else if (
-    search.records.length === 0
-  ) {
+  } else if (activeSearch.records.length === 0) {
     resultsContent = (
       <EmptyState
         title="No matching records were found"
-        message={`TMDB returned no movies, television series, or people for “${query}”. Try another title or name.`}
-        actionLabel="Clear search"
-        onAction={handleClear}
+        message={
+          isIntentMode
+            ? 'TMDB returned no records for this combination. Broaden one of the interpreted filters and try again.'
+            : `TMDB returned no movies, television series, or people for “${query}”. Try another title or name.`
+        }
+        actionLabel={isIntentMode ? 'Reset filters' : 'Clear search'}
+        onAction={
+          isIntentMode
+            ? () => updateCriteria(createDefaultIntentCriteria())
+            : handleClear
+        }
       />
     )
-  } else if (
-    filteredRecords.length === 0
-  ) {
+  } else if (filteredRecords.length === 0) {
     resultsContent = (
       <EmptyState
         title="No loaded records match this filter"
         message="Other media types were found. Return to all records or load another result page."
         actionLabel="Show all records"
-        onAction={() =>
-          handleScopeChange('all')
-        }
+        onAction={() => handleScopeChange('all')}
       />
     )
   } else {
     resultsContent = (
       <ul className="search-results__grid">
-        {filteredRecords.map(
-          (record, index) => (
-            <SearchResultCard
-              index={index}
-              key={`${record.mediaType}:${record.id}`}
-              record={record}
-            />
-          ),
-        )}
+        {filteredRecords.map((record, index) => (
+          <SearchResultCard
+            index={index}
+            key={`${record.mediaType}:${record.id}`}
+            record={record}
+          />
+        ))}
       </ul>
     )
   }
@@ -236,74 +340,45 @@ export function SearchPage() {
     <div className="search-page">
       <header className="search-opening">
         <div>
-          <p className="archive-label">
-            07 / Archive Search
-          </p>
-
+          <p className="archive-label">07 / Intelligent Search</p>
           <h1 className="search-opening__title font-display text-balance">
-            Find the record you remember.
+            Find a title—or describe the feeling.
           </h1>
         </div>
 
         <div className="search-opening__copy">
           <p className="text-pretty">
-            Search across films, television series,
-            and people preserved in the TMDB
-            catalogue.
+            Search for a known record, or tell CineScope what you want to
+            watch in your own words.
           </p>
-
           <p>
-            Results reflect catalogue matches, not
-            personalised recommendations.
+            Viewing requests are interpreted locally, shown to you, and
+            converted into editable catalogue filters.
           </p>
         </div>
       </header>
 
-      <section
-        className="search-console"
-        aria-labelledby="search-console-title"
-      >
+      <section className="search-console" aria-labelledby="search-console-title">
         <div className="search-console__heading">
           <div>
-            <p className="archive-label">
-              Search coordinates
-            </p>
-
-            <h2
-              className="search-console__title font-display"
-              id="search-console-title"
-            >
-              Name the signal.
+            <p className="archive-label">Search coordinates</p>
+            <h2 className="search-console__title font-display" id="search-console-title">
+              Name it. Or describe it.
             </h2>
           </div>
-
           <p>
-            Use a title, series name, performer, or
-            filmmaker. Submit when the query is ready.
+            Try a title or person, or a request such as “a funny family
+            movie under two hours.” CineScope selects the appropriate search.
           </p>
         </div>
 
-        <form
-          className="search-form"
-          noValidate
-          onSubmit={handleSubmit}
-        >
-          <label htmlFor="archive-search-query">
-            Archive query
-          </label>
-
+        <form className="search-form" noValidate onSubmit={handleSubmit}>
+          <label htmlFor="archive-search-query">Title, name, or viewing request</label>
           <div className="search-form__control">
             <Search aria-hidden="true" />
-
             <input
-              aria-describedby={
-                validationMessage
-                  ? 'archive-search-query-error'
-                  : undefined
-              }
-              aria-invalid={Boolean(
-                validationMessage,
-              )}
+              aria-describedby={validationMessage ? 'archive-search-query-error' : 'archive-search-query-help'}
+              aria-invalid={Boolean(validationMessage)}
               autoComplete="off"
               id="archive-search-query"
               maxLength={100}
@@ -311,209 +386,226 @@ export function SearchPage() {
                 setDraftQuery(event.target.value)
                 setValidationMessage(null)
               }}
-              placeholder="Search movies, series, and people"
+              placeholder="Dune, Zendaya, or a cozy mystery series..."
               ref={inputRef}
               spellCheck="false"
               type="search"
               value={draftQuery}
             />
-
             {draftQuery ? (
-              <button
-                aria-label="Clear archive query"
-                className="search-form__clear"
-                onClick={handleClear}
-                type="button"
-              >
+              <button aria-label="Clear archive query" className="search-form__clear" onClick={handleClear} type="button">
                 <X aria-hidden="true" />
               </button>
             ) : null}
-
-            <button
-              className="search-form__submit"
-              type="submit"
-            >
-              Search archive
+            <button className="search-form__submit" type="submit">
+              Search or recommend
               <ArrowRight aria-hidden="true" />
             </button>
           </div>
-
-          <p
-            className="search-form__validation"
-            id="archive-search-query-error"
-            aria-live="polite"
-          >
+          <p className="search-form__help" id="archive-search-query-help">
+            Auto mode keeps simple names as catalogue search and recognizes
+            requests with multiple viewing signals.
+          </p>
+          <p className="search-form__validation" id="archive-search-query-error" aria-live="polite">
             {validationMessage ?? ''}
           </p>
+          {draftQuery.length >= SEARCH_MINIMUM_LENGTH ? (
+            <div className="search-form__modes" aria-label="Choose search interpretation">
+              <button onClick={() => commitSearch(draftQuery, 'lookup')} type="button">
+                Search exact title or name
+              </button>
+              <button onClick={() => commitSearch(draftQuery, 'intent')} type="button">
+                <Sparkles aria-hidden="true" />
+                Treat as a viewing request
+              </button>
+            </div>
+          ) : null}
         </form>
 
         <div className="search-suggestions">
-          <p>Suggested signals</p>
-
+          <p>Try a signal</p>
           <div>
-            {SEARCH_SUGGESTIONS.map(
-              (suggestion) => (
-                <button
-                  key={suggestion}
-                  onClick={() =>
-                    handleSuggestion(suggestion)
-                  }
-                  type="button"
-                >
-                  {suggestion}
-                </button>
-              ),
-            )}
+            {SEARCH_SUGGESTIONS.map((suggestion) => (
+              <button key={suggestion} onClick={() => commitSearch(suggestion)} type="button">
+                {suggestion}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
+      {query && isIntentMode ? (
+        <section className="intent-interpretation" aria-labelledby="intent-interpretation-title">
+          <header>
+            <div>
+              <p className="archive-label">What CineScope understood</p>
+              <h2 className="intent-interpretation__title font-display" id="intent-interpretation-title">
+                Tune the projection.
+              </h2>
+            </div>
+            <div>
+              <p>
+                These are deterministic catalogue signals—not an opaque AI
+                judgment. Edit any interpretation before continuing.
+              </p>
+              <button onClick={() => commitSearch(query, 'lookup')} type="button">
+                Search these words as a title or name
+              </button>
+            </div>
+          </header>
+
+          <div className="intent-controls">
+            <label>
+              <span>Medium</span>
+              <select value={criteria.media} onChange={(event) => updateCriteria({ media: event.target.value as IntentSearchCriteria['media'] })}>
+                {intentMediaOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Mood</span>
+              <select value={criteria.mood} onChange={(event) => updateCriteria({ mood: event.target.value as IntentSearchCriteria['mood'] })}>
+                {recommendationMoodDefinitions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Original language</span>
+              <select value={criteria.language} onChange={(event) => updateCriteria({ language: event.target.value as IntentSearchCriteria['language'] })}>
+                {preferredLanguageOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Release decade</span>
+              <select value={criteria.decade ?? ''} onChange={(event) => updateCriteria({ decade: event.target.value ? Number(event.target.value) : null })}>
+                <option value="">Any decade</option>
+                {decadeOptions.map((decade) => (
+                  <option key={decade} value={decade}>{decade}s</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Maximum runtime</span>
+              <select value={criteria.runtimeMaximum ?? ''} onChange={(event) => updateCriteria({ runtimeMaximum: event.target.value ? Number(event.target.value) : null })}>
+                <option value="">Any runtime</option>
+                {runtimeOptions.map((runtime) => (
+                  <option key={runtime} value={runtime}>{runtime} minutes</option>
+                ))}
+              </select>
+            </label>
+            <label className="intent-controls__checkbox">
+              <input checked={criteria.familyFriendly} onChange={(event) => handleFamilyFriendlyChange(event.target.checked)} type="checkbox" />
+              <span>Prioritize family catalogue genres</span>
+            </label>
+          </div>
+
+          {limitedIntentMessage ? (
+            <p className="intent-interpretation__mapping" role="status">
+              {limitedIntentMessage}
+            </p>
+          ) : null}
+
+          <fieldset className="intent-genres">
+            <legend>Genre signals · choose up to four</legend>
+            <div>
+              {preferenceGenreDefinitions.map((genre) => (
+                <button
+                  aria-pressed={criteria.genres.includes(genre.id)}
+                  key={genre.id}
+                  onClick={() => toggleGenre(genre.id)}
+                  type="button"
+                >
+                  {genre.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
+          <button className="intent-interpretation__reset" onClick={() => updateCriteria(createDefaultIntentCriteria())} type="button">
+            Reset interpreted filters
+          </button>
+        </section>
+      ) : null}
+
       {query ? (
-        <section
-          className="search-results"
-          aria-labelledby="search-results-title"
-        >
+        <section className="search-results" aria-labelledby="search-results-title">
           <header className="search-results__heading">
             <div>
               <p className="archive-label">
-                Search projection
+                {isIntentMode ? 'Recommendation projection' : 'Search projection'}
               </p>
-
-              <h2
-                className="search-results__title font-display"
-                id="search-results-title"
-              >
-                Results for “{query}”
+              <h2 className="search-results__title font-display" id="search-results-title">
+                {isIntentMode ? 'Matches for' : 'Results for'} “{query}”
               </h2>
             </div>
-
             <p aria-live="polite">
-              <strong>
-                {search.records.length.toLocaleString()}
-              </strong>{' '}
+              <strong>{activeSearch.records.length.toLocaleString()}</strong>{' '}
               unique records loaded from{' '}
-              <strong>
-                {search.totalResults.toLocaleString()}
-              </strong>{' '}
-              reported matches.
+              <strong>{activeSearch.totalResults.toLocaleString()}</strong>{' '}
+              reported catalogue matches.
             </p>
           </header>
 
-          <div
-            className="search-scope"
-            aria-label="Filter loaded search results"
-            role="group"
-          >
-            {searchScopeOptions.map((option) => (
-              <button
-                aria-pressed={
-                  scope === option.value
-                }
-                key={option.value}
-                onClick={() =>
-                  handleScopeChange(option.value)
-                }
-                type="button"
-              >
+          <div className={`search-scope search-scope--${visibleScopeOptions.length}`} aria-label="Filter loaded search results" role="group">
+            {visibleScopeOptions.map((option) => (
+              <button aria-pressed={scope === option.value} key={option.value} onClick={() => handleScopeChange(option.value)} type="button">
                 <span>{option.label}</span>
-                <strong>
-                  {scopeCounts[option.value]}
-                </strong>
+                <strong>{scopeCounts[option.value]}</strong>
               </button>
             ))}
           </div>
 
-          <div className="search-results__content">
-            {resultsContent}
-          </div>
+          <div className="search-results__content">{resultsContent}</div>
 
-          {search.records.length > 0 ? (
-            <section
-              className="search-continuation"
-              aria-labelledby="search-continuation-title"
-            >
+          {activeSearch.records.length > 0 ? (
+            <section className="search-continuation" aria-labelledby="search-continuation-title">
               <div>
-                <p className="archive-label">
-                  Search continuation
-                </p>
-
-                <h3
-                  className="search-continuation__title font-display"
-                  id="search-continuation-title"
-                >
+                <p className="archive-label">Search continuation</p>
+                <h3 className="search-continuation__title font-display" id="search-continuation-title">
                   Extend the signal.
                 </h3>
-
                 <p aria-live="polite">
-                  {search.isFetchingNextPage
-                    ? `Retrieving search page ${search.loadedPageCount + 1}.`
-                    : `${search.records.length.toLocaleString()} records are currently projected.`}
+                  {activeSearch.isFetchingNextPage
+                    ? `Retrieving catalogue page ${activeSearch.loadedPageCount + 1}.`
+                    : `${activeSearch.records.length.toLocaleString()} records are currently projected.`}
                 </p>
               </div>
-
               <div className="search-continuation__action">
-                {search.isNextPageError ? (
+                {activeSearch.isNextPageError ? (
                   <div role="alert">
-                    <p>
-                      The next search page could not
-                      be retrieved. Existing results
-                      remain available.
-                    </p>
-
-                    {search.errorMessage ? (
-                      <p>{search.errorMessage}</p>
-                    ) : null}
+                    <p>The next page could not be retrieved. Existing results remain available.</p>
+                    {activeSearch.errorMessage ? <p>{activeSearch.errorMessage}</p> : null}
                   </div>
                 ) : null}
-
-                {search.hasNextPage ? (
-                  <button
-                    aria-busy={
-                      search.isFetchingNextPage
-                    }
-                    disabled={
-                      search.isFetchingNextPage
-                    }
-                    onClick={search.loadNextPage}
-                    type="button"
-                  >
-                    {search.isFetchingNextPage
+                {activeSearch.hasNextPage ? (
+                  <button aria-busy={activeSearch.isFetchingNextPage} disabled={activeSearch.isFetchingNextPage} onClick={activeSearch.loadNextPage} type="button">
+                    {activeSearch.isFetchingNextPage
                       ? 'Extending signal'
-                      : search.isNextPageError
+                      : activeSearch.isNextPageError
                         ? 'Retry next page'
                         : 'Load more records'}
-
                     <ArrowRight aria-hidden="true" />
                   </button>
                 ) : (
-                  <p className="search-continuation__complete">
-                    The available result pages have
-                    been fully projected.
-                  </p>
+                  <p className="search-continuation__complete">The available result pages have been fully projected.</p>
                 )}
               </div>
             </section>
           ) : null}
         </section>
       ) : (
-        <section
-          className="search-idle"
-          aria-labelledby="search-idle-title"
-        >
-          <p className="archive-label">
-            Awaiting query
-          </p>
-
-          <h2
-            className="search-idle__title font-display"
-            id="search-idle-title"
-          >
+        <section className="search-idle" aria-labelledby="search-idle-title">
+          <p className="archive-label">Awaiting query</p>
+          <h2 className="search-idle__title font-display" id="search-idle-title">
             The archive is listening.
           </h2>
-
           <p>
-            Submit at least two characters to begin a
-            live TMDB search.
+            Submit a title, a name, or a natural-language viewing request to
+            begin.
           </p>
         </section>
       )}

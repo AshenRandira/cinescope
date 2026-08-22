@@ -26,7 +26,7 @@ test('searches for a movie and opens its detail record', async ({ page }) => {
 test('opens a header suggestion using only the keyboard', async ({ page }) => {
   await page.goto('/search', { waitUntil: 'domcontentloaded' })
   const search = page.getByRole('combobox', {
-    name: 'Search movies, TV series, and people',
+    name: 'Search titles and people, or describe what you want to watch',
   })
 
   await search.fill('fixture')
@@ -38,6 +38,28 @@ test('opens a header suggestion using only the keyboard', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: 'Fixture Film', level: 1 }),
   ).toBeVisible()
+})
+
+test('turns a natural-language viewing need into editable recommendations', async ({ page }) => {
+  await page.goto('/search', { waitUntil: 'domcontentloaded' })
+  const search = page.getByRole('combobox', {
+    name: 'Search titles and people, or describe what you want to watch',
+  })
+
+  await search.fill('a funny family movie under two hours')
+  await search.press('Enter')
+
+  await expect(page).toHaveURL(/mode=intent/)
+  await expect(
+    page.getByRole('heading', { name: 'Tune the projection.' }),
+  ).toBeVisible()
+  await expect(page.getByLabel('Medium')).toHaveValue('movie')
+  await expect(page.getByLabel('Maximum runtime')).toHaveValue('120')
+  await expect(
+    page.getByRole('heading', { name: 'Fixture Family Comedy' }),
+  ).toBeVisible()
+  await expect(page.getByText('Why it matches')).toBeVisible()
+  await expect(page.getByText(/comedy \+ family request/i)).toBeVisible()
 })
 
 test('navigates from television to a season and episode, then back', async ({ page }) => {

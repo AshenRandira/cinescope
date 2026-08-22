@@ -6,6 +6,8 @@ CineScope builds a deterministic archive reel from TMDB's movie and television r
 
 The engine does not introduce a machine-learning service, background profiling job, extra analytics event, or additional TMDB request. Mood, preferences, and feedback only re-rank or remove records from the already fetched candidate set.
 
+Intent-based search is a separate, request-driven discovery surface. It turns a sentence supplied in the shared search field into visible, editable TMDB Discover filters instead of re-ranking the member's archive reel. See [intent-based catalogue search](intent-search.md).
+
 ## Archive signals and explanations
 
 Anchor strength is inspectable and ordered from explicit positive signals: favourites, ratings of 7 or higher, active TV episode progress, and recent unrated saves as the fallback. Records already present in the library are excluded so the reel remains a discovery surface.

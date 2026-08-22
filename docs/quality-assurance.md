@@ -11,12 +11,13 @@ CineScope uses six deterministic validation layers:
 5. Firebase Hosting Emulator exercises the built application shell, SPA rewrites, browser security headers, and cache policy without deploying.
 6. Functions unit tests and local Functions emulator journeys exercise the TMDB route allowlist, server-only authentication, account-deletion identity and recent-login checks, recursive data cleanup ordering, normalized failures, cache controls, and method rejection.
 
-The component suite currently covers header-search validation and keyboard selection, library save/watch/favourite/rating controls, episode-progress controls and rollups, preference and recommendation-feedback parsing, profile editing, authentication-form validation, protected-route behavior, route focus transfer, verification controls, password change, account export, and explicit destructive confirmation. Coverage enforcement includes the library, TV progress, preference, recommendation mood/feedback, and archive-ranking engines plus the authentication helpers, protected route, library controls, and account export contract.
+The component suite currently covers header-search validation, keyboard selection, natural-language request routing and its explicit title-search override, library save/watch/favourite/rating controls, episode-progress controls and rollups, preference and recommendation-feedback parsing, profile editing, authentication-form validation, protected-route behavior, route focus transfer, verification controls, password change, account export, and explicit destructive confirmation. Pure tests also cover intent parsing, URL state, Discover query construction, unsupported media mappings, mixed result projection, and match explanations. Coverage enforcement includes the library, TV progress, preference, recommendation mood/feedback, and archive-ranking engines plus the authentication helpers, protected route, library controls, and account export contract.
 
 The browser suite covers these public journeys:
 
 - search results to a movie record;
 - header keyboard suggestion to a movie record;
+- natural-language viewing request to editable recommendation filters and an explained result;
 - television register to series, season, episode, and back;
 - episode checkpoint to season rollup, reload, continue-watching shelf, and next episode;
 - media-dialog open/close with focus restoration;

@@ -18,10 +18,12 @@ vi.mock('../hooks/useCineScopeSearch', () => ({
 const records: SearchRecord[] = [
   {
     dateYear: '2016',
+    genreIds: [18],
     id: 329865,
     imagePath: null,
     imageType: 'poster',
     knownForDepartment: null,
+    matchReasons: [],
     mediaType: 'movie',
     originalLanguage: 'en',
     overview: 'A deterministic search fixture.',
@@ -31,10 +33,12 @@ const records: SearchRecord[] = [
   },
   {
     dateYear: '2022',
+    genreIds: [18],
     id: 100088,
     imagePath: null,
     imageType: 'poster',
     knownForDepartment: null,
+    matchReasons: [],
     mediaType: 'tv',
     originalLanguage: 'en',
     overview: 'A second deterministic search fixture.',
@@ -92,13 +96,13 @@ describe('HeaderSearch', () => {
 
     await user.type(
       screen.getByRole('combobox', {
-        name: 'Search movies, TV series, and people',
+        name: 'Search titles and people, or describe what you want to watch',
       }),
       'a',
     )
     await user.click(
       screen.getByRole('button', {
-        name: 'Show all search results',
+        name: 'Search or recommend',
       }),
     )
 
@@ -116,7 +120,7 @@ describe('HeaderSearch', () => {
     const user = userEvent.setup()
     renderSearch()
     const input = screen.getByRole('combobox', {
-      name: 'Search movies, TV series, and people',
+      name: 'Search titles and people, or describe what you want to watch',
     })
 
     await user.type(input, 'arrival')
@@ -135,18 +139,58 @@ describe('HeaderSearch', () => {
     const user = userEvent.setup()
     renderSearch()
     const input = screen.getByRole('combobox', {
-      name: 'Search movies, TV series, and people',
+      name: 'Search titles and people, or describe what you want to watch',
     })
 
     await user.type(input, '  dune   part two  ')
     await user.click(
       screen.getByRole('button', {
-        name: 'Show all search results',
+        name: 'Search or recommend',
       }),
     )
 
     expect(screen.getByTestId('location')).toHaveTextContent(
       '/search?q=dune+part+two',
+    )
+  })
+
+  it('routes a natural-language viewing request to intent discovery', async () => {
+    const user = userEvent.setup()
+    renderSearch()
+    const input = screen.getByRole('combobox', {
+      name: 'Search titles and people, or describe what you want to watch',
+    })
+
+    await user.type(input, 'a funny family movie under two hours')
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Search or recommend',
+      }),
+    )
+
+    expect(screen.getByTestId('location')).toHaveTextContent(
+      '/search?intent=1&mode=intent&q=a+funny+family+movie+under+two+hours&media=movie&genres=comedy%2Cfamily&runtime=120',
+    )
+  })
+
+  it('allows an interpreted request to be forced back to name lookup', async () => {
+    const user = userEvent.setup()
+    renderSearch()
+
+    await user.type(
+      screen.getByRole('combobox', {
+        name: 'Search titles and people, or describe what you want to watch',
+      }),
+      'funny family movie',
+    )
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Search names instead',
+      }),
+    )
+
+    expect(screen.getByTestId('location')).toHaveTextContent(
+      '/search?q=funny+family+movie',
     )
   })
 })

@@ -7,11 +7,11 @@ describe('TMDB route and query allowlist', () => {
     ['/genre/movie/list', 'language=en-US'],
     [
       '/discover/movie',
-      'include_adult=false&include_video=false&language=en-US&page=2&sort_by=vote_average.desc&vote_average.gte=6.4&vote_count.gte=250&with_genres=18%7C9648&without_genres=28&primary_release_date.lte=2026-08-10&with_runtime.lte=120',
+      'include_adult=false&include_video=false&language=en-US&page=2&sort_by=vote_average.desc&vote_average.gte=6.4&vote_count.gte=250&with_genres=18%7C9648&with_original_language=ko&without_genres=28&primary_release_date.lte=2026-08-10&with_runtime.lte=120',
     ],
     [
       '/discover/tv',
-      'include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=300',
+      'include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=300&vote_average.gte=7&with_genres=18%2C9648&with_original_language=ko&first_air_date.gte=2010-01-01&first_air_date.lte=2019-12-31&with_runtime.lte=60',
     ],
     ['/trending/all/week', 'language=en-US&page=1'],
     ['/movie/now_playing', 'language=en-US&page=1'],
