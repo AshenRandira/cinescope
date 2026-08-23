@@ -77,10 +77,6 @@ export function MovieDiscoveryControls({
             Filter movies.
           </h2>
         </div>
-
-        <p className="movie-parameters__introduction">
-          Filter the TMDB movie catalogue. These results are not personalized.
-        </p>
       </header>
 
       <fieldset className="movie-parameters__genres">
@@ -243,6 +239,10 @@ export function MovieDiscoveryControls({
           </select>
         </label>
       </div>
+
+      <p className="movie-parameters__introduction">
+        Browse the TMDB catalogue using any combination of these filters.
+      </p>
 
       <div className="movie-parameters__method">
         <div>

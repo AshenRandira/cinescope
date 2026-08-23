@@ -360,9 +360,6 @@ export function SearchPage() {
               Search CineScope.
             </h2>
           </div>
-          <p>
-            Example: “a funny family movie under two hours.”
-          </p>
         </div>
 
         <form className="search-form" noValidate onSubmit={handleSubmit}>

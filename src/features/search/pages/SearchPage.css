@@ -50,17 +50,12 @@
 }
 
 .search-console {
-  padding-block: clamp(3rem, 6vw, 6rem);
+  padding-block: clamp(2.25rem, 4vw, 4rem);
   border-bottom: 1px solid var(--color-line);
 }
 
 .search-console__heading {
-  display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(18rem, 0.65fr);
-  gap: 2rem;
-  align-items: end;
+  display: block;
 }
 
 .search-console__title {
@@ -257,9 +252,9 @@
 .search-suggestions button {
   min-height: 2.25rem;
   padding: 0.35rem 0.8rem;
-  border: 1px solid var(--color-line);
-  color: var(--color-app-muted);
-  background: transparent;
+  border: 1px solid var(--color-line-strong);
+  color: var(--color-paper-400);
+  background: var(--color-ink-900);
   font-size: var(--font-size-caption);
   cursor: pointer;
 }
@@ -268,6 +263,7 @@
 .search-suggestions button:focus-visible {
   border-color: var(--color-projector);
   color: var(--color-paper-100);
+  background: var(--color-projector-soft);
 }
 
 .intent-interpretation {

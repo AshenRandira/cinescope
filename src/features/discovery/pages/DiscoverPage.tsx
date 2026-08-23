@@ -597,13 +597,13 @@ export function DiscoverPage() {
                 >
                   More to explore.
                 </h3>
-              </div>
 
-              <p>
-                {isArchiveSignal
-                  ? 'These suggestions are related to titles in your archive.'
-                  : 'These titles use the same catalogue method. They are not personalized.'}
-              </p>
+                <p className="discover-contact-sheet__note">
+                  {isArchiveSignal
+                    ? 'Related to titles in your archive.'
+                    : 'More titles from this discovery method.'}
+                </p>
+              </div>
             </header>
 
             <div className="discover-contact-sheet__grid">
@@ -661,10 +661,6 @@ export function DiscoverPage() {
               Choose how to look.
             </h2>
           </div>
-
-          <p>
-            Select an option to update the recommendations.
-          </p>
         </header>
 
         <div

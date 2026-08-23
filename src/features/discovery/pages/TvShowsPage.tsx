@@ -415,11 +415,11 @@ export function TvShowsPage() {
                 >
                   Explore the results.
                 </h3>
-              </div>
 
-              <p>
-                Open a series to see seasons, cast, streaming options, and related titles.
-              </p>
+                <p className="tv-contact-sheet__note">
+                  Open a series for seasons, cast, streaming options, and related titles.
+                </p>
+              </div>
             </header>
 
             <div className="tv-contact-sheet__grid">
@@ -539,10 +539,6 @@ export function TvShowsPage() {
               Choose a TV list.
             </h2>
           </div>
-
-          <p>
-            Your choice stays in the page link, so it can be shared.
-          </p>
         </header>
 
         <div

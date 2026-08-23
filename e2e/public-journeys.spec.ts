@@ -93,6 +93,68 @@ test('reveals Discover and TV card details from the artwork', async ({ page }) =
   await expect(tvDetails).toHaveCSS('opacity', '1')
 })
 
+test('keeps catalogue controls visible and result cards compact', async ({ page }) => {
+  await page.goto('/discover', { waitUntil: 'domcontentloaded' })
+
+  const discoverChoice = page.getByRole('button', {
+    name: 'Quiet and strange',
+  })
+  await expect(discoverChoice).toHaveCSS('cursor', 'pointer')
+  expect(
+    await discoverChoice.evaluate(
+      (element) => element.ownerDocument.defaultView
+        ?.getComputedStyle(element).backgroundColor ?? '',
+    ),
+  ).not.toBe('rgba(0, 0, 0, 0)')
+  await discoverChoice.click()
+  await expect(page.locator('.discover-card').first()).toBeVisible()
+  expect(
+    await page.locator('.discover-contact-sheet__grid').evaluate(
+      (element) => element.ownerDocument.defaultView
+        ?.getComputedStyle(element).gridTemplateColumns.split(' ').length ?? 0,
+    ),
+  ).toBe(4)
+  expect(
+    (await page.locator('.discover-card__artwork').first().boundingBox())?.height,
+  ).toBeLessThanOrEqual(370)
+
+  await page.goto('/movies', { waitUntil: 'domcontentloaded' })
+  const genreChoice = page.getByRole('button', { exact: true, name: 'Drama' })
+  await expect(genreChoice).toHaveCSS('cursor', 'pointer')
+  expect(
+    await genreChoice.evaluate(
+      (element) => element.ownerDocument.defaultView
+        ?.getComputedStyle(element).backgroundColor ?? '',
+    ),
+  ).not.toBe('rgba(0, 0, 0, 0)')
+
+  await page.goto('/tv', { waitUntil: 'domcontentloaded' })
+  const tvChoice = page.getByRole('button', { exact: true, name: /Top rated/ })
+  await expect(tvChoice).toHaveCSS('cursor', 'pointer')
+  expect(
+    await tvChoice.evaluate(
+      (element) => element.ownerDocument.defaultView
+        ?.getComputedStyle(element).backgroundColor ?? '',
+    ),
+  ).not.toBe('rgba(0, 0, 0, 0)')
+  await expect(page.locator('.tv-card').first()).toBeVisible()
+  expect(
+    await page.locator('.tv-contact-sheet__grid').evaluate(
+      (element) => element.ownerDocument.defaultView
+        ?.getComputedStyle(element).gridTemplateColumns.split(' ').length ?? 0,
+    ),
+  ).toBe(4)
+  expect(
+    (await page.locator('.tv-card__artwork').first().boundingBox())?.height,
+  ).toBeLessThanOrEqual(370)
+
+  await page.goto('/search?q=fixture', { waitUntil: 'domcontentloaded' })
+  await expect(page.locator('.search-record').first()).toBeVisible()
+  expect(
+    (await page.locator('.search-record__artwork').first().boundingBox())?.height,
+  ).toBeLessThanOrEqual(370)
+})
+
 test('navigates from television to a season and episode, then back', async ({ page }) => {
   await page.goto('/tv', { waitUntil: 'domcontentloaded' })
 
