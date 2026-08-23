@@ -8,7 +8,7 @@ import { HeaderSearch } from '../../features/search/components/HeaderSearch'
 
 function getNavigationClass(isActive: boolean): string {
   const baseClasses =
-    'group relative flex h-full items-center gap-2 px-2.5 text-sm font-semibold tracking-[-0.02em] transition-colors duration-[var(--duration-micro)] lg:px-4'
+    'group relative flex h-full items-center gap-2 px-2.5 text-sm font-semibold tracking-[-0.02em] transition-colors duration-[var(--duration-micro)] lg:px-4 lg:text-[1.05rem]'
 
   const stateClasses = isActive
     ? 'text-[var(--color-paper-100)]'
@@ -19,7 +19,7 @@ function getNavigationClass(isActive: boolean): string {
 
 function getActionClass(isActive: boolean): string {
   const baseClasses =
-    'group relative inline-flex h-full items-center gap-2 px-2 text-sm font-semibold transition-colors duration-[var(--duration-micro)] lg:px-3'
+    'group relative inline-flex h-full items-center gap-2.5 px-2 text-sm font-semibold transition-colors duration-[var(--duration-micro)] lg:px-3.5 lg:text-[1.05rem]'
 
   const stateClasses = isActive
     ? 'text-[var(--color-projector)]'
@@ -41,8 +41,8 @@ export function DesktopHeader() {
       : 'Sign in'
 
   return (
-    <header className="sticky top-0 z-[var(--z-header)] hidden border-b border-[var(--color-line-soft)] bg-[color:rgb(7_8_6/0.86)] backdrop-blur-xl md:block">
-      <div className="mx-auto grid h-[var(--layout-header-height)] max-w-[var(--layout-max)] grid-cols-[auto_1fr_auto] items-stretch gap-4 px-[var(--layout-gutter)] lg:gap-8">
+    <header className="desktop-header sticky top-0 z-[var(--z-header)] hidden border-b border-[var(--color-line-soft)] backdrop-blur-xl md:block">
+      <div className="mx-auto grid h-[var(--layout-header-height)] max-w-[108rem] grid-cols-[auto_1fr_auto] items-stretch gap-4 px-[var(--layout-gutter)] lg:gap-10">
         <NavLink
           aria-label="CineScope home"
           className="flex items-center"

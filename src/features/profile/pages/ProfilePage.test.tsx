@@ -156,6 +156,22 @@ describe('profile security controls', () => {
     )
   })
 
+  it('keeps account details focused on profile actions', () => {
+    renderProfile()
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Manage your profile.',
+      }),
+    ).toBeVisible()
+    expect(
+      screen.queryByText('Authentication'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/never stores your password/i),
+    ).not.toBeInTheDocument()
+  })
+
   it('sends a verification email and refreshes account state', async () => {
     const user = userEvent.setup()
     const sendVerificationEmail = vi.fn(

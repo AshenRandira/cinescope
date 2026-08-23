@@ -6,6 +6,23 @@ test.beforeEach(async ({ page }) => {
   await installPublicApiFixtures(page)
 })
 
+test('uses a spacious readable desktop header and atmospheric background', async ({ page }) => {
+  await page.goto('/discover', { waitUntil: 'domcontentloaded' })
+
+  const header = page.locator('.desktop-header')
+  await expect(header).toBeVisible()
+  expect((await header.boundingBox())?.height).toBeGreaterThanOrEqual(85)
+  await expect(
+    page.getByRole('link', { exact: true, name: 'Discover' }),
+  ).toHaveCSS('font-size', '16.8px')
+  expect(
+    await page.locator('body').evaluate(
+      (element) => element.ownerDocument.defaultView
+        ?.getComputedStyle(element).backgroundImage ?? '',
+    ),
+  ).toContain('linear-gradient')
+})
+
 test('searches for a movie and opens its detail record', async ({ page }) => {
   await page.goto('/search?q=fixture', { waitUntil: 'domcontentloaded' })
 

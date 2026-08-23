@@ -507,12 +507,6 @@ export function ProfilePage() {
               Manage your profile.
             </h2>
           </div>
-          <aside className="profile-section-heading__note">
-            <p className="archive-label">Authentication</p>
-            <p>
-              Your sign-in is protected by a secure account service. CineScope never stores your password.
-            </p>
-          </aside>
         </header>
 
         <div className="profile-account__layout">

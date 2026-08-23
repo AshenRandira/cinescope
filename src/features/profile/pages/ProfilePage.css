@@ -110,6 +110,10 @@
   align-items: end;
 }
 
+.profile-account .profile-section-heading {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .profile-section-heading h2 {
   max-width: 13ch;
   margin: 0.65rem 0 0;

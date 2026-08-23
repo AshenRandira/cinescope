@@ -18,6 +18,22 @@
   white-space: nowrap;
 }
 
+@media (min-width: 64rem) {
+  .header-search__destination,
+  .header-search__form input {
+    font-size: 1rem;
+  }
+
+  .header-search__form {
+    width: clamp(10rem, 14vw, 15rem);
+    min-height: 2.85rem;
+  }
+
+  .header-search__form input {
+    height: 2.75rem;
+  }
+}
+
 .header-search__destination:hover,
 .header-search__destination:focus-visible,
 .header-search--route-active .header-search__destination {
