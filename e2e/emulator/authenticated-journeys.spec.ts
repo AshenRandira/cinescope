@@ -649,20 +649,29 @@ test('re-ranks archive recommendations by mood and remembers not-interested feed
   await expect(
     page.getByRole('button', { name: 'Reflective' }),
   ).toHaveAttribute('aria-pressed', 'true')
+  const reflectiveRecommendation = page.getByRole(
+    'article',
+    { exact: true, name: 'Reflective Echo' },
+  )
   await expect(
-    page.getByRole('heading', { name: 'Reflective Echo' }),
+    reflectiveRecommendation.getByRole('heading', {
+      name: 'Reflective Echo',
+    }),
   ).toBeVisible()
   await expect(
-    page.getByText(
+    reflectiveRecommendation.getByText(
       'Because Fixture Film is one of your favourites.',
     ),
   ).toBeVisible()
   await expect(
-    page.getByText('Fits this reflective mood.'),
+    reflectiveRecommendation.getByText('Fits this reflective mood.'),
   ).toBeVisible()
 
   await page
-    .getByRole('button', { name: 'Not interested' })
+    .getByRole('button', {
+      exact: true,
+      name: 'Not interested in Reflective Echo',
+    })
     .click()
   await expect(
     page.getByText(
@@ -734,7 +743,10 @@ test('changes a password and permanently deletes account data behind fresh crede
     waitUntil: 'domcontentloaded',
   })
   await page
-    .getByRole('button', { name: 'Not interested' })
+    .getByRole('button', {
+      exact: true,
+      name: 'Not interested in Reflective Echo',
+    })
     .click()
   await expectCloudRecommendationFeedback(
     request,
