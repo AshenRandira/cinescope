@@ -153,9 +153,6 @@ function OpeningProjection({
           </div>
         )}
 
-        <span className="movie-frame-number">
-          01
-        </span>
       </div>
 
       <div className="movie-opening-projection__copy">
@@ -256,11 +253,6 @@ function ContactSheetRecord({
         ['w185', 'w342', 'w500'],
       )
 
-  const recordNumber = String(index + 2).padStart(
-    2,
-    '0',
-  )
-
   const titleId = `contact-movie-${record.id}`
   const inspectionId =
     `movie-inspection-${record.id}`
@@ -317,19 +309,12 @@ function ContactSheetRecord({
             </div>
           )}
 
-          <span className="movie-frame-number">
-            {recordNumber}
-          </span>
-
           <div className="movie-contact-card__dossier">
             <div className="movie-contact-card__dossier-header">
               <p className="archive-label">
                 Movie summary
               </p>
 
-              <span aria-hidden="true">
-                Frame {recordNumber}
-              </span>
             </div>
 
             <p className="movie-contact-card__dossier-overview">
@@ -393,12 +378,6 @@ function ContactSheetRecord({
           </p>
 
           <div className="movie-contact-card__actions">
-            <span>
-              {record.voteAverage === null
-                ? 'Not yet rated'
-                : `${record.voteAverage.toFixed(1)} / 10`}
-            </span>
-
             <Link
               className="movie-contact-card__record-link"
               to={`/movies/${record.id}`}
@@ -431,7 +410,7 @@ function ContactSheetRecord({
         >
           <div>
             <p className="archive-label">
-              Expanded record {recordNumber}
+              Movie summary
             </p>
 
             <p className="movie-contact-card__inspection-overview text-pretty">
@@ -705,25 +684,17 @@ export function MoviesPage() {
       <header className="movie-register__opening">
         <div>
           <p className="archive-label">
-            05 / Movie catalogue
+            Movies
           </p>
 
           <h1 className="movie-register__title font-display text-balance">
-            Find a film through the shape of its
-            record.
+            Browse movies.
           </h1>
         </div>
 
         <div className="movie-register__opening-copy">
           <p className="text-pretty">
-            Browse movies by genre, release period,
-            runtime, rating, and popularity.
-          </p>
-
-          <p className="movie-register__disclosure">
-            {isDefault
-              ? 'Sorted by current TMDB popularity. This list is not personalized.'
-              : 'Results use your selected filters. This list is not personalized.'}
+            Filter by genre, year, runtime, rating, or popularity.
           </p>
         </div>
       </header>

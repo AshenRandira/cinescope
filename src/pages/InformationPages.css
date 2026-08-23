@@ -1,7 +1,7 @@
 .information-page {
   width: min(100%, 78rem);
   margin-inline: auto;
-  padding-block: clamp(2rem, 6vw, 6rem) clamp(5rem, 9vw, 9rem);
+  padding-block: clamp(1.5rem, 3vw, 3rem) clamp(4rem, 7vw, 7rem);
 }
 
 .information-page__hero {
@@ -11,15 +11,15 @@
 .information-page__title {
   max-width: 52rem;
   margin-top: 1rem;
-  font-size: clamp(3.75rem, 9vw, 8.5rem);
-  line-height: 0.88;
+  font-size: clamp(2.75rem, 6vw, 5.75rem);
+  line-height: 0.92;
   text-wrap: balance;
   color: var(--color-paper-100);
 }
 
 .information-page__introduction {
   max-width: 47rem;
-  margin-top: 2rem;
+  margin-top: 1.25rem;
   font-size: clamp(1rem, 1.5vw, 1.2rem);
   line-height: 1.8;
   color: var(--color-paper-300, var(--color-paper-400));
@@ -37,7 +37,7 @@
 .information-page__body {
   display: grid;
   gap: 0;
-  margin-top: clamp(4rem, 9vw, 8rem);
+  margin-top: clamp(2.5rem, 5vw, 5rem);
   border-top: 1px solid var(--color-line-strong);
 }
 

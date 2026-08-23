@@ -89,7 +89,7 @@ export function LoginPage() {
       if (mode === 'reset') {
         await resetPassword(normalizedEmail)
         setSuccessMessage(
-          'If an account matches that address, Firebase will send password-reset instructions.',
+          'If an account matches that address, password-reset instructions will be sent.',
         )
       } else {
         await login(normalizedEmail, password)
@@ -105,11 +105,10 @@ export function LoginPage() {
     <AuthPageFrame
       description="Sign in to access your saved movies, series, and preferences."
       eyebrow="Account access"
-      index="01"
       title={
         mode === 'login'
-          ? 'Resume your archive.'
-          : 'Recover your account.'
+          ? 'Welcome back.'
+          : 'Reset your password.'
       }
     >
       {status === 'unconfigured' ? (

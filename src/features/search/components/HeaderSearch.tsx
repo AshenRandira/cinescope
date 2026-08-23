@@ -1,4 +1,5 @@
 import {
+  ArrowUpRight,
   Search,
   X,
 } from 'lucide-react'
@@ -13,6 +14,7 @@ import {
   useState,
 } from 'react'
 import {
+  NavLink,
   useLocation,
   useNavigate,
 } from 'react-router'
@@ -336,12 +338,14 @@ export function HeaderSearch() {
         .join(' ')}
       ref={rootRef}
     >
-      <span
-        aria-hidden="true"
-        className="header-search__index"
+      <NavLink
+        aria-label="Open the full search page"
+        className="header-search__destination"
+        to="/search"
       >
-        04
-      </span>
+        <span>Search</span>
+        <ArrowUpRight aria-hidden="true" />
+      </NavLink>
 
       <form
         aria-label="Search CineScope"
@@ -372,7 +376,7 @@ export function HeaderSearch() {
             }
           }}
           onKeyDown={handleKeyDown}
-          placeholder="Search"
+          placeholder="Quick search"
           ref={inputRef}
           role="combobox"
           spellCheck="false"
@@ -408,7 +412,7 @@ export function HeaderSearch() {
       {isExpanded ? (
         <div className="header-search__panel">
           <div className="header-search__panel-heading">
-            <span>Live archive suggestions</span>
+            <span>Suggestions</span>
             <span>
               {isPreparing || search.isPending
                 ? 'Scanning'
@@ -441,7 +445,7 @@ export function HeaderSearch() {
                 className="header-search__message"
                 role="option"
               >
-                Matching records in the living archive.
+                Finding matches…
               </div>
             ) : search.isInitialError ? (
               <div
@@ -505,15 +509,6 @@ export function HeaderSearch() {
                         </span>
                       </span>
 
-                      <span
-                        aria-hidden="true"
-                        className="header-search__record-index"
-                      >
-                        {String(index + 1).padStart(
-                          2,
-                          '0',
-                        )}
-                      </span>
                     </button>
                   )
                 })}

@@ -31,7 +31,7 @@ async function getConfiguredAuth(): Promise<Auth> {
 
   if (!auth) {
     throw new Error(
-      'Firebase Authentication is not configured for this environment.',
+      'Account access is unavailable in this environment.',
     )
   }
 
@@ -354,7 +354,7 @@ export function AuthProvider({
 
       if (result.data.deleted !== true) {
         throw new Error(
-          'Firebase returned an incomplete account-deletion response. Try again.',
+          'Account deletion could not be completed. Try again.',
         )
       }
     },

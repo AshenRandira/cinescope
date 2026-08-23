@@ -80,7 +80,7 @@ function getPreferenceSyncErrorMessage(
       : ''
 
   if (code.includes('permission-denied')) {
-    return 'Saved on this device. Preference sync needs updated Firestore rules.'
+    return 'Saved on this device. Preference sync needs updated permissions.'
   }
 
   if (

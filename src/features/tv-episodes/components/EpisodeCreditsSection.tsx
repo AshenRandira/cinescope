@@ -95,7 +95,7 @@ export function EpisodeCreditsSection({
       <header className="tv-episode-section-heading">
         <div>
           <p className="archive-label">
-            04 / Episode personnel
+            Episode cast and crew
           </p>
           <h2
             className="font-display text-balance"
@@ -145,7 +145,7 @@ export function EpisodeCreditsSection({
 
           {performers.length > 0 ? (
             <ul className="tv-episode-performers__grid">
-              {performers.map((performer, index) => {
+              {performers.map((performer) => {
                 const profileUrl = getTmdbProfileUrl(
                   performer.profile_path,
                   'w342',
@@ -178,9 +178,6 @@ export function EpisodeCreditsSection({
                             {getInitials(performer.name)}
                           </span>
                         )}
-                        <small>
-                          {String(index + 1).padStart(2, '0')}
-                        </small>
                       </div>
                       <h4>{performer.name}</h4>
                       <p>

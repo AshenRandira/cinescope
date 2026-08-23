@@ -105,7 +105,7 @@ export function PreferencesEditor() {
       <header className="profile-section-heading">
         <div>
           <p className="archive-label">
-            03 / Discovery profile
+            Discovery preferences
           </p>
           <h2
             className="font-display"

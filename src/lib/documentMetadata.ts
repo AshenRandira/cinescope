@@ -60,7 +60,7 @@ export function getRouteMetadata(
   if (pathname === '/privacy') {
     return {
       description:
-        'Understand what CineScope stores locally and in Firebase, how catalogue requests work, and how to export or delete account data.',
+        'Understand what CineScope stores locally and with your account, how catalogue requests work, and how to export or delete account data.',
       indexable: true,
     }
   }

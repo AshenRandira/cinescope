@@ -424,7 +424,7 @@ export function TvEpisodePage() {
         <header className="tv-episode-anatomy__heading">
           <div>
             <p className="archive-label">
-              02 / Episode anatomy
+              Episode details
             </p>
             <h2
               className="font-display text-balance"
@@ -484,7 +484,7 @@ export function TvEpisodePage() {
       >
         <div className="tv-episode-nav__heading">
           <p className="archive-label">
-            05 / Continue the season
+            Continue the season
           </p>
           <Link
             to={`/tv/${series.id}/season/${season.season_number}`}

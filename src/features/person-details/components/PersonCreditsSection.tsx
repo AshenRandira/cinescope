@@ -155,7 +155,7 @@ export function PersonCreditsSection({
       <header className="person-section-heading">
         <div>
           <p className="archive-label">
-            03 / Combined credits
+            Film and TV credits
           </p>
           <h2
             className="font-display text-balance"
@@ -171,7 +171,7 @@ export function PersonCreditsSection({
 
       {selectedCredits.length > 0 ? (
         <ul className="person-credit-grid">
-          {selectedCredits.map((credit, index) => {
+          {selectedCredits.map((credit) => {
             const title = getCreditTitle(credit)
             const posterUrl = getTmdbPosterUrl(
               credit.poster_path,
@@ -204,9 +204,6 @@ export function PersonCreditsSection({
                         {title.slice(0, 2).toUpperCase()}
                       </span>
                     )}
-                    <small>
-                      {String(index + 1).padStart(2, '0')}
-                    </small>
                   </div>
                   <div className="person-credit-card__copy">
                     <p>
@@ -248,14 +245,11 @@ export function PersonCreditsSection({
           </div>
 
           <ol>
-            {chronologyCredits.map((credit, index) => (
+            {chronologyCredits.map((credit) => (
               <li
                 key={`${credit.media_type}:${credit.id}`}
               >
                 <Link to={getCreditTarget(credit)}>
-                  <span>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
                   <time dateTime={getCreditDate(credit)}>
                     {getCreditYear(credit)}
                   </time>

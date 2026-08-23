@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const browserChannel = process.env.CINESCOPE_PLAYWRIGHT_CHANNEL
+const previewPort = process.env.CINESCOPE_E2E_PORT ?? '4175'
 
 export default defineConfig({
   testDir: './e2e',
@@ -14,7 +15,7 @@ export default defineConfig({
     ? [['github'], ['html', { open: 'never' }]]
     : 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4175',
+    baseURL: `http://127.0.0.1:${previewPort}`,
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
     video: 'off',

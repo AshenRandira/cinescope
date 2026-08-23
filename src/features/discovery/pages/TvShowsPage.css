@@ -2,7 +2,7 @@
   width: min(100%, var(--layout-max));
   margin-inline: auto;
   padding-block:
-    clamp(2.5rem, 5vw, 5rem)
+    clamp(1.5rem, 3vw, 3rem)
     clamp(4rem, 8vw, 8rem);
 }
 
@@ -11,17 +11,17 @@
   grid-template-columns:
     minmax(0, 1.2fr)
     minmax(18rem, 0.8fr);
-  gap: clamp(2rem, 6vw, 6rem);
+  gap: clamp(1.5rem, 4vw, 4rem);
   align-items: end;
-  padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
   border-bottom: 1px solid var(--color-line);
 }
 
 .tv-register__title {
   max-width: 12ch;
   margin: 0.85rem 0 0;
-  font-size: clamp(3.4rem, 7vw, 7.5rem);
-  line-height: 0.88;
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  line-height: 0.92;
   color: var(--color-paper-100);
 }
 
@@ -411,6 +411,64 @@
   background: var(--color-ink-850);
 }
 
+.tv-card__copy {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: linear-gradient(180deg, rgb(5 7 6 / 0.6), rgb(5 7 6 / 0.97) 58%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.75rem);
+  transition:
+    opacity var(--duration-interface) var(--ease-standard),
+    transform var(--duration-interface) var(--ease-standard);
+}
+
+.tv-card__artwork:hover .tv-card__copy,
+.tv-card__artwork:focus-within .tv-card__copy {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.tv-card__caption {
+  display: grid;
+  gap: 0.25rem;
+  padding-top: 0.85rem;
+}
+
+.tv-card__caption > span,
+.tv-card__caption small {
+  color: var(--color-app-muted);
+  font-family: var(--font-annotation);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tv-card__caption a {
+  color: var(--color-paper-100);
+}
+
+.tv-card__caption a:hover,
+.tv-card__caption a:focus-visible {
+  color: var(--color-projector-strong);
+}
+
+.tv-card__caption strong {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: clamp(1.5rem, 2vw, 2.2rem);
+  line-height: 1;
+}
+
 .tv-card__artwork img {
   width: 100%;
   height: 100%;
@@ -428,14 +486,6 @@
 .tv-card:focus-within .tv-card__artwork img {
   filter: saturate(1) contrast(1.05);
   transform: scale(1.018);
-}
-
-.tv-card__copy {
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  flex-direction: column;
-  padding-top: 1rem;
 }
 
 .tv-card__classification {
@@ -457,7 +507,7 @@
   margin: 0.55rem 0 0;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  font-size: clamp(2rem, 3vw, 3.35rem);
+  font-size: clamp(1.55rem, 2vw, 2.2rem);
   line-height: 0.96;
   color: var(--color-paper-100);
 }
@@ -652,11 +702,11 @@
 
 @media (max-width: 48rem) {
   .tv-register-page {
-    padding-top: 2.25rem;
+    padding-top: 1.5rem;
   }
 
   .tv-register__title {
-    font-size: clamp(3.15rem, 14vw, 5.5rem);
+    font-size: clamp(2.6rem, 11vw, 4.25rem);
   }
 
   .tv-frequency__options {
@@ -696,10 +746,6 @@
     gap: 1rem;
   }
 
-  .tv-card__copy {
-    padding-top: 0.7rem;
-  }
-
   .tv-card__title {
     font-size: clamp(1.55rem, 8vw, 2.1rem);
   }
@@ -711,6 +757,12 @@
 
   .tv-card__signal,
   .tv-card__footer > span {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  .tv-card__copy {
     display: none;
   }
 }

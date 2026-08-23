@@ -12,7 +12,12 @@ test('searches for a movie and opens its detail record', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: /Results for .*fixture/i }),
   ).toBeVisible()
-  await page
+  const resultCard = page.locator('.search-record').filter({ hasText: 'Fixture Film' })
+  const resultDetails = resultCard.locator('.search-record__copy')
+  await expect(resultDetails).toHaveCSS('opacity', '0')
+  await resultCard.locator('.search-record__artwork').hover()
+  await expect(resultDetails).toHaveCSS('opacity', '1')
+  await resultCard
     .getByRole('link', { name: 'View movie details for Fixture Film' })
     .click()
 
@@ -55,11 +60,37 @@ test('turns a natural-language viewing need into editable recommendations', asyn
   ).toBeVisible()
   await expect(page.getByLabel('Medium')).toHaveValue('movie')
   await expect(page.getByLabel('Maximum runtime')).toHaveValue('120')
+  const recommendationCard = page
+    .locator('.search-record')
+    .filter({ hasText: 'Fixture Family Comedy' })
+  await recommendationCard.locator('.search-record__artwork').hover()
   await expect(
-    page.getByRole('heading', { name: 'Fixture Family Comedy' }),
+    recommendationCard.getByRole('link', {
+      exact: true,
+      name: 'Fixture Family Comedy',
+    }),
   ).toBeVisible()
-  await expect(page.getByText('Why it matches')).toBeVisible()
-  await expect(page.getByText(/comedy \+ family request/i)).toBeVisible()
+  await expect(recommendationCard.getByText('Why it matches')).toBeVisible()
+  await expect(
+    recommendationCard.getByText(/comedy \+ family request/i),
+  ).toBeVisible()
+})
+
+test('reveals Discover and TV card details from the artwork', async ({ page }) => {
+  await page.goto('/discover', { waitUntil: 'domcontentloaded' })
+  await page.getByRole('button', { name: 'Quiet and strange' }).click()
+  const discoverCard = page.locator('.discover-card').first()
+  const discoverDetails = discoverCard.locator('.discover-card__copy')
+  await expect(discoverDetails).toHaveCSS('opacity', '0')
+  await discoverCard.locator('.discover-card__artwork').hover()
+  await expect(discoverDetails).toHaveCSS('opacity', '1')
+
+  await page.goto('/tv', { waitUntil: 'domcontentloaded' })
+  const tvCard = page.locator('.tv-card').first()
+  const tvDetails = tvCard.locator('.tv-card__copy')
+  await expect(tvDetails).toHaveCSS('opacity', '0')
+  await tvCard.locator('.tv-card__artwork').hover()
+  await expect(tvDetails).toHaveCSS('opacity', '1')
 })
 
 test('navigates from television to a season and episode, then back', async ({ page }) => {

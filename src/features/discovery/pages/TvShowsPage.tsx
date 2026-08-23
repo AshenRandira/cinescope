@@ -40,9 +40,7 @@ type TvRecordProps = {
   record: TvDiscoveryRecord
 }
 
-type TvCardProps = TvRecordProps & {
-  index: number
-}
+type TvCardProps = TvRecordProps
 
 function getGenreLabel(
   record: TvDiscoveryRecord,
@@ -146,9 +144,6 @@ function TelevisionLead({
           </div>
         )}
 
-        <span className="tv-signal-index">
-          FEATURED
-        </span>
       </div>
 
       <div className="tv-lead__copy">
@@ -212,7 +207,6 @@ function TelevisionLead({
 
 function TelevisionCard({
   genreNames,
-  index,
   record,
 }: TvCardProps) {
   const posterUrl = getTmdbPosterUrl(
@@ -222,10 +216,6 @@ function TelevisionCard({
   const imageSrcSet = getTmdbImageSrcSet(
     record.posterPath,
     ['w185', 'w342', 'w500'],
-  )
-  const recordNumber = String(index + 2).padStart(
-    2,
-    '0',
   )
   const titleId = `tv-record-${record.id}`
 
@@ -257,12 +247,7 @@ function TelevisionCard({
           </div>
         )}
 
-        <span className="tv-signal-index">
-          {recordNumber}
-        </span>
-      </div>
-
-      <div className="tv-card__copy">
+        <div className="tv-card__copy">
         <p className="tv-card__classification">
           {getGenreLabel(
             record,
@@ -306,6 +291,17 @@ function TelevisionCard({
 
           <span>Series</span>
         </footer>
+        </div>
+      </div>
+
+      <div className="tv-card__caption">
+        <span>TV series</span>
+        <Link to={getTvTarget(record)}>
+          <strong className="font-display">{record.name}</strong>
+        </Link>
+        <small>
+          {record.firstAirYear ?? 'Date unknown'} / {getOriginLabel(record)}
+        </small>
       </div>
     </article>
   )
@@ -428,10 +424,9 @@ export function TvShowsPage() {
 
             <div className="tv-contact-sheet__grid">
               {remainingRecords.map(
-                (record, index) => (
+                (record) => (
                   <TelevisionCard
                     genreNames={genreNames}
-                    index={index}
                     key={record.id}
                     record={record}
                   />
@@ -512,22 +507,17 @@ export function TvShowsPage() {
       <header className="tv-register__opening">
         <div>
           <p className="archive-label">
-            06 / TV catalogue
+            TV Shows
           </p>
 
           <h1 className="tv-register__title font-display text-balance">
-            Follow the signal beyond one night.
+            Browse series.
           </h1>
         </div>
 
         <div className="tv-register__opening-copy">
           <p className="text-pretty">
-            Browse series by popularity, rating, or
-            broadcast schedule.
-          </p>
-
-          <p>
-            These TMDB lists are not personalized.
+            Switch between popular, acclaimed, and currently airing shows.
           </p>
         </div>
       </header>
@@ -561,7 +551,7 @@ export function TvShowsPage() {
           role="group"
         >
           {tvDiscoveryViewOptions.map(
-            (option, index) => (
+            (option) => (
               <button
                 aria-pressed={
                   view === option.value
@@ -572,13 +562,6 @@ export function TvShowsPage() {
                 }
                 type="button"
               >
-                <span>
-                  {String(index + 1).padStart(
-                    2,
-                    '0',
-                  )}
-                </span>
-
                 <strong>{option.label}</strong>
 
                 <small>{option.eyebrow}</small>

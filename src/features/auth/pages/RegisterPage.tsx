@@ -97,8 +97,7 @@ export function RegisterPage() {
     <AuthPageFrame
       description="Create an account to sync your private library and preferences."
       eyebrow="New membership"
-      index="02"
-      title="Begin your own archive."
+      title="Create your account."
     >
       {status === 'unconfigured' ? (
         <AuthConfigurationNotice />

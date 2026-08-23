@@ -69,7 +69,7 @@ export function PrivacyPage() {
 
   return (
     <InformationPage
-      eyebrow="01 / Privacy and data"
+      eyebrow="Privacy and data"
       introduction="See what CineScope stores, where it is kept, and how you can control it."
       title="Your archive remains yours."
     >
@@ -80,15 +80,15 @@ export function PrivacyPage() {
           no advertising or analytics trackers.
         </p>
         <p>
-          With an account, Firebase stores your email, display name,
+          With an account, our secure account service stores your email, display name,
           account ID, and sign-in details. Your library and preferences
-          can then sync to your private Firestore records.
+          can then sync to your private account records.
         </p>
       </InformationSection>
 
       <InformationSection title="Catalogue requests">
         <p>
-          Searches and filters pass through a CineScope Firebase Function
+          Searches and filters pass through a secure CineScope service
           to TMDB.
         </p>
         <p>
@@ -102,7 +102,7 @@ export function PrivacyPage() {
         <p>
           Device data remains until you remove it, clear browser storage,
           or delete your account. Cloud data remains until account deletion.
-          Deleting the account removes its Firebase and CineScope data,
+          Deleting the account removes its sign-in and CineScope data,
           then clears this device.
         </p>
         <p>
@@ -146,7 +146,7 @@ export function TermsPage() {
 
   return (
     <InformationPage
-      eyebrow="02 / Conditions of use"
+      eyebrow="Conditions of use"
       introduction="These draft terms explain the planned V1 service. They require approval before public release."
       title="Use the archive with care."
     >
@@ -199,7 +199,7 @@ export function AccessibilityPage() {
 
   return (
     <InformationPage
-      eyebrow="03 / Accessibility"
+      eyebrow="Accessibility"
       introduction="CineScope aims for WCAG 2.2 Level AA, with readable text, keyboard access, clear focus, reduced motion, and responsive layouts."
       title="Every record should remain reachable."
     >
@@ -256,7 +256,7 @@ export function CreditsPage() {
 
   return (
     <InformationPage
-      eyebrow="04 / Credits and attribution"
+      eyebrow="Credits and attribution"
       introduction="See which third-party services provide CineScope's catalogue, media, fonts, and icons."
       title="Built with the archive in view."
     >

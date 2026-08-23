@@ -100,7 +100,7 @@ export function EpisodeMediaSection({
       <header className="tv-episode-section-heading">
         <div>
           <p className="archive-label">
-            03 / Images and videos
+            Images and videos
           </p>
           <h2
             className="font-display text-balance"
@@ -173,16 +173,13 @@ export function EpisodeMediaSection({
 
       {additionalVideos.length > 0 ? (
         <ul className="tv-episode-video-list">
-          {additionalVideos.map((video, index) => (
+          {additionalVideos.map((video) => (
             <li key={video.id}>
               <a
                 href={getYoutubeUrl(video.key)}
                 rel="noreferrer"
                 target="_blank"
               >
-                <span>
-                  {String(index + 2).padStart(2, '0')}
-                </span>
                 <strong>{video.name}</strong>
                 <small>{video.type}</small>
                 <ExternalLink aria-hidden="true" />
@@ -224,9 +221,6 @@ export function EpisodeMediaSection({
                       srcSet={imageSrcSet}
                     />
                   ) : null}
-                  <span>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
                 </li>
               )
             })}

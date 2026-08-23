@@ -51,9 +51,7 @@ type DiscoverRecordProps = {
   record: DiscoverRecord
 }
 
-type DiscoverCardProps = DiscoverRecordProps & {
-  index: number
-}
+type DiscoverCardProps = DiscoverRecordProps
 
 function getRecordTarget(
   record: DiscoverRecord,
@@ -175,9 +173,6 @@ function DiscoverLead({
           />
         ) : null}
 
-        <span className="discover-frame-index">
-          OPENING FRAME
-        </span>
       </div>
 
       <div className="discover-lead__copy">
@@ -260,7 +255,6 @@ function DiscoverLead({
 }
 
 function DiscoverCard({
-  index,
   isArchiveSignal,
   onDismiss,
   record,
@@ -284,10 +278,6 @@ function DiscoverCard({
         record.backdropPath,
         ['w300', 'w780'],
       )
-  const recordNumber = String(index + 2).padStart(
-    2,
-    '0',
-  )
   const titleId = `discover-record-${record.mediaType}-${record.id}`
 
   return (
@@ -316,12 +306,7 @@ function DiscoverCard({
           />
         ) : null}
 
-        <span className="discover-frame-index">
-          {recordNumber}
-        </span>
-      </div>
-
-      <div className="discover-card__copy">
+        <div className="discover-card__copy">
         <p className="discover-card__classification">
           {record.mediaType === 'movie'
             ? 'Film record'
@@ -381,6 +366,28 @@ function DiscoverCard({
             </button>
           ) : null}
         </div>
+        </div>
+      </div>
+
+      <div className="discover-card__caption">
+        <span>{record.mediaType === 'movie' ? 'Movie' : 'TV series'}</span>
+        <Link to={getRecordTarget(record)}>
+          <strong className="font-display">{record.title}</strong>
+        </Link>
+        <small>
+          {record.dateYear ?? 'Date unknown'} / {record.originalLanguage.toUpperCase()}
+        </small>
+        {isArchiveSignal ? (
+          <button
+            aria-label={`Not interested in ${record.title}`}
+            className="discover-card__touch-dismiss"
+            onClick={() => onDismiss(record)}
+            type="button"
+          >
+            <EyeOff aria-hidden="true" />
+            Not interested
+          </button>
+        ) : null}
       </div>
     </article>
   )
@@ -601,9 +608,8 @@ export function DiscoverPage() {
 
             <div className="discover-contact-sheet__grid">
               {remainingRecords.map(
-                (record, index) => (
+                (record) => (
                   <DiscoverCard
-                    index={index}
                     isArchiveSignal={isArchiveSignal}
                     key={`${record.mediaType}:${record.id}`}
                     onDismiss={handleDismiss}
@@ -623,23 +629,17 @@ export function DiscoverPage() {
       <header className="discover-opening">
         <div>
           <p className="archive-label">
-            02 / Discovery Room
+            Discover
           </p>
 
           <h1 className="discover-opening__title font-display text-balance">
-            Discovery is a method, not magic.
+            Find your next watch.
           </h1>
         </div>
 
         <div className="discover-opening__copy">
           <p className="text-pretty">
-            Choose a discovery method or get suggestions
-            based on titles you enjoyed.
-          </p>
-
-          <p>
-            Every option explains how its results are
-            selected from TMDB.
+            Explore curated lists or get suggestions based on titles you enjoyed.
           </p>
         </div>
       </header>
@@ -686,7 +686,6 @@ export function DiscoverPage() {
                 }
                 type="button"
               >
-                <span>{definition.index}</span>
                 <strong>{definition.label}</strong>
               </button>
             ),
@@ -790,7 +789,7 @@ export function DiscoverPage() {
         <header className="discover-projection__heading">
           <div>
             <p className="archive-label">
-              Results page / {String(page).padStart(2, '0')}
+              Results · Page {page}
             </p>
 
             <h2

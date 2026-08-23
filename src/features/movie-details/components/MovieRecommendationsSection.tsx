@@ -79,7 +79,7 @@ export function MovieRecommendationsSection({
       <header className="movie-recommendations__heading">
         <div>
           <p className="archive-label">
-            06 / Adjacent records
+            Similar movies
           </p>
 
           <h2
@@ -98,7 +98,7 @@ export function MovieRecommendationsSection({
       {recommendations.length > 0 ? (
         <ul className="movie-recommendations__grid">
           {recommendations.map(
-            (recommendation, index) => {
+            (recommendation) => {
               const posterUrl =
                 getTmdbPosterUrl(
                   recommendation.poster_path,
@@ -136,12 +136,6 @@ export function MovieRecommendationsSection({
                         </div>
                       )}
 
-                      <span className="movie-recommendation-card__number">
-                        {String(index + 1).padStart(
-                          2,
-                          '0',
-                        )}
-                      </span>
                     </div>
 
                     <div className="movie-recommendation-card__caption">

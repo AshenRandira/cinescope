@@ -177,7 +177,7 @@ function getCloudSyncErrorMessage(
       : ''
 
   if (code.includes('permission-denied')) {
-    return 'Saved on this device. Cloud sync needs updated Firestore rules.'
+    return 'Saved on this device. Account sync needs updated permissions.'
   }
 
   if (

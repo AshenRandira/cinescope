@@ -76,7 +76,7 @@ export function TvRecommendationsSection({
       <header className="movie-recommendations__heading">
         <div>
           <p className="archive-label">
-            07 / Related series
+            Related series
           </p>
 
           <h2
@@ -95,7 +95,7 @@ export function TvRecommendationsSection({
       {recommendations.length > 0 ? (
         <ul className="movie-recommendations__grid">
           {recommendations.map(
-            (recommendation, index) => {
+            (recommendation) => {
               const posterUrl = getTmdbPosterUrl(
                 recommendation.poster_path,
                 'w500',
@@ -131,12 +131,6 @@ export function TvRecommendationsSection({
                         </div>
                       )}
 
-                      <span className="movie-recommendation-card__number">
-                        {String(index + 1).padStart(
-                          2,
-                          '0',
-                        )}
-                      </span>
                     </div>
 
                     <div className="movie-recommendation-card__caption">

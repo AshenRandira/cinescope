@@ -71,7 +71,7 @@ describe('authentication pages', () => {
 
     expect(resetPassword).toHaveBeenCalledWith('member@example.com')
     expect(
-      screen.getByText(/Firebase will send password-reset instructions/),
+      screen.getByText(/password-reset instructions will be sent/),
     ).toBeVisible()
   })
 

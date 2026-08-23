@@ -112,7 +112,7 @@ export function TvVideoSection({
       <header className="tv-video-section__heading">
         <div>
           <p className="archive-label">
-            02 / Videos
+            Videos
           </p>
 
           <h2
@@ -202,16 +202,13 @@ export function TvVideoSection({
         <div className="tv-video-additional">
           <p>More videos</p>
           <ul>
-            {additionalVideos.map((video, index) => (
+            {additionalVideos.map((video) => (
               <li key={video.id}>
                 <a
                   href={getYoutubeUrl(video.key)}
                   rel="noreferrer"
                   target="_blank"
                 >
-                  <span>
-                    {String(index + 2).padStart(2, '0')}
-                  </span>
                   <strong>{video.name}</strong>
                   <small>
                     {video.type} /{' '}

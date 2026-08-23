@@ -409,7 +409,7 @@ export function TvSeasonPage() {
         <header className="tv-season-section-heading">
           <div>
             <p className="archive-label">
-              02 / Episodes
+              Episodes
             </p>
             <h2
               className="font-display text-balance"
@@ -593,7 +593,7 @@ export function TvSeasonPage() {
         <header className="tv-season-section-heading">
           <div>
             <p className="archive-label">
-              03 / Season personnel
+              Season personnel
             </p>
             <h2
               className="font-display text-balance"
@@ -609,7 +609,7 @@ export function TvSeasonPage() {
 
         {cast.length > 0 ? (
           <ul className="tv-season-cast__grid">
-            {cast.map((member, index) => {
+            {cast.map((member) => {
               const profileUrl = getTmdbProfileUrl(
                 member.profile_path,
                 'w342',
@@ -642,9 +642,6 @@ export function TvSeasonPage() {
                           {getInitials(member.name)}
                         </span>
                       )}
-                      <small>
-                        {String(index + 1).padStart(2, '0')}
-                      </small>
                     </div>
                     <h3>{member.name}</h3>
                     <p>

@@ -31,7 +31,6 @@ import {
   type MovieAvailabilitySectionProps = {
     mediaKind?: 'movie' | 'series'
     movieTitle: string
-    sectionIndex?: string
     watchProviders: WatchProviderQueryState
   }
 
@@ -149,7 +148,6 @@ import {
   export function MovieAvailabilitySection({
     mediaKind = 'movie',
     movieTitle,
-    sectionIndex = '05',
     watchProviders,
   }: MovieAvailabilitySectionProps) {
     const browserRegion =
@@ -234,7 +232,7 @@ import {
         <header className="movie-availability__heading">
           <div>
             <p className="archive-label">
-              {sectionIndex} / Viewing coordinates
+              Where to watch
             </p>
 
             <h2

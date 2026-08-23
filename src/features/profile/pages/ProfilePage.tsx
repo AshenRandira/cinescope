@@ -405,7 +405,7 @@ export function ProfilePage() {
 
           <div>
             <p className="archive-label">
-              01 / Member profile
+              Profile
             </p>
             <h1 className="profile-opening__title font-display text-balance">
               {user.displayName || 'CineScope member'}
@@ -422,7 +422,7 @@ export function ProfilePage() {
             className="profile-opening__signal"
           />
           <div>
-            <p>Firebase session active</p>
+            <p>Secure session active</p>
             <span>
               {user.emailVerified
                 ? 'Email verified'
@@ -439,7 +439,7 @@ export function ProfilePage() {
         <header className="profile-section-heading">
           <div>
             <p className="archive-label">
-              02 / Your library
+              Your library
             </p>
             <h2
               className="font-display"
@@ -498,7 +498,7 @@ export function ProfilePage() {
         <header className="profile-section-heading">
           <div>
             <p className="archive-label">
-              04 / Account details
+              Account details
             </p>
             <h2
               className="font-display"
@@ -510,7 +510,7 @@ export function ProfilePage() {
           <aside className="profile-section-heading__note">
             <p className="archive-label">Authentication</p>
             <p>
-              Firebase protects your sign-in. CineScope never stores your password.
+              Your sign-in is protected by a secure account service. CineScope never stores your password.
             </p>
           </aside>
         </header>
@@ -582,7 +582,7 @@ export function ProfilePage() {
         <header className="profile-section-heading">
           <div>
             <p className="archive-label">
-              05 / Security and privacy
+              Security and privacy
             </p>
             <h2
               className="font-display"
@@ -609,7 +609,7 @@ export function ProfilePage() {
             </h3>
             <p className="profile-security__description">
               {user.emailVerified
-                ? 'Firebase has confirmed the email address attached to this account.'
+                ? 'Your email address has been verified.'
                 : 'Send a verification email. Open its link, then refresh the status here.'}
             </p>
 

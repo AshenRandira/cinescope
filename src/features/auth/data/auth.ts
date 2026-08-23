@@ -20,7 +20,7 @@ const AUTH_ERROR_MESSAGES: Readonly<
   'auth/network-request-failed':
     'The authentication service could not be reached. Check your connection and try again.',
   'auth/operation-not-allowed':
-    'Email and password authentication is not enabled for this Firebase project.',
+    'Email and password sign-in is not available right now.',
   'auth/too-many-requests':
     'Too many attempts were made. Wait a little before trying again.',
   'auth/user-disabled':
@@ -95,7 +95,7 @@ export function getAuthErrorMessage(
   ) {
     return (
       AUTH_ERROR_MESSAGES[error.code] ??
-      'Firebase could not complete this request. Try again.'
+      'The account service could not complete this request. Try again.'
     )
   }
 

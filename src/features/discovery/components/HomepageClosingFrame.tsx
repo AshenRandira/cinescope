@@ -7,21 +7,18 @@ const closingRoutes = [
   {
     description:
       'Browse movies by genre, runtime, rating, and release period.',
-    index: '01',
     label: 'Enter the movie archive',
     to: '/movies',
   },
   {
     description:
       'Browse popular, highly rated, and currently airing series.',
-    index: '02',
     label: 'Tune into television',
     to: '/tv',
   },
   {
     description:
       'Search by title or person, or describe what you want to watch.',
-    index: '03',
     label: 'Search the archive',
     to: '/search',
   },
@@ -37,7 +34,7 @@ export function HomepageClosingFrame() {
       <div className="mx-auto max-w-[var(--layout-max)]">
         <header className="mx-auto max-w-6xl text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-projector)]">
-            05 / Closing Frame
+            Keep exploring
           </p>
 
           <h2
@@ -65,10 +62,6 @@ export function HomepageClosingFrame() {
                     className="homepage-closing-frame__route group"
                     to={route.to}
                   >
-                    <span className="font-mono text-[var(--font-size-caption)] tracking-[0.16em] text-[var(--color-app-subtle)]">
-                      {route.index}
-                    </span>
-
                     <span>
                       <span className="block text-base font-semibold text-[var(--color-app-text)] sm:text-lg">
                         {route.label}

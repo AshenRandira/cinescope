@@ -315,7 +315,7 @@ export function PersonDetailPage() {
           <div className="person-detail-hero__layout">
             <div className="person-detail-hero__copy">
               <p className="archive-label">
-                01 / Contributor record
+                Contributor
               </p>
               <h1
                 className="person-detail-hero__title font-display"
@@ -402,7 +402,7 @@ export function PersonDetailPage() {
         <header className="person-section-heading">
           <div>
             <p className="archive-label">
-              02 / Biographical note
+              Biography
             </p>
             <h2
               className="font-display text-balance"
@@ -474,7 +474,7 @@ export function PersonDetailPage() {
           <header className="person-section-heading">
             <div>
               <p className="archive-label">
-                04 / Portrait archive
+                Portraits
               </p>
               <h2
                 className="font-display text-balance"
@@ -509,9 +509,6 @@ export function PersonDetailPage() {
                     src={imageUrl}
                     srcSet={imageSrcSet}
                   />
-                  <span>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
                 </li>
               ) : null
             })}

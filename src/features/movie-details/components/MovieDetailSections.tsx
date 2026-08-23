@@ -236,7 +236,7 @@ import {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                03 / Record anatomy
+                Movie details
               </p>
 
               <h2
@@ -339,7 +339,7 @@ import {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                04 / Cast and crew
+                Cast and crew
               </p>
 
               <h2
@@ -415,7 +415,7 @@ import {
 
               {cast.length > 0 ? (
                 <ul className="movie-detail-cast__grid">
-                  {cast.map((member, index) => {
+                  {cast.map((member) => {
                     const profileUrl =
                       getTmdbProfileUrl(
                         member.profile_path,
@@ -459,12 +459,6 @@ import {
                               </div>
                             )}
 
-                            <span className="movie-detail-cast-card__number">
-                              {String(index + 1).padStart(
-                                2,
-                                '0',
-                              )}
-                            </span>
                           </div>
 
                           <div className="movie-detail-cast-card__caption">

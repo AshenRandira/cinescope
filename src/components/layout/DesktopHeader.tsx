@@ -55,8 +55,8 @@ export function DesktopHeader() {
           aria-label="Primary navigation"
           className="flex min-w-0 justify-center"
         >
-          <ol className="flex h-full items-stretch">
-            {desktopNavigation.map((item, index) =>
+          <ul className="flex h-full items-stretch">
+            {desktopNavigation.map((item) =>
               item.to === '/search' ? (
                 <HeaderSearch key={item.to} />
               ) : (
@@ -69,10 +69,6 @@ export function DesktopHeader() {
                   >
                     {({ isActive }) => (
                       <>
-                        <span className="font-mono text-[var(--font-size-label)] tracking-[0.12em] text-[var(--color-paper-600)] transition-colors group-hover:text-[var(--color-projector)]">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-
                         <span>{item.label}</span>
 
                         <span
@@ -89,7 +85,7 @@ export function DesktopHeader() {
                 </li>
               ),
             )}
-          </ol>
+          </ul>
         </nav>
 
         <div className="flex h-full items-stretch">

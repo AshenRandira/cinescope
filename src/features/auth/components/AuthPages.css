@@ -50,8 +50,8 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 5rem;
+  justify-content: flex-start;
+  gap: clamp(3rem, 8vw, 7rem);
 }
 
 .auth-page__wordmark {
@@ -62,7 +62,7 @@
   max-width: 9ch;
   margin: 0.75rem 0 0;
   color: var(--color-paper-100);
-  font-size: clamp(4.5rem, 8vw, 9rem);
+  font-size: clamp(3rem, 6vw, 6rem);
   font-weight: 400;
   line-height: 0.84;
 }

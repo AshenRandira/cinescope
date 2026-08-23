@@ -310,8 +310,7 @@ export function DiscoverySplice({
                             key={`copy-${activeCut.id}-${activeMovie.id}`}
                         >
                             <p className="archive-label text-[var(--color-projector-strong)]">
-                                {activeCut.label} / Selected frame{' '}
-                                {String(safeMovieIndex + 1).padStart(2, '0')}
+                                {activeCut.label}
                             </p>
 
                             <h3 className="font-display text-balance mt-5 max-w-4xl text-[clamp(3.35rem,7.6vw,8.4rem)] leading-[0.84] text-[var(--color-app-text)]">
@@ -430,8 +429,9 @@ export function DiscoverySplice({
                                             key={movie.id}
                                         >
                                             <button
+                                                aria-label={`Show ${movie.title}`}
                                                 aria-pressed={isActive}
-                                                className={`group grid min-h-24 w-full grid-cols-[2.25rem_1fr_auto] items-center gap-3 py-4 text-left transition-colors ${isActive
+                                                className={`group grid min-h-24 w-full grid-cols-[1fr_auto] items-center gap-3 py-4 text-left transition-colors ${isActive
                                                         ? 'text-[var(--color-app-text)]'
                                                         : 'text-[var(--color-app-muted)] hover:text-[var(--color-app-text)]'
                                                     }`}
@@ -440,10 +440,6 @@ export function DiscoverySplice({
                                                 }}
                                                 type="button"
                                             >
-                                                <span className="font-mono text-[var(--font-size-caption)] tracking-[0.16em] text-[var(--color-app-subtle)]">
-                                                    {String(index + 1).padStart(2, '0')}
-                                                </span>
-
                                                 <span>
                                                     <span className="block text-sm font-semibold leading-5">
                                                         {movie.title}
@@ -484,7 +480,7 @@ export function DiscoverySplice({
             <div className="mx-auto max-w-[var(--layout-max)]">
                 <header className="grid gap-8 pb-12 lg:grid-cols-[auto_minmax(0,1fr)_minmax(18rem,0.55fr)] lg:items-end lg:gap-12 lg:pb-16">
                     <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-projector)]">
-                        02 / Discovery Splice
+                        Movie discovery
                     </p>
 
                     <div>

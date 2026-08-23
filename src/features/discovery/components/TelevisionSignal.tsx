@@ -330,10 +330,7 @@ export function TelevisionSignal({
                             <div>
                                 <div className="flex flex-wrap items-center justify-between gap-4">
                                     <p className="archive-label text-[var(--color-projector-strong)]">
-                                        Featured series{' '}
-                                        {String(
-                                            safeShowIndex + 1,
-                                        ).padStart(2, '0')}
+                                        Featured series
                                     </p>
 
                                     <p className="inline-flex items-center gap-2 font-mono text-[var(--font-size-caption)] uppercase tracking-[0.15em] text-[var(--color-app-subtle)]">
@@ -464,13 +461,6 @@ export function TelevisionSignal({
                                                     type="button"
                                                 >
                                                     <span className="flex items-center justify-between gap-4">
-                                                        <span className="font-mono text-[var(--font-size-caption)] tracking-[0.16em] text-[var(--color-app-subtle)]">
-                                                            {String(index + 1).padStart(
-                                                                2,
-                                                                '0',
-                                                            )}
-                                                        </span>
-
                                                         <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.12em] text-[var(--color-app-subtle)]">
                                                             {getFirstAirYear(
                                                                 show.first_air_date,
@@ -517,7 +507,7 @@ export function TelevisionSignal({
                 <header className="grid gap-8 pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.45fr)] lg:items-end lg:gap-16 lg:pb-16">
                     <div>
                         <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-projector)]">
-                            04 / Television Signal
+                            TV highlights
                         </p>
 
                         <h2

@@ -1,16 +1,16 @@
 .profile-page {
   width: min(100%, var(--layout-max));
   margin-inline: auto;
-  padding-block: clamp(2rem, 5vw, 5rem)
+  padding-block: clamp(1.5rem, 3vw, 3rem)
     clamp(5rem, 10vw, 10rem);
 }
 
 .profile-opening {
   display: flex;
   justify-content: space-between;
-  gap: clamp(3rem, 8vw, 8rem);
+  gap: clamp(2rem, 5vw, 5rem);
   align-items: end;
-  padding-bottom: clamp(3rem, 6vw, 6rem);
+  padding-bottom: clamp(1.75rem, 3vw, 3rem);
   border-bottom: 1px solid var(--color-line);
 }
 
@@ -23,7 +23,7 @@
 
 .profile-opening__monogram {
   display: grid;
-  width: clamp(7rem, 14vw, 13rem);
+  width: clamp(6rem, 10vw, 9rem);
   flex: 0 0 auto;
   aspect-ratio: 1;
   place-items: center;
@@ -41,13 +41,13 @@
       var(--color-projector-soft),
       transparent 52%
     );
-  font-size: clamp(3rem, 7vw, 7rem);
+  font-size: clamp(2.75rem, 5vw, 5rem);
 }
 
 .profile-opening__title {
   max-width: 10ch;
   margin: 0.7rem 0 0;
-  font-size: clamp(4rem, 8vw, 8.5rem);
+  font-size: clamp(3rem, 5.5vw, 5.75rem);
   font-weight: 400;
   line-height: 0.84;
   overflow-wrap: anywhere;

@@ -325,9 +325,8 @@ export function SearchPage() {
   } else {
     resultsContent = (
       <ul className="search-results__grid">
-        {filteredRecords.map((record, index) => (
+        {filteredRecords.map((record) => (
           <SearchResultCard
-            index={index}
             key={`${record.mediaType}:${record.id}`}
             record={record}
           />
@@ -340,18 +339,15 @@ export function SearchPage() {
     <div className="search-page">
       <header className="search-opening">
         <div>
-          <p className="archive-label">07 / Intelligent Search</p>
+          <p className="archive-label">Search</p>
           <h1 className="search-opening__title font-display text-balance">
-            Find a title—or describe the feeling.
+            Search or describe what you want.
           </h1>
         </div>
 
         <div className="search-opening__copy">
           <p className="text-pretty">
-            Enter a title or person. You can also describe what you want to watch.
-          </p>
-          <p>
-            CineScope turns viewing requests into filters you can review and edit.
+            Find a title or person, or describe your mood for recommendations.
           </p>
         </div>
       </header>
@@ -361,7 +357,7 @@ export function SearchPage() {
           <div>
             <p className="archive-label">Search coordinates</p>
             <h2 className="search-console__title font-display" id="search-console-title">
-              Name it. Or describe it.
+              Search CineScope.
             </h2>
           </div>
           <p>

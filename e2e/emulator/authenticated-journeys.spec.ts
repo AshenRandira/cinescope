@@ -368,7 +368,7 @@ test('returns to a protected route and preserves signed-in library edits through
     /\/profile\?panel=identity$/,
   )
   await expect(
-    page.getByText('Firebase session active'),
+    page.getByText('Secure session active'),
   ).toBeVisible()
 
   await page.goto('/movies/550', {

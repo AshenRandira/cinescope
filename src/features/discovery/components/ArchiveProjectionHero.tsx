@@ -35,22 +35,18 @@ type AtmosphereStyle = CSSProperties & {
 
 const archiveFrames: Array<{
   id: ArchiveFrame
-  index: string
   label: string
 }> = [
   {
     id: 'story',
-    index: '01',
     label: 'Story',
   },
   {
     id: 'atmosphere',
-    index: '02',
     label: 'Atmosphere',
   },
   {
     id: 'reception',
-    index: '03',
     label: 'Reception',
   },
 ]
@@ -325,10 +321,7 @@ export function ArchiveProjectionHero({
                 />
 
                 <p className="font-mono text-[var(--font-size-label)] uppercase tracking-[0.16em] text-[var(--color-paper-500)]">
-                  Movie{' '}
-                  {String(activeMovieIndex + 1).padStart(2, '0')}
-                  {' / '}
-                  {String(movies.length).padStart(2, '0')}
+                  Featured movie
                 </p>
               </div>
 
@@ -385,10 +378,6 @@ export function ArchiveProjectionHero({
                       tabIndex={isActive ? 0 : -1}
                       type="button"
                     >
-                      <span className="font-mono text-[var(--font-size-label)] tracking-[0.14em] text-[var(--color-projector)]">
-                        {frame.index}
-                      </span>
-
                       <span className="text-xs font-semibold uppercase tracking-[0.12em] sm:text-sm">
                         {frame.label}
                       </span>
@@ -486,9 +475,8 @@ export function ArchiveProjectionHero({
                     archiveFrames.find(
                       (frame) =>
                         frame.id === activeFrame,
-                    )?.index
+                    )?.label
                   }
-                  {' / 03'}
                 </p>
               </div>
             </div>
@@ -529,10 +517,6 @@ export function ArchiveProjectionHero({
                     />
 
                     <span className="flex items-center justify-between gap-4">
-                      <span className="font-mono text-[var(--font-size-label)] tracking-[0.14em] text-[var(--color-projector)]">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-
                       <span className="archive-label">
                         {getReleaseYear(
                           movie.release_date,

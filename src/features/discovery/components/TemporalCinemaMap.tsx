@@ -366,11 +366,6 @@ export function TemporalCinemaMap({
                             <div className="max-w-5xl">
                                 <p className="archive-label text-[var(--color-projector-strong)]">
                                     {activeStation.label}
-                                    {' / '}
-                                    Record{' '}
-                                    {String(
-                                        safeMovieIndex + 1,
-                                    ).padStart(2, '0')}
                                 </p>
 
                                 <h3 className="font-display text-balance mt-5 text-[clamp(3.5rem,8vw,8.75rem)] leading-[0.84] text-[var(--color-app-text)]">
@@ -438,13 +433,6 @@ export function TemporalCinemaMap({
                                                     type="button"
                                                 >
                                                     <span className="flex items-center justify-between gap-4">
-                                                        <span className="font-mono text-[var(--font-size-caption)] tracking-[0.16em] text-[var(--color-app-subtle)]">
-                                                            {String(index + 1).padStart(
-                                                                2,
-                                                                '0',
-                                                            )}
-                                                        </span>
-
                                                         <span className="font-mono text-[var(--font-size-caption)] uppercase tracking-[0.12em] text-[var(--color-app-subtle)]">
                                                             {getReleaseYear(
                                                                 movie.release_date,
@@ -483,7 +471,7 @@ export function TemporalCinemaMap({
                 <header className="grid gap-8 pb-12 lg:grid-cols-[minmax(14rem,0.4fr)_minmax(0,1fr)] lg:items-end lg:gap-14 lg:pb-16">
                     <div>
                         <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-projector)]">
-                            03 / Temporal Cinema Map
+                            Explore by era
                         </p>
 
                         <p className="mt-5 max-w-xs text-sm leading-7 text-[var(--color-app-muted)]">

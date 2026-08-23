@@ -120,10 +120,8 @@ function formatSavedDate(value: string): string {
 }
 
 function LibraryCard({
-  index,
   record,
 }: {
-  index: number
   record: LibraryRecord
 }) {
   const posterUrl = getTmdbPosterUrl(
@@ -180,9 +178,6 @@ function LibraryCard({
           </div>
         )}
 
-        <span className="library-card__index">
-          {String(index + 1).padStart(2, '0')}
-        </span>
       </div>
 
       <div className="library-card__copy">
@@ -406,18 +401,17 @@ export function LibraryPage() {
       <header className="library-opening">
         <div>
           <p className="archive-label">
-            08 / Personal Library
+            Library
           </p>
 
           <h1 className="library-opening__title font-display text-balance">
-            Keep the records you want to return to.
+            Your library.
           </h1>
         </div>
 
         <div className="library-opening__copy">
           <p className="text-pretty">
-            Your private collection of saved, watched,
-            favourite, and rated titles.
+            Saved, watched, favourite, and rated titles in one place.
           </p>
 
           <div
@@ -568,9 +562,8 @@ export function LibraryPage() {
           </div>
         ) : (
           <div className="library-register__grid">
-            {filteredRecords.map((record, index) => (
+            {filteredRecords.map((record) => (
               <LibraryCard
-                index={index}
                 key={`${record.mediaType}:${record.id}`}
                 record={record}
               />

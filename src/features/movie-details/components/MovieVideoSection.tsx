@@ -222,7 +222,7 @@ import {
         <header className="movie-video-section__heading">
           <div>
             <p className="archive-label">
-              02 / Videos
+              Videos
             </p>
 
             <h2
@@ -363,7 +363,7 @@ import {
 
             <ul>
               {additionalVideos.map(
-                (video, index) => (
+                (video) => (
                   <li key={video.id}>
                     <button
                       type="button"
@@ -371,12 +371,6 @@ import {
                         openVideo(video)
                       }
                     >
-                      <span className="movie-video-additional__number">
-                        {String(index + 2).padStart(
-                          2,
-                          '0',
-                        )}
-                      </span>
 
                       <span className="movie-video-additional__name">
                         <strong>{video.name}</strong>

@@ -452,7 +452,7 @@ export function TvDetailPage() {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                03 / Series details
+                Series details
               </p>
               <h2
                 className="movie-detail-section-heading__title font-display text-balance"
@@ -562,7 +562,7 @@ export function TvDetailPage() {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                04 / Seasons
+                Seasons
               </p>
               <h2
                 className="movie-detail-section-heading__title font-display text-balance"
@@ -578,7 +578,7 @@ export function TvDetailPage() {
 
           {seasons.length > 0 ? (
             <ol className="tv-season-grid">
-              {seasons.map((season, index) => {
+              {seasons.map((season) => {
                 const seasonPosterUrl =
                   getTmdbPosterUrl(
                     season.poster_path,
@@ -614,9 +614,6 @@ export function TvDetailPage() {
                             ).padStart(2, '0')}
                           </span>
                         )}
-                        <small>
-                          {String(index + 1).padStart(2, '0')}
-                        </small>
                       </div>
 
                       <div className="tv-season-card__copy">
@@ -664,7 +661,7 @@ export function TvDetailPage() {
           <header className="movie-detail-section-heading">
             <div>
               <p className="archive-label">
-                05 / Cast and crew
+                Cast and crew
               </p>
               <h2
                 className="movie-detail-section-heading__title font-display text-balance"
@@ -733,7 +730,7 @@ export function TvDetailPage() {
 
               {cast.length > 0 ? (
                 <ul className="movie-detail-cast__grid">
-                  {cast.map((member, index) => {
+                  {cast.map((member) => {
                     const profileUrl =
                       getTmdbProfileUrl(
                         member.profile_path,
@@ -775,12 +772,6 @@ export function TvDetailPage() {
                                 </span>
                               </div>
                             )}
-                            <span className="movie-detail-cast-card__number">
-                              {String(index + 1).padStart(
-                                2,
-                                '0',
-                              )}
-                            </span>
                           </div>
                           <div className="movie-detail-cast-card__caption">
                             <h4>{member.name}</h4>
@@ -808,7 +799,6 @@ export function TvDetailPage() {
       <MovieAvailabilitySection
         mediaKind="series"
         movieTitle={show.name}
-        sectionIndex="06"
         watchProviders={watchProviders}
       />
 

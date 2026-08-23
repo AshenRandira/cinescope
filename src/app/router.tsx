@@ -5,23 +5,6 @@ import { AppShell } from '../components/layout/AppShell'
 import { HomePage } from '../features/discovery/pages/HomePage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 
-const developmentRoutes = import.meta.env.DEV
-  ? [
-      {
-        path: 'dev/tmdb',
-        lazy: async () => {
-          const { TmdbVerificationPage } = await import(
-            '../features/development/pages/TmdbVerificationPage'
-          )
-
-          return {
-            Component: TmdbVerificationPage,
-          }
-        },
-      },
-    ]
-  : []
-
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -240,7 +223,6 @@ export const router = createBrowserRouter([
           return { Component: AccessibilityPage }
         },
       },
-      ...developmentRoutes,
       {
         path: '*',
         element: <NotFoundPage />,

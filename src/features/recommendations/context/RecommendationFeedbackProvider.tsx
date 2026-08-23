@@ -121,7 +121,7 @@ function getFeedbackSyncErrorMessage(
       : ''
 
   if (code.includes('permission-denied')) {
-    return 'Saved on this device. Feedback sync needs updated Firestore rules.'
+    return 'Saved on this device. Feedback sync needs updated permissions.'
   }
 
   if (

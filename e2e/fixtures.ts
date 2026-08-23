@@ -68,9 +68,23 @@ const recommendationMovieSummary = {
   vote_count: 175,
 }
 
+const secondaryMovieSummary = {
+  ...recommendationMovieSummary,
+  id: 553,
+  title: 'Fixture Second Film',
+  original_title: 'Fixture Second Film',
+}
+
+const tertiaryMovieSummary = {
+  ...secondaryMovieSummary,
+  id: 554,
+  title: 'Fixture Third Film',
+  original_title: 'Fixture Third Film',
+}
+
 const movieRecommendationResponse = {
   page: 1,
-  results: [recommendationMovieSummary],
+  results: [recommendationMovieSummary, secondaryMovieSummary],
   total_pages: 1,
   total_results: 1,
 }
@@ -97,6 +111,13 @@ const tvSummary = {
   poster_path: null,
   vote_average: 8.2,
   vote_count: 180,
+}
+
+const secondaryTvSummary = {
+  ...tvSummary,
+  id: 1405,
+  name: 'Fixture Second Series',
+  original_name: 'Fixture Second Series',
 }
 
 const episodeSummary = {
@@ -217,14 +238,14 @@ const intentMovieSummary = {
 
 const movieDiscoveryResponse = {
   page: 1,
-  results: [intentMovieSummary],
+  results: [intentMovieSummary, secondaryMovieSummary, tertiaryMovieSummary],
   total_pages: 1,
   total_results: 1,
 }
 
 const tvDiscoveryResponse = {
   page: 1,
-  results: [tvSummary],
+  results: [tvSummary, secondaryTvSummary],
   total_pages: 1,
   total_results: 1,
 }
@@ -345,6 +366,7 @@ export async function installPublicApiFixtures(
           ...homeMovieResponse,
           results: [
             { ...recommendationMovieSummary, media_type: 'movie' },
+            { ...secondaryTvSummary, media_type: 'tv' },
           ],
         })
         return

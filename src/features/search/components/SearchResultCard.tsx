@@ -16,7 +16,6 @@ import type {
 import './SearchResultCard.css'
 
 type SearchResultCardProps = {
-  index: number
   record: SearchRecord
 }
 
@@ -36,18 +35,9 @@ function formatVoteCount(
   return `${voteCount.toLocaleString()} votes`
 }
 
-function getRecordIndex(
-  index: number,
-): string {
-  return String(index + 1).padStart(2, '0')
-}
-
 export function SearchResultCard({
-  index,
   record,
 }: SearchResultCardProps) {
-  const recordIndex = getRecordIndex(index)
-
   const imageUrl =
     record.imageType === 'profile'
       ? getTmdbProfileUrl(
@@ -113,12 +103,7 @@ export function SearchResultCard({
             </div>
           )}
 
-          <span className="search-record__frame">
-            {recordIndex}
-          </span>
-        </div>
-
-        <div className="search-record__copy">
+          <div className="search-record__copy">
           <div className="search-record__classification">
             <span>{mediaTypeLabel}</span>
 
@@ -227,6 +212,23 @@ export function SearchResultCard({
               />
             ) : null}
           </footer>
+          </div>
+        </div>
+
+        <div className="search-record__caption">
+          <span>{mediaTypeLabel}</span>
+          <Link
+            to={
+              record.mediaType === 'movie'
+                ? `/movies/${record.id}`
+                : record.mediaType === 'tv'
+                  ? `/tv/${record.id}`
+                  : `/people/${record.id}`
+            }
+          >
+            <strong className="font-display">{record.title}</strong>
+          </Link>
+          {metadata.length > 0 ? <small>{metadata.join(' / ')}</small> : null}
         </div>
       </article>
     </li>
