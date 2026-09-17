@@ -1,4 +1,4 @@
-﻿import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
@@ -11,9 +11,7 @@ export default defineConfig({
     proxy: {
       '/api/tmdb': {
         changeOrigin: true,
-        rewrite: (path) =>
-          `/demo-cinescope/asia-east1/tmdbApi${path}`,
-        target: 'http://127.0.0.1:5001',
+        target: 'https://cinescope-tmdb.cinescope-ash.workers.dev',
       },
     },
   },

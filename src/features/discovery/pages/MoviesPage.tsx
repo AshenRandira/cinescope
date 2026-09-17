@@ -692,14 +692,7 @@ export function MoviesPage() {
           </h1>
         </div>
 
-        <div className="movie-register__opening-copy">
-          <p className="text-pretty">
-            Filter by genre, year, runtime, rating, or popularity.
-          </p>
-        </div>
       </header>
-
-      <hr className="editorial-rule" />
 
       <MovieDiscoveryControls
         filters={filters}

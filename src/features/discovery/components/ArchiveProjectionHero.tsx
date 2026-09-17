@@ -91,14 +91,14 @@ function formatCompactNumber(value: number): string {
 
 function getTitleSizeClass(title: string): string {
   if (title.length > 30) {
-    return 'text-[clamp(3.25rem,6vw,6.75rem)]'
+    return 'text-[clamp(2.75rem,4.8vw,5.25rem)]'
   }
 
   if (title.length > 18) {
-    return 'text-[clamp(3.75rem,7.5vw,8rem)]'
+    return 'text-[clamp(3rem,5.8vw,6.25rem)]'
   }
 
-  return 'text-[clamp(4.5rem,9.5vw,10rem)]'
+  return 'text-[clamp(3.5rem,7vw,7.5rem)]'
 }
 
 type FramePanelProps = {
@@ -178,7 +178,7 @@ function FramePanel({
       <div>
         <p className="archive-label">Audience reading</p>
 
-        <p className="font-display mt-2 flex items-center gap-3 text-[clamp(4rem,7vw,7rem)] italic leading-none text-[var(--color-projector)]">
+        <p className="font-display mt-2 flex items-center gap-3 text-[clamp(3rem,5vw,5.5rem)] italic leading-none text-[var(--color-projector)]">
           {movie.vote_average.toFixed(1)}
 
           <Star

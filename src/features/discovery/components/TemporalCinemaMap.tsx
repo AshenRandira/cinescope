@@ -368,7 +368,7 @@ export function TemporalCinemaMap({
                                     {activeStation.label}
                                 </p>
 
-                                <h3 className="font-display text-balance mt-5 text-[clamp(3.5rem,8vw,8.75rem)] leading-[0.84] text-[var(--color-app-text)]">
+                                <h3 className="font-display text-balance mt-5 text-[clamp(2.75rem,5.8vw,6.25rem)] leading-[0.88] text-[var(--color-app-text)]">
                                     {activeMovie.title}
                                 </h3>
 
@@ -480,7 +480,7 @@ export function TemporalCinemaMap({
                     </div>
 
                     <h2
-                        className="font-display text-balance max-w-5xl text-[clamp(3.25rem,7vw,8rem)] leading-[0.86] text-[var(--color-app-text)]"
+                        className="font-display text-balance max-w-5xl text-[clamp(2.75rem,5.5vw,6rem)] leading-[0.9] text-[var(--color-app-text)]"
                         id="temporal-map-title"
                     >
                         The archive is always moving.

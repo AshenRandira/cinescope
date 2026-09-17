@@ -349,7 +349,7 @@ export function TelevisionSignal({
                             </div>
 
                             <div className="mt-20 max-w-5xl">
-                                <h3 className="font-display text-balance text-[clamp(3.5rem,8vw,9rem)] leading-[0.84] text-[var(--color-app-text)]">
+                                <h3 className="font-display text-balance text-[clamp(2.75rem,5.8vw,6.25rem)] leading-[0.88] text-[var(--color-app-text)]">
                                     {activeShow.name}
                                 </h3>
 
@@ -511,7 +511,7 @@ export function TelevisionSignal({
                         </p>
 
                         <h2
-                            className="font-display text-balance mt-7 max-w-5xl text-[clamp(3.25rem,7vw,8rem)] leading-[0.86] text-[var(--color-app-text)]"
+                            className="font-display text-balance mt-7 max-w-5xl text-[clamp(2.75rem,5.5vw,6rem)] leading-[0.9] text-[var(--color-app-text)]"
                             id="television-signal-title"
                         >
                             Stories travel in frequencies.

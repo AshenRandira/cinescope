@@ -3,7 +3,7 @@
   margin-inline: auto;
   padding-block:
     clamp(1.5rem, 3vw, 3rem)
-    clamp(4rem, 8vw, 8rem);
+    clamp(2.5rem, 5vw, 5rem);
 }
 
 .tv-register__opening {
@@ -20,7 +20,7 @@
 .tv-register__title {
   max-width: 12ch;
   margin: 0.85rem 0 0;
-  font-size: clamp(2.6rem, 5vw, 5rem);
+  font-size: clamp(2.4rem, 4vw, 4rem);
   line-height: 0.92;
   color: var(--color-paper-100);
 }
@@ -76,7 +76,7 @@
 .tv-contact-sheet__title,
 .tv-continuation__title {
   margin: 0.55rem 0 0;
-  font-size: clamp(2.6rem, 5vw, 5.2rem);
+  font-size: clamp(2.4rem, 4vw, 4.25rem);
   line-height: 0.94;
   color: var(--color-paper-100);
 }
@@ -302,7 +302,7 @@
 
 .tv-lead__title {
   margin: 0.75rem 0 0;
-  font-size: clamp(3rem, 5.5vw, 6rem);
+  font-size: clamp(2.6rem, 4.5vw, 4.75rem);
   line-height: 0.9;
   color: var(--color-paper-100);
 }

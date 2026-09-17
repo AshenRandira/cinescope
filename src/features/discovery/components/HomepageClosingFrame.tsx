@@ -38,7 +38,7 @@ export function HomepageClosingFrame() {
           </p>
 
           <h2
-            className="font-display text-balance mt-8 text-[clamp(3.75rem,8.5vw,9.75rem)] leading-[0.82] text-[var(--color-app-text)]"
+            className="font-display text-balance mt-8 text-[clamp(3rem,5.5vw,6.5rem)] leading-[0.86] text-[var(--color-app-text)]"
             id="homepage-closing-frame-title"
           >
             Choose where to go next.

@@ -1,6 +1,9 @@
 import { getFirebaseAppCheckToken } from '../../config/firebase'
 
-const TMDB_API_BASE_PATH = '/api/tmdb/'
+const TMDB_API_BASE_PATH =
+  import.meta.env.MODE === 'test'
+    ? '/api/tmdb/'
+    : import.meta.env.VITE_TMDB_API_BASE_URL?.trim() || '/api/tmdb/'
 
 type TmdbQueryValue = string | number | boolean | null | undefined
 
@@ -35,10 +38,10 @@ export function buildTmdbApiUrl(
   query?: Record<string, TmdbQueryValue>,
 ): string {
   const normalizedPath = path.replace(/^\/+/, '')
-  const url = new URL(
-    `${TMDB_API_BASE_PATH}${normalizedPath}`,
-    'https://cinescope.invalid',
-  )
+  const base = TMDB_API_BASE_PATH.endsWith('/')
+    ? TMDB_API_BASE_PATH
+    : `${TMDB_API_BASE_PATH}/`
+  const url = new URL(`${base}${normalizedPath}`, 'https://cinescope.invalid')
 
   if (
     !normalizedPath ||
@@ -59,7 +62,9 @@ export function buildTmdbApiUrl(
     })
   }
 
-  return `${url.pathname}${url.search}`
+  return TMDB_API_BASE_PATH.startsWith('http')
+    ? url.toString()
+    : `${url.pathname}${url.search}`
 }
 
 async function readJsonResponse(response: Response): Promise<unknown> {

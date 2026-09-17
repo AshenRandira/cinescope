@@ -54,10 +54,7 @@
   .homepage-closing-frame__route {
     position: relative;
     display: grid;
-    grid-template-columns:
-      3rem
-      minmax(0, 1fr)
-      auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 1rem;
     min-height: 7.5rem;
@@ -142,12 +139,26 @@
   }
 
   @media (max-width: 639px) {
+    .homepage-closing-frame > div > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.5rem;
+    }
+
     .homepage-closing-frame__route {
-      grid-template-columns:
-        2.25rem
-        minmax(0, 1fr)
-        auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
       min-height: 6.5rem;
+    }
+
+    .homepage-closing-frame__route > span {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .homepage-closing-frame__route-arrow {
+      flex: 0 0 auto;
     }
 
     .homepage-closing-frame::after {

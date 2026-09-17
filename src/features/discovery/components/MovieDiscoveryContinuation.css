@@ -5,15 +5,15 @@
     minmax(17rem, 0.65fr);
   gap: 2rem;
   align-items: end;
-  margin-top: clamp(3.5rem, 7vw, 7rem);
-  padding-block: clamp(2rem, 4vw, 3.5rem);
+  margin-top: clamp(2rem, 4vw, 4rem);
+  padding-block: clamp(1.25rem, 2.5vw, 2rem);
   border-block: 1px solid var(--color-line);
 }
 
 .movie-continuation__title {
   max-width: 12ch;
   margin: 0.55rem 0 0;
-  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-size: clamp(2.25rem, 4vw, 4rem);
   font-weight: 400;
   line-height: 0.95;
   color: var(--color-paper-100);

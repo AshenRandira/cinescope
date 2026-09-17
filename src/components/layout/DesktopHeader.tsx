@@ -8,7 +8,7 @@ import { HeaderSearch } from '../../features/search/components/HeaderSearch'
 
 function getNavigationClass(isActive: boolean): string {
   const baseClasses =
-    'group relative flex h-full items-center gap-2 px-2.5 text-sm font-semibold tracking-[-0.02em] transition-colors duration-[var(--duration-micro)] lg:px-4 lg:text-[1.05rem]'
+      'group relative flex h-full items-center gap-2 px-2.5 text-sm font-semibold tracking-[-0.02em] transition-colors duration-[var(--duration-micro)] lg:px-4 lg:text-[1rem]'
 
   const stateClasses = isActive
     ? 'text-[var(--color-paper-100)]'
@@ -19,7 +19,7 @@ function getNavigationClass(isActive: boolean): string {
 
 function getActionClass(isActive: boolean): string {
   const baseClasses =
-    'group relative inline-flex h-full items-center gap-2.5 px-2 text-sm font-semibold transition-colors duration-[var(--duration-micro)] lg:px-3.5 lg:text-[1.05rem]'
+    'group relative inline-flex h-full items-center gap-2.5 px-2 text-sm font-semibold transition-colors duration-[var(--duration-micro)] lg:px-3.5 lg:text-[1rem]'
 
   const stateClasses = isActive
     ? 'text-[var(--color-projector)]'
@@ -53,9 +53,9 @@ export function DesktopHeader() {
 
         <nav
           aria-label="Primary navigation"
-          className="flex min-w-0 justify-center"
+          className="flex min-w-0 items-center justify-center"
         >
-          <ul className="flex h-full items-stretch">
+          <ul className="flex h-[2.85rem] items-center gap-1 rounded-full border border-[var(--color-line-soft)] bg-[rgb(255_255_255_/_0.025)] px-1.5 shadow-[0_8px_24px_rgb(0_0_0_/_0.12)]">
             {desktopNavigation.map((item) =>
               item.to === '/search' ? (
                 <HeaderSearch key={item.to} />

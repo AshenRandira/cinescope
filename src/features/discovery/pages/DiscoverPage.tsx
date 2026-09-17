@@ -637,11 +637,6 @@ export function DiscoverPage() {
           </h1>
         </div>
 
-        <div className="discover-opening__copy">
-          <p className="text-pretty">
-            Explore curated lists or get suggestions based on titles you enjoyed.
-          </p>
-        </div>
       </header>
 
       <section

@@ -313,7 +313,7 @@ export function DiscoverySplice({
                                 {activeCut.label}
                             </p>
 
-                            <h3 className="font-display text-balance mt-5 max-w-4xl text-[clamp(3.35rem,7.6vw,8.4rem)] leading-[0.84] text-[var(--color-app-text)]">
+                            <h3 className="font-display text-balance mt-5 max-w-4xl text-[clamp(2.75rem,5.5vw,6rem)] leading-[0.88] text-[var(--color-app-text)]">
                                 {activeMovie.title}
                             </h3>
 
@@ -485,7 +485,7 @@ export function DiscoverySplice({
 
                     <div>
                         <h2
-                            className="font-display text-balance text-[clamp(3.25rem,6.8vw,7.5rem)] leading-[0.88] text-[var(--color-app-text)]"
+                            className="font-display text-balance text-[clamp(2.75rem,5.2vw,6rem)] leading-[0.9] text-[var(--color-app-text)]"
                             id="discovery-splice-title"
                         >
                             Discovery with a human pulse.

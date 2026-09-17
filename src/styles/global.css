@@ -125,7 +125,7 @@
   --layout-max: 94rem;
   --layout-reading: 46rem;
   --layout-gutter: clamp(1rem, 3vw, 3.25rem);
-  --layout-section-gap: clamp(5rem, 10vw, 10rem);
+  --layout-section-gap: clamp(3rem, 6vw, 6rem);
   --layout-header-height: 5.35rem;
   --layout-mobile-nav-height: 4.5rem;
 
@@ -253,6 +253,7 @@
 }
 
 html {
+  font-size: 80%;
   min-width: 320px;
   min-height: 100%;
   scroll-behavior: smooth;
@@ -260,8 +261,37 @@ html {
   background: var(--color-app-background);
 }
 
+/* Keep every route readable when the viewport becomes narrow. */
 body {
-  min-width: 320px;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+li,
+dt,
+dd {
+  max-width: 100%;
+  overflow-wrap: normal;
+}
+
+section,
+main,
+article,
+header,
+footer,
+figure,
+[class*="__inner"],
+[class*="__content"] {
+  min-width: 0;
+}
+
+body {
+  min-width: 0;
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
@@ -296,7 +326,7 @@ body {
       rgb(22 18 13 / 0.92) 58%,
       rgb(10 14 11 / 0.96)
     );
-  box-shadow: 0 0.75rem 2.5rem rgb(0 0 0 / 0.18);
+  box-shadow: 0 0.75rem 2.5rem rgb(0 0 0 / 0.22);
 }
 
 body::before {
@@ -367,6 +397,54 @@ img {
     scroll-margin-block-end: calc(
       5.5rem + env(safe-area-inset-bottom)
     );
+  }
+
+  :root {
+    --layout-gutter: 1rem;
+    --layout-section-gap: 3.5rem;
+  }
+
+  h1.font-display,
+  h2.font-display {
+    font-size: clamp(2.15rem, 9vw, 3.75rem);
+    line-height: 0.98;
+  }
+
+  img {
+    max-height: 70vh;
+    object-fit: cover;
+  }
+}
+
+/* Keep content columns usable on phones. Tailwind's responsive utilities are
+   based on rem, so this explicit rule also covers narrow desktop previews. */
+@media (max-width: 48rem) {
+  main,
+  main > *,
+  footer,
+  footer > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .homepage-closing-frame h2 {
+    font-size: clamp(2.5rem, 11vw, 4.75rem) !important;
+    line-height: 0.9;
+  }
+
+  .homepage-closing-frame > div > div {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 2.5rem !important;
+  }
+
+  .homepage-closing-frame__route {
+    grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+    width: 100%;
+  }
+
+  .homepage-closing-frame__route > span {
+    min-width: 0;
   }
 }
 
