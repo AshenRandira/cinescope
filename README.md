@@ -2,6 +2,9 @@
 
 <div align="center">
 
+### 🌐 **Live Demo:** [https://cinescope-f361c.web.app/](https://cinescope-f361c.web.app/)
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-cinescope--f361c.web.app-FF0055?style=for-the-badge&logo=googlechrome&logoColor=white)](https://cinescope-f361c.web.app/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
@@ -11,13 +14,16 @@
 
 **A cinematic React archive for exploring cinema, television, and creators through TMDB with deterministic natural-language discovery, local-first library tracking, and private cloud synchronization.**
 
-[Key Features](#key-features) • [System Architecture](#system-architecture) • [Getting Started](#getting-started) • [Firebase Setup](#firebase-setup) • [Validation & Quality](#validation--quality-gates) • [Documentation](#documentation-index)
+[🚀 **Launch Live Demo**](https://cinescope-f361c.web.app/) • [Key Features](#key-features) • [System Architecture](#system-architecture) • [Getting Started](#getting-started) • [Firebase Setup](#firebase-setup) • [Validation & Quality](#validation--quality-gates) • [Documentation](#documentation-index)
 
 </div>
 
 ---
 
 ## Overview
+
+> [!TIP]
+> **Live Demo**: Explore CineScope live in production at **[https://cinescope-f361c.web.app/](https://cinescope-f361c.web.app/)**.
 
 **CineScope** is an editorial, high-performance web archive for film and television enthusiasts. Built as a local-first single-page application with React 19, TypeScript, and Vite, CineScope blends cinematic aesthetics with rigorous privacy and accessibility boundaries.
 
@@ -67,41 +73,41 @@ CineScope enforces a strict security boundary: the browser never receives TMDB A
 flowchart TD
     subgraph Client["Browser (React 19 SPA)"]
         UI["CineScope App Shell"]
-        LocalStore[("Local Archive\n(localStorage)")]
+        LocalStore[("Local Archive - localStorage")]
         UI <--> LocalStore
     end
 
     subgraph Hosting["Firebase Hosting (CDN)"]
-        H_Rewrites["Rewrite Rules\n& Security Headers"]
+        H_Rewrites["Rewrite Rules & Security Headers"]
     end
 
     subgraph Functions["Cloud Functions (Node.js)"]
-        TMDB_Proxy["tmdbApi Proxy\n(/api/tmdb/**)"]
+        TMDB_Proxy["tmdbApi Proxy - /api/tmdb"]
         Acc_Delete["deleteAccount Callable"]
     end
 
     subgraph External["External Services"]
-        TMDB["TMDB API\n(api.themoviedb.org)"]
-        SecretMgr[("Google Secret Manager\nTMDB_READ_ACCESS_TOKEN")]
+        TMDB["TMDB API - api.themoviedb.org"]
+        SecretMgr[("Secret Manager - TMDB Token")]
     end
 
     subgraph FirebaseServices["Managed Firebase"]
         FirebaseAuth["Firebase Authentication"]
-        Firestore[("Cloud Firestore\n(users/{uid}/...)")]
+        Firestore[("Cloud Firestore - User Records")]
     end
 
     %% Client communication
-    UI -->|Page Load & Static Assets| H_Rewrites
-    UI -->|Catalogue Requests /api/tmdb/**| H_Rewrites
+    UI -->|Page Load and Static Assets| H_Rewrites
+    UI -->|Catalogue Requests /api/tmdb| H_Rewrites
     H_Rewrites -->|Forward API Traffic| TMDB_Proxy
 
-    %% Functions & Secrets
+    %% Functions and Secrets
     TMDB_Proxy --- SecretMgr
     TMDB_Proxy -->|Authorized Request| TMDB
 
     %% User Data
-    UI -->|Direct SDK (Auth)| FirebaseAuth
-    UI -->|Direct SDK (Owner Rules)| Firestore
+    UI -->|Direct SDK Auth| FirebaseAuth
+    UI -->|Direct SDK Firestore Rules| Firestore
     UI -->|Account Purge| Acc_Delete
     Acc_Delete -->|Recursive Delete| Firestore
     Acc_Delete -->|Revoke Identity| FirebaseAuth
